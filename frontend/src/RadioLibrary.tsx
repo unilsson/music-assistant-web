@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { RadioStation } from "./api";
 import "./radio-library.css";
+import "./radio-genre-filter.css";
 
 const RADIO_GENRE_STORAGE_KEY = "music-assistant-web.radio-genre";
 const ALL_FILTER = "all";
