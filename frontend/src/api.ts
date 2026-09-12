@@ -5,6 +5,20 @@ export type NowPlaying = {
   image: string | null;
 };
 
+export type QueuePreviewItem = {
+  id: string | null;
+  title: string | null;
+  artist: string | null;
+  album: string | null;
+  image: string | null;
+};
+
+export type QueueContext = {
+  previous: QueuePreviewItem | null;
+  current: QueuePreviewItem | null;
+  next: QueuePreviewItem | null;
+};
+
 export type Player = {
   id: string;
   name: string;
@@ -23,6 +37,11 @@ type PlayersResponse = {
   players: Player[];
 };
 
+type QueueContextResponse = QueueContext & {
+  status: string;
+  playerId: string;
+};
+
 async function request(path: string, init?: RequestInit) {
   const response = await fetch(path, init);
 
@@ -37,6 +56,18 @@ async function request(path: string, init?: RequestInit) {
 export async function getPlayers(): Promise<Player[]> {
   const data = (await request("/api/players")) as PlayersResponse;
   return data.players;
+}
+
+export async function getQueueContext(playerId: string): Promise<QueueContext> {
+  const data = (await request(
+    `/api/players/${encodeURIComponent(playerId)}/queue-context`
+  )) as QueueContextResponse;
+
+  return {
+    previous: data.previous,
+    current: data.current,
+    next: data.next,
+  };
 }
 
 export async function playPause(playerId: string) {
