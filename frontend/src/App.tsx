@@ -88,24 +88,29 @@ function TrackPreview({
 
 function RadioPanel({
   item,
-  isPlaying,
+  isActive,
   busy,
-  onPlayPause,
+  onTransport,
 }: {
   item: NowPlaying | QueuePreviewItem;
-  isPlaying: boolean;
+  isActive: boolean;
   busy: boolean;
-  onPlayPause: () => void;
+  onTransport: () => void;
 }) {
   const hasLiveMetadata = Boolean(item.liveArtist || item.liveTitle || item.streamTitle);
 
   return (
     <div className="radio-stage">
-      <section className="radio-panel" aria-label="Direktsänd radio">
-        <div className="live-badge">
-          <span className="live-dot" />
-          LIVE
-        </div>
+      <section
+        className="radio-panel"
+        aria-label={isActive ? "Direktsänd radio" : "Senast spelade radiostation"}
+      >
+        {isActive && (
+          <div className="live-badge">
+            <span className="live-dot" />
+            LIVE
+          </div>
+        )}
 
         <div className="artwork-wrap radio-artwork-wrap">
           {item.image ? (
@@ -113,34 +118,36 @@ function RadioPanel({
           ) : (
             <div className="artwork artwork-placeholder">♫</div>
           )}
-          <span className={`status-dot ${isPlaying ? "playing" : ""}`} />
+          <span className={`status-dot ${isActive ? "playing" : ""}`} />
         </div>
 
         <h2 className="radio-station-name">{item.stationName ?? item.title ?? "Radio"}</h2>
 
-        <div className="radio-now-playing">
-          <p className="info-label">Nu sänds</p>
-          {hasLiveMetadata ? (
-            <div className="radio-live-metadata">
-              {item.liveArtist && <strong>{item.liveArtist}</strong>}
-              {item.liveTitle && <span>{item.liveTitle}</span>}
-              {!item.liveArtist && !item.liveTitle && item.streamTitle && (
-                <span>{item.streamTitle}</span>
-              )}
-            </div>
-          ) : (
-            <span className="radio-live-fallback">Direktsändning</span>
-          )}
-        </div>
+        {isActive && (
+          <div className="radio-now-playing">
+            <p className="info-label">Nu sänds</p>
+            {hasLiveMetadata ? (
+              <div className="radio-live-metadata">
+                {item.liveArtist && <strong>{item.liveArtist}</strong>}
+                {item.liveTitle && <span>{item.liveTitle}</span>}
+                {!item.liveArtist && !item.liveTitle && item.streamTitle && (
+                  <span>{item.streamTitle}</span>
+                )}
+              </div>
+            ) : (
+              <span className="radio-live-fallback">Direktsändning</span>
+            )}
+          </div>
+        )}
 
         <div className="transport radio-transport" aria-label="Styr radio">
           <button
             className="primary-control"
-            disabled={busy}
-            onClick={onPlayPause}
-            aria-label="Spela eller pausa"
+            disabled={busy || (!isActive && !item.uri)}
+            onClick={onTransport}
+            aria-label={isActive ? "Stoppa radio" : "Spela radio"}
           >
-            {isPlaying ? "❚❚" : "▶"}
+            {isActive ? "■" : "▶"}
           </button>
         </div>
       </section>
@@ -152,10 +159,12 @@ function PlayerCard({
   player,
   queueContext,
   onChanged,
+  preserveRadio = false,
 }: {
   player: Player;
   queueContext: QueueContext | null;
   onChanged: () => Promise<void>;
+  preserveRadio?: boolean;
 }) {
   const [busy, setBusy] = useState(false);
   const [volume, setLocalVolume] = useState(player.volumeLevel ?? 25);
@@ -172,14 +181,14 @@ function PlayerCard({
   };
 
   const radioStateActive = player.state === "playing" || player.state === "paused";
-  const radioItem = radioStateActive
-    ? player.nowPlaying?.mediaType === "radio"
-      ? player.nowPlaying
-      : queueContext?.current?.mediaType === "radio"
-        ? queueContext.current
-        : null
-    : null;
+  const radioCandidate = player.nowPlaying?.mediaType === "radio"
+    ? player.nowPlaying
+    : queueContext?.current?.mediaType === "radio"
+      ? queueContext.current
+      : null;
+  const radioItem = radioStateActive || preserveRadio ? radioCandidate : null;
   const isRadio = radioItem !== null;
+  const isRadioActive = isRadio && radioStateActive;
   const now = isRadio
     ? radioItem
     : queueContext?.current?.mediaType === "radio"
@@ -226,9 +235,19 @@ function PlayerCard({
       {isRadio && radioItem ? (
         <RadioPanel
           item={radioItem}
-          isPlaying={isPlaying}
+          isActive={isRadioActive}
           busy={busy}
-          onPlayPause={() => void run(() => playPause(player.id))}
+          onTransport={() => {
+            if (isRadioActive) {
+              void run(() => playPause(player.id));
+              return;
+            }
+
+            const uri = radioItem.uri;
+            if (uri) {
+              void run(() => playRadio(player.id, uri));
+            }
+          }}
         />
       ) : (
         <div className="queue-stage">
@@ -465,9 +484,10 @@ export default function App() {
     }
   };
 
+  const hasRadioSelection = selectedPlayer?.nowPlaying?.mediaType === "radio";
   const radioIsActive =
-    selectedPlayer?.nowPlaying?.mediaType === "radio" &&
-    (selectedPlayer.state === "playing" || selectedPlayer.state === "paused");
+    hasRadioSelection &&
+    (selectedPlayer?.state === "playing" || selectedPlayer?.state === "paused");
 
   return (
     <main className="app-shell">
@@ -561,12 +581,16 @@ export default function App() {
 
           {selectedPlayer && activeView === "radio" && (
             <section id="radio-view" role="tabpanel" className="radio-view">
-              {radioIsActive && (
-                <section className="radio-player-section" aria-label="Radio spelar nu">
+              {hasRadioSelection && (
+                <section
+                  className="radio-player-section"
+                  aria-label={radioIsActive ? "Radio spelar nu" : "Senast spelade radio"}
+                >
                   <PlayerCard
                     player={selectedPlayer}
                     queueContext={null}
                     onChanged={refresh}
+                    preserveRadio
                   />
                 </section>
               )}
