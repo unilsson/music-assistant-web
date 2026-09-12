@@ -80,29 +80,6 @@
   margin: 22px auto 0;
 }
 
-.radio-transport .primary-control {
-  position: relative;
-  width: 54px;
-  min-width: 54px;
-  height: 54px;
-  padding: 0;
-  overflow: hidden;
-  border-radius: 50%;
-  color: transparent !important;
-  font-size: 0 !important;
-}
-
-.radio-transport .primary-control::before {
-  content: "■";
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  color: #0f172a;
-  font-size: 1rem;
-  line-height: 1;
-}
-
 .view-empty-state {
   min-height: 150px;
   display: flex;
