@@ -31,6 +31,11 @@ export type QueueContext = {
   next: QueuePreviewItem | null;
 };
 
+export type RadioGenre = {
+  id: string;
+  name: string;
+};
+
 export type RadioStation = {
   id: string;
   name: string;
@@ -38,6 +43,7 @@ export type RadioStation = {
   image: string | null;
   provider: string | null;
   favorite: boolean;
+  genres: RadioGenre[];
 };
 
 export type Player = {
