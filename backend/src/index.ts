@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import { maCommand } from "./musicAssistant.js";
+import { createRadioRouter } from "./radioRoutes.js";
 
 const app = express();
 
@@ -8,6 +9,7 @@ const host = process.env.HOST ?? "127.0.0.1";
 const port = Number(process.env.PORT ?? 3001);
 
 app.use(express.json());
+app.use("/api/radios", createRadioRouter(maCommand));
 
 function unwrapArray(response: any): any[] {
   if (Array.isArray(response)) {
@@ -21,12 +23,20 @@ function unwrapArray(response: any): any[] {
   return [];
 }
 
+function queueItemMediaType(item: any): string | null {
+  const mediaItem = item?.media_item ?? item?.media_item_data ?? null;
+  return item?.streamdetails?.media_type ?? mediaItem?.media_type ?? null;
+}
+
 function summarizeQueueItem(item: any) {
   if (!item) {
     return null;
   }
 
   const mediaItem = item?.media_item ?? item?.media_item_data ?? null;
+  const streamDetails = item?.streamdetails ?? null;
+  const streamMetadata = streamDetails?.stream_metadata ?? null;
+  const mediaType = queueItemMediaType(item);
 
   let artist: string | null = null;
 
@@ -55,10 +65,16 @@ function summarizeQueueItem(item: any) {
 
   return {
     id: item?.queue_item_id ?? mediaItem?.item_id ?? null,
+    uri: mediaItem?.uri ?? item?.uri ?? null,
     title: mediaItem?.name ?? item?.name ?? null,
     artist,
     album,
     image,
+    mediaType,
+    stationName: mediaType === "radio" ? mediaItem?.name ?? item?.name ?? null : null,
+    liveTitle: streamMetadata?.title ?? null,
+    liveArtist: streamMetadata?.artist ?? null,
+    streamTitle: streamDetails?.stream_title ?? null,
   };
 }
 
@@ -237,28 +253,32 @@ app.get("/api/players/:id/queue-context", async (req, res) => {
 });
 
 /*
- * Toggle play/pause for a queue/player.
+ * Toggle play/pause for music. For live radio, stop the stream instead.
  */
 app.post("/api/players/:id/play-pause", async (req, res) => {
   try {
     const playerId = req.params.id;
+    const queues = unwrapArray(await maCommand("player_queues/all"));
+    const queue = queues.find((entry: any) => entry.queue_id === playerId);
+    const isRadio = queueItemMediaType(queue?.current_item) === "radio";
+    const command = isRadio ? "player_queues/stop" : "player_queues/play_pause";
 
-    const result = await maCommand("player_queues/play_pause", {
+    const result = await maCommand(command, {
       queue_id: playerId,
     });
 
     res.json({
       status: "ok",
       playerId,
-      action: "play-pause",
+      action: isRadio ? "stop" : "play-pause",
       result,
     });
   } catch (error) {
-    console.error("Music Assistant play/pause error:", error);
+    console.error("Music Assistant transport error:", error);
 
     res.status(502).json({
       status: "error",
-      error: "Unable to toggle play/pause",
+      error: "Unable to control playback",
     });
   }
 });

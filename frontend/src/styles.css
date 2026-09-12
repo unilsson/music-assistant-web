@@ -238,6 +238,76 @@ h1 {
   color: #64748b;
 }
 
+.radio-stage {
+  display: grid;
+  place-items: center;
+  padding: 20px 28px 18px;
+}
+
+.radio-panel {
+  width: min(320px, 100%);
+  text-align: center;
+}
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 12px;
+  padding: 5px 10px;
+  border: 1px solid rgba(248, 113, 113, 0.22);
+  border-radius: 999px;
+  background: rgba(127, 29, 29, 0.18);
+  color: #fca5a5;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f87171;
+  box-shadow: 0 0 12px rgba(248, 113, 113, 0.7);
+}
+
+.radio-artwork-wrap {
+  width: 220px;
+}
+
+.radio-station-name {
+  margin: 14px 0 0;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.radio-now-playing {
+  min-height: 68px;
+  margin-top: 14px;
+}
+
+.radio-live-metadata {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.radio-live-metadata strong {
+  color: #f8fafc;
+  font-size: 1rem;
+}
+
+.radio-live-metadata span,
+.radio-live-fallback {
+  color: #cbd5e1;
+  font-size: 0.92rem;
+}
+
+.radio-transport {
+  margin-top: 12px;
+}
+
 .queue-preview {
   min-width: 0;
   padding-top: 44px;
@@ -540,8 +610,13 @@ h1 {
     width: 96px;
   }
 
-  .artwork-wrap {
+  .artwork-wrap,
+  .radio-artwork-wrap {
     width: 210px;
+  }
+
+  .radio-stage {
+    padding: 18px 20px 16px;
   }
 
   .player-controls-row {

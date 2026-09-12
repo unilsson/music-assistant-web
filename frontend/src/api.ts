@@ -1,22 +1,49 @@
 export type NowPlaying = {
+  uri: string | null;
   title: string | null;
   artist: string | null;
   album: string | null;
   image: string | null;
+  mediaType: string | null;
+  stationName: string | null;
+  liveTitle: string | null;
+  liveArtist: string | null;
+  streamTitle: string | null;
 };
 
 export type QueuePreviewItem = {
   id: string | null;
+  uri: string | null;
   title: string | null;
   artist: string | null;
   album: string | null;
   image: string | null;
+  mediaType: string | null;
+  stationName: string | null;
+  liveTitle: string | null;
+  liveArtist: string | null;
+  streamTitle: string | null;
 };
 
 export type QueueContext = {
   previous: QueuePreviewItem | null;
   current: QueuePreviewItem | null;
   next: QueuePreviewItem | null;
+};
+
+export type RadioGenre = {
+  id: string;
+  name: string;
+};
+
+export type RadioStation = {
+  id: string;
+  name: string;
+  uri: string;
+  image: string | null;
+  provider: string | null;
+  favorite: boolean;
+  genres: RadioGenre[];
 };
 
 export type Player = {
@@ -41,6 +68,12 @@ type PlayersResponse = {
 type QueueContextResponse = QueueContext & {
   status: string;
   playerId: string;
+};
+
+type RadiosResponse = {
+  status: string;
+  count: number;
+  radios: RadioStation[];
 };
 
 type RawStatusResponse = {
@@ -99,7 +132,7 @@ function rawQueueDuration(queue: any): number | null {
 export async function getPlayers(): Promise<Player[]> {
   const data = (await request("/api/players")) as PlayersResponse;
 
-  if (data.players.every((player) => (player.duration ?? 0) > 0)) {
+  if (data.players.every((player) => (player.duration ?? 0) > 0 || player.nowPlaying?.mediaType === "radio")) {
     return data.players;
   }
 
@@ -108,7 +141,7 @@ export async function getPlayers(): Promise<Player[]> {
     const queues = asArray(raw.musicAssistant);
 
     return data.players.map((player) => {
-      if ((player.duration ?? 0) > 0) {
+      if ((player.duration ?? 0) > 0 || player.nowPlaying?.mediaType === "radio") {
         return player;
       }
 
@@ -120,6 +153,27 @@ export async function getPlayers(): Promise<Player[]> {
   } catch {
     return data.players;
   }
+}
+
+export async function getRadios(): Promise<RadioStation[]> {
+  const data = (await request("/api/radios")) as RadiosResponse;
+  return data.radios;
+}
+
+export async function playRadio(playerId: string, uri: string) {
+  return request(`/api/radios/${encodeURIComponent(playerId)}/play`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ uri }),
+  });
+}
+
+export async function stopRadio(playerId: string) {
+  return request(`/api/radios/${encodeURIComponent(playerId)}/stop`, {
+    method: "POST",
+  });
 }
 
 export async function getQueueContext(playerId: string): Promise<QueueContext> {

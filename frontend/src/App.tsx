@@ -2,16 +2,25 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   getPlayers,
   getQueueContext,
+  getRadios,
   nextTrack,
   playPause,
+  playRadio,
   previousTrack,
   setVolume,
+  type NowPlaying,
   type Player,
   type QueueContext,
   type QueuePreviewItem,
+  type RadioStation,
 } from "./api";
+import RadioLibrary from "./RadioLibrary";
+import "./view-tabs.css";
 
 const PLAYER_STORAGE_KEY = "music-assistant-web.selected-player";
+const VIEW_STORAGE_KEY = "music-assistant-web.active-view";
+
+type AppView = "music" | "radio";
 
 function formatTime(value: number | null | undefined) {
   if (!Number.isFinite(value) || value == null || value < 0) {
@@ -77,14 +86,85 @@ function TrackPreview({
   );
 }
 
+function RadioPanel({
+  item,
+  isActive,
+  busy,
+  onTransport,
+}: {
+  item: NowPlaying | QueuePreviewItem;
+  isActive: boolean;
+  busy: boolean;
+  onTransport: () => void;
+}) {
+  const hasLiveMetadata = Boolean(item.liveArtist || item.liveTitle || item.streamTitle);
+
+  return (
+    <div className="radio-stage">
+      <section
+        className="radio-panel"
+        aria-label={isActive ? "Direktsänd radio" : "Senast spelade radiostation"}
+      >
+        {isActive && (
+          <div className="live-badge">
+            <span className="live-dot" />
+            LIVE
+          </div>
+        )}
+
+        <div className="artwork-wrap radio-artwork-wrap">
+          {item.image ? (
+            <img className="artwork" src={item.image} alt="" />
+          ) : (
+            <div className="artwork artwork-placeholder">♫</div>
+          )}
+          <span className={`status-dot ${isActive ? "playing" : ""}`} />
+        </div>
+
+        <h2 className="radio-station-name">{item.stationName ?? item.title ?? "Radio"}</h2>
+
+        {isActive && (
+          <div className="radio-now-playing">
+            <p className="info-label">Nu sänds</p>
+            {hasLiveMetadata ? (
+              <div className="radio-live-metadata">
+                {item.liveArtist && <strong>{item.liveArtist}</strong>}
+                {item.liveTitle && <span>{item.liveTitle}</span>}
+                {!item.liveArtist && !item.liveTitle && item.streamTitle && (
+                  <span>{item.streamTitle}</span>
+                )}
+              </div>
+            ) : (
+              <span className="radio-live-fallback">Direktsändning</span>
+            )}
+          </div>
+        )}
+
+        <div className="transport radio-transport" aria-label="Styr radio">
+          <button
+            className="primary-control"
+            disabled={busy || (!isActive && !item.uri)}
+            onClick={onTransport}
+            aria-label={isActive ? "Stoppa radio" : "Spela radio"}
+          >
+            {isActive ? "■" : "▶"}
+          </button>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 function PlayerCard({
   player,
   queueContext,
   onChanged,
+  preserveRadio = false,
 }: {
   player: Player;
   queueContext: QueueContext | null;
   onChanged: () => Promise<void>;
+  preserveRadio?: boolean;
 }) {
   const [busy, setBusy] = useState(false);
   const [volume, setLocalVolume] = useState(player.volumeLevel ?? 25);
@@ -100,7 +180,22 @@ function PlayerCard({
     }
   };
 
-  const now = queueContext?.current ?? player.nowPlaying;
+  const radioStateActive = player.state === "playing" || player.state === "paused";
+  const radioCandidate = player.nowPlaying?.mediaType === "radio"
+    ? player.nowPlaying
+    : queueContext?.current?.mediaType === "radio"
+      ? queueContext.current
+      : null;
+  const radioItem = radioStateActive || preserveRadio ? radioCandidate : null;
+  const isRadio = radioItem !== null;
+  const isRadioActive = isRadio && radioStateActive;
+  const now = isRadio
+    ? radioItem
+    : queueContext?.current?.mediaType === "radio"
+      ? null
+      : player.nowPlaying?.mediaType === "radio"
+        ? queueContext?.current ?? null
+        : queueContext?.current ?? player.nowPlaying;
   const isPlaying = player.state === "playing";
   const duration = Number.isFinite(player.duration) && (player.duration ?? 0) > 0
     ? player.duration ?? 0
@@ -117,7 +212,7 @@ function PlayerCard({
   }, [player.elapsedTime, player.id, now?.title]);
 
   useEffect(() => {
-    if (!isPlaying) {
+    if (!isPlaying || isRadio) {
       return;
     }
 
@@ -129,7 +224,7 @@ function PlayerCard({
     }, 1000);
 
     return () => window.clearInterval(timer);
-  }, [isPlaying, duration]);
+  }, [isPlaying, isRadio, duration]);
 
   const progressPercent = duration > 0
     ? Math.min(100, Math.max(0, (progress / duration) * 100))
@@ -137,86 +232,105 @@ function PlayerCard({
 
   return (
     <article className="player-card player-card-single">
-      <div className="queue-stage">
-        <TrackPreview
-          item={queueContext?.previous ?? null}
-          label="Föregående"
-          disabled={busy}
-          onActivate={() => void run(() => previousTrack(player.id))}
+      {isRadio && radioItem ? (
+        <RadioPanel
+          item={radioItem}
+          isActive={isRadioActive}
+          busy={busy}
+          onTransport={() => {
+            if (isRadioActive) {
+              void run(() => playPause(player.id));
+              return;
+            }
+
+            const uri = radioItem.uri;
+            if (uri) {
+              void run(() => playRadio(player.id, uri));
+            }
+          }}
         />
+      ) : (
+        <div className="queue-stage">
+          <TrackPreview
+            item={queueContext?.previous ?? null}
+            label="Föregående"
+            disabled={busy}
+            onActivate={() => void run(() => previousTrack(player.id))}
+          />
 
-        <section className="media-panel" aria-label="Nu spelas">
-          <div className="artwork-wrap">
-            {now?.image ? (
-              <img className="artwork" src={now.image} alt="" />
-            ) : (
-              <div className="artwork artwork-placeholder">♫</div>
-            )}
-            <span className={`status-dot ${isPlaying ? "playing" : ""}`} />
-          </div>
-
-          <div className="track-info">
-            <p className="info-label">Nu spelas</p>
-            <div className="now-playing">
-              <strong>{now?.title ?? "Inget spelar"}</strong>
-              <span>{now?.artist ?? "Välj musik i Music Assistant"}</span>
-              {now?.album && <small>{now.album}</small>}
+          <section className="media-panel" aria-label="Nu spelas">
+            <div className="artwork-wrap">
+              {now?.image ? (
+                <img className="artwork" src={now.image} alt="" />
+              ) : (
+                <div className="artwork artwork-placeholder">♫</div>
+              )}
+              <span className={`status-dot ${isPlaying ? "playing" : ""}`} />
             </div>
 
-            <div className="playback-progress">
-              <div className="playback-times">
-                <span>{formatTime(progress)}</span>
-                <span>{formatTime(duration)}</span>
+            <div className="track-info">
+              <p className="info-label">Nu spelas</p>
+              <div className="now-playing">
+                <strong>{now?.title ?? "Inget spelar"}</strong>
+                <span>{now?.artist ?? "Välj musik i Music Assistant"}</span>
+                {now?.album && <small>{now.album}</small>}
               </div>
-              <div
-                className="progress-track"
-                role="progressbar"
-                aria-label="Uppspelning"
-                aria-valuemin={0}
-                aria-valuemax={duration || 0}
-                aria-valuenow={Math.min(progress, duration || progress)}
-              >
+
+              <div className="playback-progress">
+                <div className="playback-times">
+                  <span>{formatTime(progress)}</span>
+                  <span>{formatTime(duration)}</span>
+                </div>
                 <div
-                  className="progress-fill"
-                  style={{ width: `${progressPercent}%` }}
-                />
+                  className="progress-track"
+                  role="progressbar"
+                  aria-label="Uppspelning"
+                  aria-valuemin={0}
+                  aria-valuemax={duration || 0}
+                  aria-valuenow={Math.min(progress, duration || progress)}
+                >
+                  <div
+                    className="progress-fill"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="transport" aria-label={`Styr ${player.name}`}>
+                <button
+                  disabled={busy}
+                  onClick={() => run(() => previousTrack(player.id))}
+                  aria-label="Föregående"
+                >
+                  ◀◀
+                </button>
+                <button
+                  className="primary-control"
+                  disabled={busy}
+                  onClick={() => run(() => playPause(player.id))}
+                  aria-label="Spela eller pausa"
+                >
+                  {isPlaying ? "❚❚" : "▶"}
+                </button>
+                <button
+                  disabled={busy}
+                  onClick={() => run(() => nextTrack(player.id))}
+                  aria-label="Nästa"
+                >
+                  ▶▶
+                </button>
               </div>
             </div>
+          </section>
 
-            <div className="transport" aria-label={`Styr ${player.name}`}>
-              <button
-                disabled={busy}
-                onClick={() => run(() => previousTrack(player.id))}
-                aria-label="Föregående"
-              >
-                ◀◀
-              </button>
-              <button
-                className="primary-control"
-                disabled={busy}
-                onClick={() => run(() => playPause(player.id))}
-                aria-label="Spela eller pausa"
-              >
-                {isPlaying ? "❚❚" : "▶"}
-              </button>
-              <button
-                disabled={busy}
-                onClick={() => run(() => nextTrack(player.id))}
-                aria-label="Nästa"
-              >
-                ▶▶
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <TrackPreview
-          item={queueContext?.next ?? null}
-          label="Nästa"
-          disabled={busy}
-          onActivate={() => void run(() => nextTrack(player.id))}
-        />
-      </div>
+          <TrackPreview
+            item={queueContext?.next ?? null}
+            label="Nästa"
+            disabled={busy}
+            onActivate={() => void run(() => nextTrack(player.id))}
+          />
+        </div>
+      )}
 
       <div className="player-controls-row">
         <section className="player-info" aria-label="Spelarinfo">
@@ -248,9 +362,18 @@ function PlayerCard({
   );
 }
 
+function storedView(): AppView {
+  return window.localStorage.getItem(VIEW_STORAGE_KEY) === "radio" ? "radio" : "music";
+}
+
 export default function App() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [queueContext, setQueueContext] = useState<QueueContext | null>(null);
+  const [radios, setRadios] = useState<RadioStation[]>([]);
+  const [radiosLoading, setRadiosLoading] = useState(true);
+  const [radioError, setRadioError] = useState<string | null>(null);
+  const [startingRadioUri, setStartingRadioUri] = useState<string | null>(null);
+  const [activeView, setActiveView] = useState<AppView>(storedView);
   const [selectedPlayerId, setSelectedPlayerId] = useState<string>(() =>
     window.localStorage.getItem(PLAYER_STORAGE_KEY) ?? ""
   );
@@ -263,7 +386,8 @@ export default function App() {
       setPlayers(data);
       setError(null);
 
-      if (selectedPlayerId) {
+      const selectedPlayer = data.find((player) => player.id === selectedPlayerId);
+      if (selectedPlayerId && selectedPlayer?.nowPlaying?.mediaType !== "radio") {
         try {
           setQueueContext(await getQueueContext(selectedPlayerId));
         } catch {
@@ -284,6 +408,33 @@ export default function App() {
     const timer = window.setInterval(() => void refresh(), 5000);
     return () => window.clearInterval(timer);
   }, [refresh]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadRadios = async () => {
+      try {
+        const data = await getRadios();
+        if (!cancelled) {
+          setRadios(data);
+          setRadioError(null);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setRadioError(err instanceof Error ? err.message : "Kunde inte läsa radiostationerna");
+        }
+      } finally {
+        if (!cancelled) {
+          setRadiosLoading(false);
+        }
+      }
+    };
+
+    void loadRadios();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (players.length === 0) {
@@ -309,6 +460,35 @@ export default function App() {
     window.localStorage.setItem(PLAYER_STORAGE_KEY, playerId);
   };
 
+  const chooseView = (view: AppView) => {
+    setActiveView(view);
+    window.localStorage.setItem(VIEW_STORAGE_KEY, view);
+  };
+
+  const startRadioStation = async (station: RadioStation) => {
+    if (!selectedPlayer || startingRadioUri) {
+      return;
+    }
+
+    setStartingRadioUri(station.uri);
+    setRadioError(null);
+
+    try {
+      await playRadio(selectedPlayer.id, station.uri);
+      setQueueContext(null);
+      await refresh();
+    } catch (err) {
+      setRadioError(err instanceof Error ? err.message : "Kunde inte starta radiostationen");
+    } finally {
+      setStartingRadioUri(null);
+    }
+  };
+
+  const hasRadioSelection = selectedPlayer?.nowPlaying?.mediaType === "radio";
+  const radioIsActive =
+    hasRadioSelection &&
+    (selectedPlayer?.state === "playing" || selectedPlayer?.state === "paused");
+
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -318,6 +498,31 @@ export default function App() {
           <p className="subtitle">Välj spelare och styr musiken på ett enkelt sätt</p>
         </div>
       </header>
+
+      <nav className="view-switcher" aria-label="Välj innehåll" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeView === "music"}
+          aria-controls="music-view"
+          className={activeView === "music" ? "active" : ""}
+          onClick={() => chooseView("music")}
+        >
+          <span className="view-switcher-icon" aria-hidden="true">♫</span>
+          Musik
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeView === "radio"}
+          aria-controls="radio-view"
+          className={activeView === "radio" ? "active" : ""}
+          onClick={() => chooseView("radio")}
+        >
+          <span className="view-switcher-icon" aria-hidden="true">●</span>
+          Radio
+        </button>
+      </nav>
 
       {error && <div className="message error">{error}</div>}
       {loading && <div className="message">Läser spelare…</div>}
@@ -352,12 +557,61 @@ export default function App() {
             </button>
           </section>
 
-          {selectedPlayer && (
-            <section className="selected-player">
-              <PlayerCard
-                player={selectedPlayer}
-                queueContext={queueContext}
-                onChanged={refresh}
+          {selectedPlayer && activeView === "music" && (
+            <section id="music-view" role="tabpanel" className="selected-player">
+              {radioIsActive ? (
+                <div className="view-empty-state">
+                  <span className="view-empty-icon" aria-hidden="true">●</span>
+                  <div>
+                    <strong>
+                      {selectedPlayer.state === "paused" ? "Radio är pausad" : "Radio spelar just nu"}
+                    </strong>
+                    <p>Välj Radio ovan för att se stationen och byta kanal.</p>
+                  </div>
+                </div>
+              ) : (
+                <PlayerCard
+                  player={selectedPlayer}
+                  queueContext={queueContext}
+                  onChanged={refresh}
+                />
+              )}
+            </section>
+          )}
+
+          {selectedPlayer && activeView === "radio" && (
+            <section id="radio-view" role="tabpanel" className="radio-view">
+              {hasRadioSelection && (
+                <section
+                  className="radio-player-section"
+                  aria-label={radioIsActive ? "Radio spelar nu" : "Senast spelade radio"}
+                >
+                  <PlayerCard
+                    player={selectedPlayer}
+                    queueContext={null}
+                    onChanged={refresh}
+                    preserveRadio
+                  />
+                </section>
+              )}
+
+              <RadioLibrary
+                stations={radios}
+                playerName={selectedPlayer.name}
+                currentUri={
+                  radioIsActive
+                    ? selectedPlayer.nowPlaying?.uri ?? null
+                    : null
+                }
+                currentName={
+                  radioIsActive
+                    ? selectedPlayer.nowPlaying?.stationName ?? selectedPlayer.nowPlaying?.title ?? null
+                    : null
+                }
+                loading={radiosLoading}
+                error={radioError}
+                busyUri={startingRadioUri}
+                onPlay={(station) => void startRadioStation(station)}
               />
             </section>
           )}
