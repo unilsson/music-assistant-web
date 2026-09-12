@@ -163,9 +163,14 @@ function PlayerCard({
     }
   };
 
-  const now = queueContext?.current ?? player.nowPlaying;
+  const radioItem = player.nowPlaying?.mediaType === "radio"
+    ? player.nowPlaying
+    : queueContext?.current?.mediaType === "radio"
+      ? queueContext.current
+      : null;
+  const isRadio = radioItem !== null;
+  const now = isRadio ? radioItem : queueContext?.current ?? player.nowPlaying;
   const isPlaying = player.state === "playing";
-  const isRadio = now?.mediaType === "radio";
   const duration = Number.isFinite(player.duration) && (player.duration ?? 0) > 0
     ? player.duration ?? 0
     : 0;
@@ -201,9 +206,9 @@ function PlayerCard({
 
   return (
     <article className="player-card player-card-single">
-      {isRadio && now ? (
+      {isRadio && radioItem ? (
         <RadioPanel
-          item={now}
+          item={radioItem}
           isPlaying={isPlaying}
           busy={busy}
           onPlayPause={() => void run(() => playPause(player.id))}
@@ -336,7 +341,8 @@ export default function App() {
       setPlayers(data);
       setError(null);
 
-      if (selectedPlayerId) {
+      const selectedPlayer = data.find((player) => player.id === selectedPlayerId);
+      if (selectedPlayerId && selectedPlayer?.nowPlaying?.mediaType !== "radio") {
         try {
           setQueueContext(await getQueueContext(selectedPlayerId));
         } catch {
