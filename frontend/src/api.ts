@@ -164,6 +164,12 @@ export async function playRadio(playerId: string, uri: string) {
   });
 }
 
+export async function stopRadio(playerId: string) {
+  return request(`/api/radios/${encodeURIComponent(playerId)}/stop`, {
+    method: "POST",
+  });
+}
+
 export async function getQueueContext(playerId: string): Promise<QueueContext> {
   const data = (await request(
     `/api/players/${encodeURIComponent(playerId)}/queue-context`
