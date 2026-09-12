@@ -29,63 +29,65 @@ function PlayerCard({ player, onChanged }: { player: Player; onChanged: () => Pr
 
   return (
     <article className="player-card player-card-single">
-      <div className="artwork-wrap">
-        {now?.image ? (
-          <img className="artwork" src={now.image} alt="" />
-        ) : (
-          <div className="artwork artwork-placeholder">♫</div>
-        )}
-        <span className={`status-dot ${isPlaying ? "playing" : ""}`} />
-      </div>
-
-      <div className="player-body">
-        <div className="info-row">
-          <section className="player-info" aria-label="Spelarinfo">
-            <p className="info-label">Spelare</p>
-            <h2>{player.name}</h2>
-            <p className="state">
-              {isPlaying ? "Spelar" : player.state === "paused" ? "Pausad" : "Redo"}
-            </p>
-          </section>
-
-          <section className="track-info" aria-label="Låtinfo">
-            <p className="info-label">Nu spelas</p>
-            <div className="now-playing">
-              <strong>{now?.title ?? "Inget spelar"}</strong>
-              <span>{now?.artist ?? "Välj musik i Music Assistant"}</span>
-              {now?.album && <small>{now.album}</small>}
-            </div>
-
-            <div className="transport" aria-label={`Styr ${player.name}`}>
-              <button disabled={busy} onClick={() => run(() => previousTrack(player.id))} aria-label="Föregående">
-                ◀◀
-              </button>
-              <button className="primary-control" disabled={busy} onClick={() => run(() => playPause(player.id))} aria-label="Spela eller pausa">
-                {isPlaying ? "❚❚" : "▶"}
-              </button>
-              <button disabled={busy} onClick={() => run(() => nextTrack(player.id))} aria-label="Nästa">
-                ▶▶
-              </button>
-            </div>
-          </section>
+      <section className="media-panel" aria-label="Nu spelas">
+        <div className="artwork-wrap">
+          {now?.image ? (
+            <img className="artwork" src={now.image} alt="" />
+          ) : (
+            <div className="artwork artwork-placeholder">♫</div>
+          )}
+          <span className={`status-dot ${isPlaying ? "playing" : ""}`} />
         </div>
+
+        <div className="track-info">
+          <p className="info-label">Nu spelas</p>
+          <div className="now-playing">
+            <strong>{now?.title ?? "Inget spelar"}</strong>
+            <span>{now?.artist ?? "Välj musik i Music Assistant"}</span>
+            {now?.album && <small>{now.album}</small>}
+          </div>
+
+          <div className="transport" aria-label={`Styr ${player.name}`}>
+            <button disabled={busy} onClick={() => run(() => previousTrack(player.id))} aria-label="Föregående">
+              ◀◀
+            </button>
+            <button className="primary-control" disabled={busy} onClick={() => run(() => playPause(player.id))} aria-label="Spela eller pausa">
+              {isPlaying ? "❚❚" : "▶"}
+            </button>
+            <button disabled={busy} onClick={() => run(() => nextTrack(player.id))} aria-label="Nästa">
+              ▶▶
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <div className="player-controls-row">
+        <section className="player-info" aria-label="Spelarinfo">
+          <p className="info-label">Spelare</p>
+          <h2>{player.name}</h2>
+          <p className="state">
+            {isPlaying ? "Spelar" : player.state === "paused" ? "Pausad" : "Redo"}
+          </p>
+        </section>
 
         <label className="volume-control">
           <span>Volym</span>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={volume}
-            onChange={(event) => setLocalVolume(Number(event.target.value))}
-            onPointerUp={() => run(() => setVolume(player.id, volume))}
-            onKeyUp={(event) => {
-              if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
-                void run(() => setVolume(player.id, volume));
-              }
-            }}
-          />
-          <output>{volume}%</output>
+          <div className="volume-slider-row">
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={volume}
+              onChange={(event) => setLocalVolume(Number(event.target.value))}
+              onPointerUp={() => run(() => setVolume(player.id, volume))}
+              onKeyUp={(event) => {
+                if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+                  void run(() => setVolume(player.id, volume));
+                }
+              }}
+            />
+            <output>{volume}%</output>
+          </div>
         </label>
       </div>
     </article>
