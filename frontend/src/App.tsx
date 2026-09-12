@@ -548,6 +548,16 @@ export default function App() {
 
           {selectedPlayer && activeView === "radio" && (
             <section id="radio-view" role="tabpanel" className="radio-view">
+              {radioIsPlaying && (
+                <section className="radio-player-section" aria-label="Radio spelar nu">
+                  <PlayerCard
+                    player={selectedPlayer}
+                    queueContext={null}
+                    onChanged={refresh}
+                  />
+                </section>
+              )}
+
               <RadioLibrary
                 stations={radios}
                 playerName={selectedPlayer.name}
@@ -566,16 +576,6 @@ export default function App() {
                 busyUri={startingRadioUri}
                 onPlay={(station) => void startRadioStation(station)}
               />
-
-              {radioIsPlaying && (
-                <section className="radio-player-section" aria-label="Radio spelar nu">
-                  <PlayerCard
-                    player={selectedPlayer}
-                    queueContext={null}
-                    onChanged={refresh}
-                  />
-                </section>
-              )}
             </section>
           )}
         </>
