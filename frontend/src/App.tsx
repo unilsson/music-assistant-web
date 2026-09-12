@@ -15,8 +15,12 @@ import {
   type RadioStation,
 } from "./api";
 import RadioLibrary from "./RadioLibrary";
+import "./view-tabs.css";
 
 const PLAYER_STORAGE_KEY = "music-assistant-web.selected-player";
+const VIEW_STORAGE_KEY = "music-assistant-web.active-view";
+
+type AppView = "music" | "radio";
 
 function formatTime(value: number | null | undefined) {
   if (!Number.isFinite(value) || value == null || value < 0) {
@@ -330,6 +334,10 @@ function PlayerCard({
   );
 }
 
+function storedView(): AppView {
+  return window.localStorage.getItem(VIEW_STORAGE_KEY) === "radio" ? "radio" : "music";
+}
+
 export default function App() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [queueContext, setQueueContext] = useState<QueueContext | null>(null);
@@ -337,6 +345,7 @@ export default function App() {
   const [radiosLoading, setRadiosLoading] = useState(true);
   const [radioError, setRadioError] = useState<string | null>(null);
   const [startingRadioUri, setStartingRadioUri] = useState<string | null>(null);
+  const [activeView, setActiveView] = useState<AppView>(storedView);
   const [selectedPlayerId, setSelectedPlayerId] = useState<string>(() =>
     window.localStorage.getItem(PLAYER_STORAGE_KEY) ?? ""
   );
@@ -423,6 +432,11 @@ export default function App() {
     window.localStorage.setItem(PLAYER_STORAGE_KEY, playerId);
   };
 
+  const chooseView = (view: AppView) => {
+    setActiveView(view);
+    window.localStorage.setItem(VIEW_STORAGE_KEY, view);
+  };
+
   const startRadioStation = async (station: RadioStation) => {
     if (!selectedPlayer || startingRadioUri) {
       return;
@@ -442,6 +456,8 @@ export default function App() {
     }
   };
 
+  const radioIsPlaying = selectedPlayer?.nowPlaying?.mediaType === "radio";
+
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -451,6 +467,31 @@ export default function App() {
           <p className="subtitle">Välj spelare och styr musiken på ett enkelt sätt</p>
         </div>
       </header>
+
+      <nav className="view-switcher" aria-label="Välj innehåll" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeView === "music"}
+          aria-controls="music-view"
+          className={activeView === "music" ? "active" : ""}
+          onClick={() => chooseView("music")}
+        >
+          <span className="view-switcher-icon" aria-hidden="true">♫</span>
+          Musik
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeView === "radio"}
+          aria-controls="radio-view"
+          className={activeView === "radio" ? "active" : ""}
+          onClick={() => chooseView("radio")}
+        >
+          <span className="view-switcher-icon" aria-hidden="true">●</span>
+          Radio
+        </button>
+      </nav>
 
       {error && <div className="message error">{error}</div>}
       {loading && <div className="message">Läser spelare…</div>}
@@ -485,27 +526,39 @@ export default function App() {
             </button>
           </section>
 
-          {selectedPlayer && (
-            <>
-              <section className="selected-player">
+          {selectedPlayer && activeView === "music" && (
+            <section id="music-view" role="tabpanel" className="selected-player">
+              {radioIsPlaying ? (
+                <div className="view-empty-state">
+                  <span className="view-empty-icon" aria-hidden="true">●</span>
+                  <div>
+                    <strong>Radio spelar just nu</strong>
+                    <p>Välj Radio ovan för att se stationen och byta kanal.</p>
+                  </div>
+                </div>
+              ) : (
                 <PlayerCard
                   player={selectedPlayer}
                   queueContext={queueContext}
                   onChanged={refresh}
                 />
-              </section>
+              )}
+            </section>
+          )}
 
+          {selectedPlayer && activeView === "radio" && (
+            <section id="radio-view" role="tabpanel" className="radio-view">
               <RadioLibrary
                 stations={radios}
                 playerName={selectedPlayer.name}
                 currentUri={
-                  selectedPlayer.nowPlaying?.mediaType === "radio"
-                    ? selectedPlayer.nowPlaying.uri
+                  radioIsPlaying
+                    ? selectedPlayer.nowPlaying?.uri ?? null
                     : null
                 }
                 currentName={
-                  selectedPlayer.nowPlaying?.mediaType === "radio"
-                    ? selectedPlayer.nowPlaying.stationName ?? selectedPlayer.nowPlaying.title
+                  radioIsPlaying
+                    ? selectedPlayer.nowPlaying?.stationName ?? selectedPlayer.nowPlaying?.title ?? null
                     : null
                 }
                 loading={radiosLoading}
@@ -513,7 +566,17 @@ export default function App() {
                 busyUri={startingRadioUri}
                 onPlay={(station) => void startRadioStation(station)}
               />
-            </>
+
+              {radioIsPlaying && (
+                <section className="radio-player-section" aria-label="Radio spelar nu">
+                  <PlayerCard
+                    player={selectedPlayer}
+                    queueContext={null}
+                    onChanged={refresh}
+                  />
+                </section>
+              )}
+            </section>
           )}
         </>
       )}
