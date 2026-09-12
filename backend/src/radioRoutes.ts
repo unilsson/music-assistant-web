@@ -67,5 +67,27 @@ export function createRadioRouter(command: Command) {
     }
   });
 
+  router.post("/:playerId/stop", async (req, res) => {
+    try {
+      const playerId = req.params.playerId;
+      const result = await command("player_queues/stop", {
+        queue_id: playerId,
+      });
+
+      res.json({
+        status: "ok",
+        playerId,
+        action: "stop",
+        result,
+      });
+    } catch (error) {
+      console.error("Music Assistant radio stop error:", error);
+      res.status(502).json({
+        status: "error",
+        error: "Unable to stop radio",
+      });
+    }
+  });
+
   return router;
 }
