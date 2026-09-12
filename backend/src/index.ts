@@ -62,6 +62,17 @@ function summarizeQueueItem(item: any) {
   };
 }
 
+function normalizeVolume(...values: unknown[]): number | null {
+  for (const value of values) {
+    const number = Number(value);
+    if (Number.isFinite(number) && number >= 0 && number <= 100) {
+      return Math.round(number);
+    }
+  }
+
+  return null;
+}
+
 app.get("/api/health", (_req, res) => {
   res.json({
     status: "ok",
@@ -101,19 +112,39 @@ app.get("/api/players", async (_req, res) => {
     const response = await maCommand("player_queues/all");
     const queues = unwrapArray(response);
 
+    let maPlayers: any[] = [];
+    try {
+      maPlayers = unwrapArray(await maCommand("players/all"));
+    } catch (error) {
+      console.warn("Unable to retrieve Music Assistant player details:", error);
+    }
+
     const players = queues
       .filter((queue: any) => queue.available === true)
-      .map((queue: any) => ({
-        id: queue.queue_id,
-        name: queue.display_name ?? queue.queue_id,
-        available: queue.available ?? false,
-        state: queue.state ?? "unknown",
-        active: queue.active ?? false,
-        items: queue.items ?? 0,
-        elapsedTime: queue.elapsed_time ?? null,
-        duration: queue.duration ?? null,
-        nowPlaying: summarizeQueueItem(queue.current_item),
-      }));
+      .map((queue: any) => {
+        const playerDetails = maPlayers.find((entry: any) => {
+          const id = entry?.player_id ?? entry?.id ?? entry?.queue_id;
+          return id === queue.queue_id;
+        });
+
+        return {
+          id: queue.queue_id,
+          name: queue.display_name ?? queue.queue_id,
+          available: queue.available ?? false,
+          state: queue.state ?? "unknown",
+          active: queue.active ?? false,
+          items: queue.items ?? 0,
+          elapsedTime: queue.elapsed_time ?? null,
+          duration: queue.duration ?? null,
+          volumeLevel: normalizeVolume(
+            playerDetails?.volume_level,
+            playerDetails?.volume,
+            queue?.volume_level,
+            queue?.volume
+          ),
+          nowPlaying: summarizeQueueItem(queue.current_item),
+        };
+      });
 
     res.json({
       status: "ok",
