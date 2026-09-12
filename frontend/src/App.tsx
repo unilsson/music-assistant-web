@@ -13,6 +13,18 @@ import {
 
 const PLAYER_STORAGE_KEY = "music-assistant-web.selected-player";
 
+function formatTime(value: number | null | undefined) {
+  if (!Number.isFinite(value) || value == null || value < 0) {
+    return "0:00";
+  }
+
+  const totalSeconds = Math.floor(value);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+
 function PreviewContent({ item, label }: { item: QueuePreviewItem | null; label: string }) {
   return (
     <>
@@ -76,6 +88,7 @@ function PlayerCard({
 }) {
   const [busy, setBusy] = useState(false);
   const [volume, setLocalVolume] = useState(25);
+  const [progress, setProgress] = useState(player.elapsedTime ?? 0);
 
   const run = async (action: () => Promise<unknown>) => {
     setBusy(true);
@@ -89,6 +102,32 @@ function PlayerCard({
 
   const now = queueContext?.current ?? player.nowPlaying;
   const isPlaying = player.state === "playing";
+  const duration = Number.isFinite(player.duration) && (player.duration ?? 0) > 0
+    ? player.duration ?? 0
+    : 0;
+
+  useEffect(() => {
+    setProgress(Math.max(0, player.elapsedTime ?? 0));
+  }, [player.elapsedTime, player.id, now?.title]);
+
+  useEffect(() => {
+    if (!isPlaying) {
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      setProgress((current) => {
+        const next = current + 1;
+        return duration > 0 ? Math.min(next, duration) : next;
+      });
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, [isPlaying, duration]);
+
+  const progressPercent = duration > 0
+    ? Math.min(100, Math.max(0, (progress / duration) * 100))
+    : 0;
 
   return (
     <article className="player-card player-card-single">
@@ -116,6 +155,26 @@ function PlayerCard({
               <strong>{now?.title ?? "Inget spelar"}</strong>
               <span>{now?.artist ?? "Välj musik i Music Assistant"}</span>
               {now?.album && <small>{now.album}</small>}
+            </div>
+
+            <div className="playback-progress">
+              <div className="playback-times">
+                <span>{formatTime(progress)}</span>
+                <span>{formatTime(duration)}</span>
+              </div>
+              <div
+                className="progress-track"
+                role="progressbar"
+                aria-label="Uppspelning"
+                aria-valuemin={0}
+                aria-valuemax={duration || 0}
+                aria-valuenow={Math.min(progress, duration || progress)}
+              >
+                <div
+                  className="progress-fill"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
             </div>
 
             <div className="transport" aria-label={`Styr ${player.name}`}>
