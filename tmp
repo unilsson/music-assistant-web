@@ -1,0 +1,3644 @@
+{
+    "status": "ok",
+    "musicAssistant": [
+        {
+            "queue_id": "up543ad6b97864",
+            "active": true,
+            "display_name": "Samsung",
+            "available": false,
+            "items": 9,
+            "shuffle_enabled": false,
+            "repeat_mode": "off",
+            "crossfade_enabled": false,
+            "autoplay_enabled": true,
+            "overlay_enabled": false,
+            "overlay_source": null,
+            "overlay_volume": 100,
+            "smart_fades_active": false,
+            "smart_shuffle_active": false,
+            "current_index": 2,
+            "index_in_buffer": null,
+            "ended": false,
+            "elapsed_time": 0,
+            "elapsed_time_last_updated": 1787924601.7398303,
+            "playback_speed": 1,
+            "state": "idle",
+            "current_item": {
+                "queue_id": "up543ad6b97864",
+                "queue_item_id": "8ff44c69bac348fabf6e4d07c747ac43",
+                "name": "Rush - YYZ",
+                "duration": 266,
+                "sort_index": 2,
+                "streamdetails": null,
+                "media_item": {
+                    "item_id": "77623603",
+                    "provider": "tidal--AQz2Eakq",
+                    "name": "YYZ",
+                    "version": "",
+                    "sort_name": "yyz",
+                    "uri": "tidal--AQz2Eakq://track/77623603",
+                    "external_ids": [
+                        [
+                            "isrc",
+                            "USMR18180105"
+                        ]
+                    ],
+                    "is_playable": true,
+                    "media_type": "track",
+                    "provider_mappings": [
+                        {
+                            "item_id": "77623603",
+                            "provider_domain": "tidal",
+                            "provider_instance": "tidal--AQz2Eakq",
+                            "available": true,
+                            "in_library": null,
+                            "is_unique": null,
+                            "audio_format": {
+                                "content_type": "flac",
+                                "codec_type": "?",
+                                "sample_rate": 44100,
+                                "bit_depth": 24,
+                                "channels": 2,
+                                "output_format_str": "flac",
+                                "bit_rate": 0
+                            },
+                            "url": "https://tidal.com/track/77623603",
+                            "details": null
+                        }
+                    ],
+                    "metadata": {
+                        "description": null,
+                        "description_language": null,
+                        "life_span": null,
+                        "artist_entity_type": null,
+                        "review": null,
+                        "explicit": false,
+                        "images": [
+                            {
+                                "type": "thumb",
+                                "path": "https://resources.tidal.com/images/eee33e04/bcfc/444e/a4ae/0c8e1246421e/750x750.jpg",
+                                "provider": "tidal--AQz2Eakq",
+                                "remotely_accessible": true,
+                                "proxy_id": "ce742237bf4378db49096bb3735ac118320a9242489860f91afae1cef3398da3"
+                            }
+                        ],
+                        "grouping": null,
+                        "genres": [
+                            "Rock"
+                        ],
+                        "mood": null,
+                        "style": null,
+                        "copyright": "\u2117 1981 UMG Recordings, Inc.",
+                        "lyrics": null,
+                        "lrc_lyrics": null,
+                        "transcript": null,
+                        "transcript_cues": null,
+                        "has_transcript": null,
+                        "label": null,
+                        "links": null,
+                        "performers": [
+                            "Robbie Whelan",
+                            "Geddy Lee",
+                            "RUSH",
+                            "Neil Peart",
+                            "Paul Northfield",
+                            "Terry Brown"
+                        ],
+                        "preview": null,
+                        "popularity": 65,
+                        "release_date": null,
+                        "languages": null,
+                        "chapters": null,
+                        "collections": null,
+                        "last_refresh": null
+                    },
+                    "favorite": false,
+                    "position": null,
+                    "date_added": null,
+                    "duration": 266,
+                    "artists": [
+                        {
+                            "item_id": "19141",
+                            "provider": "tidal--AQz2Eakq",
+                            "name": "Rush",
+                            "version": "",
+                            "sort_name": "rush",
+                            "uri": "tidal--AQz2Eakq://artist/19141",
+                            "external_ids": [],
+                            "is_playable": true,
+                            "media_type": "artist",
+                            "provider_mappings": [
+                                {
+                                    "item_id": "19141",
+                                    "provider_domain": "tidal",
+                                    "provider_instance": "tidal--AQz2Eakq",
+                                    "available": true,
+                                    "in_library": null,
+                                    "is_unique": null,
+                                    "audio_format": {
+                                        "content_type": "?",
+                                        "codec_type": "?",
+                                        "sample_rate": 44100,
+                                        "bit_depth": 16,
+                                        "channels": 2,
+                                        "output_format_str": "?",
+                                        "bit_rate": 0
+                                    },
+                                    "url": "https://tidal.com/artist/19141",
+                                    "details": null
+                                }
+                            ],
+                            "metadata": {
+                                "description": null,
+                                "description_language": null,
+                                "life_span": null,
+                                "artist_entity_type": null,
+                                "review": null,
+                                "explicit": null,
+                                "images": null,
+                                "grouping": null,
+                                "genres": null,
+                                "mood": null,
+                                "style": null,
+                                "copyright": null,
+                                "lyrics": null,
+                                "lrc_lyrics": null,
+                                "transcript": null,
+                                "transcript_cues": null,
+                                "has_transcript": null,
+                                "label": null,
+                                "links": null,
+                                "performers": null,
+                                "preview": null,
+                                "popularity": 80,
+                                "release_date": null,
+                                "languages": null,
+                                "chapters": null,
+                                "collections": null,
+                                "last_refresh": null
+                            },
+                            "favorite": false,
+                            "position": null,
+                            "date_added": null,
+                            "artist_type": "singer"
+                        }
+                    ],
+                    "last_played": 0,
+                    "album": {
+                        "item_id": "99",
+                        "provider": "library",
+                        "name": "Moving Pictures",
+                        "version": "",
+                        "sort_name": "moving pictures",
+                        "uri": "library://album/99",
+                        "external_ids": [
+                            [
+                                "barcode",
+                                "00602547243850"
+                            ]
+                        ],
+                        "is_playable": true,
+                        "media_type": "album",
+                        "provider_mappings": [
+                            {
+                                "item_id": "77623600",
+                                "provider_domain": "tidal",
+                                "provider_instance": "tidal--AQz2Eakq",
+                                "available": true,
+                                "in_library": true,
+                                "is_unique": null,
+                                "audio_format": {
+                                    "content_type": "flac",
+                                    "codec_type": "?",
+                                    "sample_rate": 44100,
+                                    "bit_depth": 16,
+                                    "channels": 2,
+                                    "output_format_str": "flac",
+                                    "bit_rate": 0
+                                },
+                                "url": "https://tidal.com/album/77623600",
+                                "details": null
+                            }
+                        ],
+                        "metadata": {
+                            "description": "Moving Pictures \u00e4r ett musikalbum av Rush, sl\u00e4ppt den 28 februari 1981. Albumet h\u00f6r till deras mest framg\u00e5ngsrika. Det har s\u00e5lt 4x platina i USA och n\u00e5dde tredjeplatsen p\u00e5 Billboard 200.",
+                            "description_language": "sv",
+                            "life_span": null,
+                            "artist_entity_type": null,
+                            "review": "",
+                            "explicit": false,
+                            "images": [
+                                {
+                                    "type": "thumb",
+                                    "path": "https://resources.tidal.com/images/eee33e04/bcfc/444e/a4ae/0c8e1246421e/750x750.jpg",
+                                    "provider": "tidal--AQz2Eakq",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "ce742237bf4378db49096bb3735ac118320a9242489860f91afae1cef3398da3"
+                                },
+                                {
+                                    "type": "thumb",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/thumb/ln3kob1762516561.jpg",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "6f57a757ceaa9bfff20d26caeebbc96f9e03474008207f80a7e97ad385a67249"
+                                },
+                                {
+                                    "type": "discart",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/cdart/xyihe11762516578.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "35d88550ceefeb7f33e409d25d1bef54ade72825d6d05ac7c51c263c66c97123"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dcase/738l4u1762516590.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "7e82b0504d1de5dcde7c7b31ae85b925f6c88ef72472d2cc5f5a4262b93e0ed0"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dflat/p0vlx51762516602.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "ab7ff01a5792bcfe3a8759a55f4d1ef5131d591c4199f18154d5169264390b49"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dface/wg3e1s1762516613.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "272f4c15c89a0cb34a6b8c2f771a7f760ea63489b7c83dbd568980d410fd362d"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dthumb/qrr14n1613732550.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "4a79456a577556490bba531a9b628bb2f7a172ddf7c3aa47687a6e0f3438c28e"
+                                },
+                                {
+                                    "type": "thumb",
+                                    "path": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/19/39/78/19397873-9581-13e0-07f3-3071f38527ac/12UMGIM19114.rgb.jpg/1500x1500bb.jpg",
+                                    "provider": "itunes_artwork",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "ddfd559ea291b504accc9c090f95cca711bdedef17ea68edcfa315dfb1878e30"
+                                }
+                            ],
+                            "grouping": null,
+                            "genres": [
+                                "Progressive Rock"
+                            ],
+                            "mood": "Gritty",
+                            "style": "Rock/Pop",
+                            "copyright": "\u00a9 2015 Anthem Entertainment/Mercury Records, a division of UMG Recordings, Inc.",
+                            "lyrics": null,
+                            "lrc_lyrics": null,
+                            "transcript": null,
+                            "transcript_cues": null,
+                            "has_transcript": null,
+                            "label": "Island Mercury",
+                            "links": [
+                                {
+                                    "type": "wikipedia",
+                                    "url": "https://wikipedia.org/wiki/Moving_Pictures_(Rush_album)"
+                                },
+                                {
+                                    "type": "allmusic",
+                                    "url": "https://www.allmusic.com/album/mw0000616962"
+                                }
+                            ],
+                            "performers": null,
+                            "preview": null,
+                            "popularity": 70,
+                            "release_date": "1981-02-07T00:00:00",
+                            "languages": null,
+                            "chapters": null,
+                            "collections": null,
+                            "last_refresh": 1787847610
+                        },
+                        "favorite": true,
+                        "position": null,
+                        "date_added": "2026-08-27T16:20:10+00:00",
+                        "year": 1981,
+                        "artists": [
+                            {
+                                "item_id": "188",
+                                "provider": "library",
+                                "name": "Rush",
+                                "version": "",
+                                "sort_name": "rush",
+                                "uri": "library://artist/188",
+                                "external_ids": [],
+                                "is_playable": true,
+                                "media_type": "artist",
+                                "available": true,
+                                "image": null,
+                                "year": null
+                            }
+                        ],
+                        "album_type": "album"
+                    },
+                    "disc_number": 0,
+                    "track_number": 0,
+                    "audio_metadata": null
+                },
+                "image": {
+                    "type": "thumb",
+                    "path": "https://resources.tidal.com/images/eee33e04/bcfc/444e/a4ae/0c8e1246421e/750x750.jpg",
+                    "provider": "tidal--AQz2Eakq",
+                    "remotely_accessible": true,
+                    "proxy_id": "ce742237bf4378db49096bb3735ac118320a9242489860f91afae1cef3398da3"
+                },
+                "index": 0,
+                "available": true,
+                "extra_attributes": {}
+            },
+            "next_item": {
+                "queue_id": "up543ad6b97864",
+                "queue_item_id": "958db4cf59fd4e68b87f32ef3078d9cb",
+                "name": "Rush - Red Barchetta",
+                "duration": 372,
+                "sort_index": 6,
+                "streamdetails": null,
+                "media_item": {
+                    "item_id": "77623602",
+                    "provider": "tidal--AQz2Eakq",
+                    "name": "Red Barchetta",
+                    "version": "",
+                    "sort_name": "red barchetta",
+                    "uri": "tidal--AQz2Eakq://track/77623602",
+                    "external_ids": [
+                        [
+                            "isrc",
+                            "USMR18180104"
+                        ]
+                    ],
+                    "is_playable": true,
+                    "media_type": "track",
+                    "provider_mappings": [
+                        {
+                            "item_id": "77623602",
+                            "provider_domain": "tidal",
+                            "provider_instance": "tidal--AQz2Eakq",
+                            "available": true,
+                            "in_library": null,
+                            "is_unique": null,
+                            "audio_format": {
+                                "content_type": "flac",
+                                "codec_type": "?",
+                                "sample_rate": 44100,
+                                "bit_depth": 24,
+                                "channels": 2,
+                                "output_format_str": "flac",
+                                "bit_rate": 0
+                            },
+                            "url": "https://tidal.com/track/77623602",
+                            "details": null
+                        }
+                    ],
+                    "metadata": {
+                        "description": null,
+                        "description_language": null,
+                        "life_span": null,
+                        "artist_entity_type": null,
+                        "review": null,
+                        "explicit": false,
+                        "images": [
+                            {
+                                "type": "thumb",
+                                "path": "https://resources.tidal.com/images/eee33e04/bcfc/444e/a4ae/0c8e1246421e/750x750.jpg",
+                                "provider": "tidal--AQz2Eakq",
+                                "remotely_accessible": true,
+                                "proxy_id": "ce742237bf4378db49096bb3735ac118320a9242489860f91afae1cef3398da3"
+                            }
+                        ],
+                        "grouping": null,
+                        "genres": [
+                            "Rock"
+                        ],
+                        "mood": null,
+                        "style": null,
+                        "copyright": "\u2117 1981 UMG Recordings, Inc.",
+                        "lyrics": "My uncle has a country place\nNo one knows about\nHe says it used to be a farm\nBefore the \"Motor Law\"\nAnd on Sundays I elude the eyes\nAnd hop the turbine freight\nTo far outside the wire\nWhere my white-haired uncle waits\n\nJump to the ground\nAs the turbo slows to cross the borderline\nRun like the wind\nAs excitement shivers up and down my spine\nDown in his barn\nMy uncle preserved for me an old machine\nFor 50 odd years\nTo keep it as new has been his dearest dream\n\nI strip away the old debris\nThat hides a shining car\nA brilliant red Barchetta\nFrom a better vanished time\nWe fire up the willing engine\nResponding with a roar\nTires spitting gravel\nI commit my weekly crime\n\nWind in my hair\nShifting and drifting\nMechanical music\nAdrenaline surge\n\nWell-weathered leather\nHot metal and oil\nThe scented country air\nSunlight on chrome\nThe blur of the landscape\nEvery nerve aware\n\nSuddenly ahead of me\nAcross the mountainside\nA gleaming alloy air car\nShoots towards me, two lanes wide\nI spin around with shrieking tires\nTo run the deadly race\nGo screaming through the valley\nAs another joins the chase\n\nDrive like the wind\nStraining the limits of machine and man\nLaughing out loud with fear and hope\nI've got a desperate plan\nAt the one-lane bridge\nI leave the giants stranded at the riverside\nRace back to the farm\nTo dream with my uncle at the fireside",
+                        "lrc_lyrics": "[00:46.09] My uncle has a country place\n[00:49.34] No one knows about\n[00:52.69] He says it used to be a farm\n[00:55.93] Before the \"Motor Law\"\n[00:59.25] And on Sundays I elude the eyes\n[01:02.38] And hop the turbine freight\n[01:05.66] To far outside the wire\n[01:08.53] Where my white-haired uncle waits\n[01:32.64] Jump to the ground\n[01:34.08] As the turbo slows to cross the borderline\n[01:39.36] Run like the wind\n[01:40.65] As excitement shivers up and down my spine\n[01:46.08] Down in his barn\n[01:47.53] My uncle preserved for me an old machine\n[01:50.81] For 50 odd years\n[01:52.72] To keep it as new has been his dearest dream\n[02:00.44] I strip away the old debris\n[02:03.67] That hides a shining car\n[02:06.83] A brilliant red Barchetta\n[02:09.43] From a better vanished time\n[02:13.73] We fire up the willing engine\n[02:17.21] Responding with a roar\n[02:20.58] Tires spitting gravel\n[02:23.02] I commit my weekly crime\n[02:42.83] Wind in my hair\n[02:47.23] Shifting and drifting\n[02:53.09] Mechanical music\n[02:58.76] Adrenaline surge\n[03:08.20] Well-weathered leather\n[03:09.74] Hot metal and oil\n[03:11.40] The scented country air\n[03:14.57] Sunlight on chrome\n[03:15.98] The blur of the landscape\n[03:18.18] Every nerve aware\n[03:56.20] Suddenly ahead of me\n[03:59.23] Across the mountainside\n[04:02.48] A gleaming alloy air car\n[04:04.96] Shoots towards me, two lanes wide\n[04:09.17] I spin around with shrieking tires\n[04:12.41] To run the deadly race\n[04:15.75] Go screaming through the valley\n[04:18.33] As another joins the chase\n[04:42.77] Drive like the wind\n[04:44.31] Straining the limits of machine and man\n[04:49.35] Laughing out loud with fear and hope\n[04:52.28] I've got a desperate plan\n[04:55.53] At the one-lane bridge\n[04:57.09] I leave the giants stranded at the riverside\n[05:02.15] Race back to the farm\n[05:04.07] To dream with my uncle at the fireside\n[05:08.61] ",
+                        "transcript": null,
+                        "transcript_cues": null,
+                        "has_transcript": null,
+                        "label": null,
+                        "links": null,
+                        "performers": [
+                            "Robbie Whelan",
+                            "Alex Lifeson",
+                            "Geddy Lee",
+                            "RUSH",
+                            "Neil Peart",
+                            "Paul Northfield",
+                            "Terry Brown"
+                        ],
+                        "preview": null,
+                        "popularity": 63,
+                        "release_date": null,
+                        "languages": null,
+                        "chapters": null,
+                        "collections": null,
+                        "last_refresh": null
+                    },
+                    "favorite": false,
+                    "position": null,
+                    "date_added": null,
+                    "duration": 372,
+                    "artists": [
+                        {
+                            "item_id": "19141",
+                            "provider": "tidal--AQz2Eakq",
+                            "name": "Rush",
+                            "version": "",
+                            "sort_name": "rush",
+                            "uri": "tidal--AQz2Eakq://artist/19141",
+                            "external_ids": [],
+                            "is_playable": true,
+                            "media_type": "artist",
+                            "provider_mappings": [
+                                {
+                                    "item_id": "19141",
+                                    "provider_domain": "tidal",
+                                    "provider_instance": "tidal--AQz2Eakq",
+                                    "available": true,
+                                    "in_library": null,
+                                    "is_unique": null,
+                                    "audio_format": {
+                                        "content_type": "?",
+                                        "codec_type": "?",
+                                        "sample_rate": 44100,
+                                        "bit_depth": 16,
+                                        "channels": 2,
+                                        "output_format_str": "?",
+                                        "bit_rate": 0
+                                    },
+                                    "url": "https://tidal.com/artist/19141",
+                                    "details": null
+                                }
+                            ],
+                            "metadata": {
+                                "description": null,
+                                "description_language": null,
+                                "life_span": null,
+                                "artist_entity_type": null,
+                                "review": null,
+                                "explicit": null,
+                                "images": null,
+                                "grouping": null,
+                                "genres": null,
+                                "mood": null,
+                                "style": null,
+                                "copyright": null,
+                                "lyrics": null,
+                                "lrc_lyrics": null,
+                                "transcript": null,
+                                "transcript_cues": null,
+                                "has_transcript": null,
+                                "label": null,
+                                "links": null,
+                                "performers": null,
+                                "preview": null,
+                                "popularity": 80,
+                                "release_date": null,
+                                "languages": null,
+                                "chapters": null,
+                                "collections": null,
+                                "last_refresh": null
+                            },
+                            "favorite": false,
+                            "position": null,
+                            "date_added": null,
+                            "artist_type": "singer"
+                        }
+                    ],
+                    "last_played": 0,
+                    "album": {
+                        "item_id": "99",
+                        "provider": "library",
+                        "name": "Moving Pictures",
+                        "version": "",
+                        "sort_name": "moving pictures",
+                        "uri": "library://album/99",
+                        "external_ids": [
+                            [
+                                "barcode",
+                                "00602547243850"
+                            ]
+                        ],
+                        "is_playable": true,
+                        "media_type": "album",
+                        "provider_mappings": [
+                            {
+                                "item_id": "77623600",
+                                "provider_domain": "tidal",
+                                "provider_instance": "tidal--AQz2Eakq",
+                                "available": true,
+                                "in_library": true,
+                                "is_unique": null,
+                                "audio_format": {
+                                    "content_type": "flac",
+                                    "codec_type": "?",
+                                    "sample_rate": 44100,
+                                    "bit_depth": 16,
+                                    "channels": 2,
+                                    "output_format_str": "flac",
+                                    "bit_rate": 0
+                                },
+                                "url": "https://tidal.com/album/77623600",
+                                "details": null
+                            }
+                        ],
+                        "metadata": {
+                            "description": "Moving Pictures \u00e4r ett musikalbum av Rush, sl\u00e4ppt den 28 februari 1981. Albumet h\u00f6r till deras mest framg\u00e5ngsrika. Det har s\u00e5lt 4x platina i USA och n\u00e5dde tredjeplatsen p\u00e5 Billboard 200.",
+                            "description_language": "sv",
+                            "life_span": null,
+                            "artist_entity_type": null,
+                            "review": "",
+                            "explicit": false,
+                            "images": [
+                                {
+                                    "type": "thumb",
+                                    "path": "https://resources.tidal.com/images/eee33e04/bcfc/444e/a4ae/0c8e1246421e/750x750.jpg",
+                                    "provider": "tidal--AQz2Eakq",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "ce742237bf4378db49096bb3735ac118320a9242489860f91afae1cef3398da3"
+                                },
+                                {
+                                    "type": "thumb",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/thumb/ln3kob1762516561.jpg",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "6f57a757ceaa9bfff20d26caeebbc96f9e03474008207f80a7e97ad385a67249"
+                                },
+                                {
+                                    "type": "discart",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/cdart/xyihe11762516578.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "35d88550ceefeb7f33e409d25d1bef54ade72825d6d05ac7c51c263c66c97123"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dcase/738l4u1762516590.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "7e82b0504d1de5dcde7c7b31ae85b925f6c88ef72472d2cc5f5a4262b93e0ed0"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dflat/p0vlx51762516602.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "ab7ff01a5792bcfe3a8759a55f4d1ef5131d591c4199f18154d5169264390b49"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dface/wg3e1s1762516613.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "272f4c15c89a0cb34a6b8c2f771a7f760ea63489b7c83dbd568980d410fd362d"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dthumb/qrr14n1613732550.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "4a79456a577556490bba531a9b628bb2f7a172ddf7c3aa47687a6e0f3438c28e"
+                                },
+                                {
+                                    "type": "thumb",
+                                    "path": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/19/39/78/19397873-9581-13e0-07f3-3071f38527ac/12UMGIM19114.rgb.jpg/1500x1500bb.jpg",
+                                    "provider": "itunes_artwork",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "ddfd559ea291b504accc9c090f95cca711bdedef17ea68edcfa315dfb1878e30"
+                                }
+                            ],
+                            "grouping": null,
+                            "genres": [
+                                "Progressive Rock"
+                            ],
+                            "mood": "Gritty",
+                            "style": "Rock/Pop",
+                            "copyright": "\u00a9 2015 Anthem Entertainment/Mercury Records, a division of UMG Recordings, Inc.",
+                            "lyrics": null,
+                            "lrc_lyrics": null,
+                            "transcript": null,
+                            "transcript_cues": null,
+                            "has_transcript": null,
+                            "label": "Island Mercury",
+                            "links": [
+                                {
+                                    "type": "wikipedia",
+                                    "url": "https://wikipedia.org/wiki/Moving_Pictures_(Rush_album)"
+                                },
+                                {
+                                    "type": "allmusic",
+                                    "url": "https://www.allmusic.com/album/mw0000616962"
+                                }
+                            ],
+                            "performers": null,
+                            "preview": null,
+                            "popularity": 70,
+                            "release_date": "1981-02-07T00:00:00",
+                            "languages": null,
+                            "chapters": null,
+                            "collections": null,
+                            "last_refresh": 1787847610
+                        },
+                        "favorite": true,
+                        "position": null,
+                        "date_added": "2026-08-27T16:20:10+00:00",
+                        "year": 1981,
+                        "artists": [
+                            {
+                                "item_id": "188",
+                                "provider": "library",
+                                "name": "Rush",
+                                "version": "",
+                                "sort_name": "rush",
+                                "uri": "library://artist/188",
+                                "external_ids": [],
+                                "is_playable": true,
+                                "media_type": "artist",
+                                "available": true,
+                                "image": null,
+                                "year": null
+                            }
+                        ],
+                        "album_type": "album"
+                    },
+                    "disc_number": 0,
+                    "track_number": 0,
+                    "audio_metadata": null
+                },
+                "image": {
+                    "type": "thumb",
+                    "path": "https://resources.tidal.com/images/eee33e04/bcfc/444e/a4ae/0c8e1246421e/750x750.jpg",
+                    "provider": "tidal--AQz2Eakq",
+                    "remotely_accessible": true,
+                    "proxy_id": "ce742237bf4378db49096bb3735ac118320a9242489860f91afae1cef3398da3"
+                },
+                "index": 0,
+                "available": true,
+                "extra_attributes": {}
+            },
+            "sources": [],
+            "flow_mode": false,
+            "resume_pos": 0,
+            "is_dynamic": false,
+            "extra_attributes": {
+                "play_action_in_progress": false
+            },
+            "dont_stop_the_music_enabled": true,
+            "radio_source": []
+        },
+        {
+            "queue_id": "upacad18d191a4",
+            "active": true,
+            "display_name": "MacBook Pro som tillh\u00f6r Ulf",
+            "available": false,
+            "items": 0,
+            "shuffle_enabled": false,
+            "repeat_mode": "off",
+            "crossfade_enabled": false,
+            "autoplay_enabled": true,
+            "overlay_enabled": false,
+            "overlay_source": null,
+            "overlay_volume": 100,
+            "smart_fades_active": false,
+            "smart_shuffle_active": false,
+            "current_index": null,
+            "index_in_buffer": null,
+            "ended": false,
+            "elapsed_time": 0,
+            "elapsed_time_last_updated": 1787841264.3732388,
+            "playback_speed": 1,
+            "state": "idle",
+            "current_item": null,
+            "next_item": null,
+            "sources": [],
+            "flow_mode": false,
+            "resume_pos": 0,
+            "is_dynamic": false,
+            "extra_attributes": {
+                "play_action_in_progress": false
+            },
+            "dont_stop_the_music_enabled": true,
+            "radio_source": []
+        },
+        {
+            "queue_id": "upbcd3707ea8a9",
+            "active": true,
+            "display_name": "MacBookProM4",
+            "available": false,
+            "items": 0,
+            "shuffle_enabled": false,
+            "repeat_mode": "off",
+            "crossfade_enabled": false,
+            "autoplay_enabled": true,
+            "overlay_enabled": false,
+            "overlay_source": null,
+            "overlay_volume": 100,
+            "smart_fades_active": false,
+            "smart_shuffle_active": false,
+            "current_index": null,
+            "index_in_buffer": null,
+            "ended": false,
+            "elapsed_time": 0,
+            "elapsed_time_last_updated": 1787841264.4295447,
+            "playback_speed": 1,
+            "state": "idle",
+            "current_item": null,
+            "next_item": null,
+            "sources": [],
+            "flow_mode": false,
+            "resume_pos": 0,
+            "is_dynamic": false,
+            "extra_attributes": {
+                "play_action_in_progress": false
+            },
+            "dont_stop_the_music_enabled": true,
+            "radio_source": []
+        },
+        {
+            "queue_id": "up10a1da3a4d92",
+            "active": true,
+            "display_name": "MacBook som tillh\u00f6r Sune",
+            "available": false,
+            "items": 0,
+            "shuffle_enabled": false,
+            "repeat_mode": "off",
+            "crossfade_enabled": false,
+            "autoplay_enabled": true,
+            "overlay_enabled": false,
+            "overlay_source": null,
+            "overlay_volume": 100,
+            "smart_fades_active": false,
+            "smart_shuffle_active": false,
+            "current_index": null,
+            "index_in_buffer": null,
+            "ended": false,
+            "elapsed_time": 0,
+            "elapsed_time_last_updated": 1787841264.439786,
+            "playback_speed": 1,
+            "state": "idle",
+            "current_item": null,
+            "next_item": null,
+            "sources": [],
+            "flow_mode": false,
+            "resume_pos": 0,
+            "is_dynamic": false,
+            "extra_attributes": {
+                "play_action_in_progress": false
+            },
+            "dont_stop_the_music_enabled": true,
+            "radio_source": []
+        },
+        {
+            "queue_id": "up686ce6f54f2a",
+            "active": true,
+            "display_name": "XBOX",
+            "available": false,
+            "items": 0,
+            "shuffle_enabled": false,
+            "repeat_mode": "off",
+            "crossfade_enabled": false,
+            "autoplay_enabled": true,
+            "overlay_enabled": false,
+            "overlay_source": null,
+            "overlay_volume": 100,
+            "smart_fades_active": false,
+            "smart_shuffle_active": false,
+            "current_index": null,
+            "index_in_buffer": null,
+            "ended": false,
+            "elapsed_time": 0,
+            "elapsed_time_last_updated": 1787841264.4505723,
+            "playback_speed": 1,
+            "state": "idle",
+            "current_item": null,
+            "next_item": null,
+            "sources": [],
+            "flow_mode": false,
+            "resume_pos": 0,
+            "is_dynamic": false,
+            "extra_attributes": {
+                "play_action_in_progress": false
+            },
+            "dont_stop_the_music_enabled": true,
+            "radio_source": []
+        },
+        {
+            "queue_id": "aa6def62-d3d2-324d-3038-27c530d4d8d0",
+            "active": true,
+            "display_name": "Pappas rum",
+            "available": true,
+            "items": 0,
+            "shuffle_enabled": false,
+            "repeat_mode": "off",
+            "crossfade_enabled": false,
+            "autoplay_enabled": true,
+            "overlay_enabled": false,
+            "overlay_source": null,
+            "overlay_volume": 100,
+            "smart_fades_active": false,
+            "smart_shuffle_active": false,
+            "current_index": null,
+            "index_in_buffer": null,
+            "ended": false,
+            "elapsed_time": 0,
+            "elapsed_time_last_updated": 1787841267.5977724,
+            "playback_speed": 1,
+            "state": "idle",
+            "current_item": null,
+            "next_item": null,
+            "sources": [],
+            "flow_mode": false,
+            "resume_pos": 0,
+            "is_dynamic": false,
+            "extra_attributes": {
+                "play_action_in_progress": false
+            },
+            "dont_stop_the_music_enabled": true,
+            "radio_source": []
+        },
+        {
+            "queue_id": "fd3d5c09-8657-428e-9319-177755f3c55c",
+            "active": true,
+            "display_name": "K\u00f6ket",
+            "available": true,
+            "items": 26,
+            "shuffle_enabled": false,
+            "repeat_mode": "off",
+            "crossfade_enabled": false,
+            "autoplay_enabled": true,
+            "overlay_enabled": false,
+            "overlay_source": null,
+            "overlay_volume": 100,
+            "smart_fades_active": false,
+            "smart_shuffle_active": false,
+            "current_index": 2,
+            "index_in_buffer": 3,
+            "ended": false,
+            "elapsed_time": 166.36553070572916,
+            "elapsed_time_last_updated": 1789209198.7589514,
+            "playback_speed": 1,
+            "state": "paused",
+            "current_item": {
+                "queue_id": "fd3d5c09-8657-428e-9319-177755f3c55c",
+                "queue_item_id": "f356e61ff5474a8195a7e542cfd5d0a0",
+                "name": "Pink Floyd - Another Brick in the Wall, Pt. 1",
+                "duration": 191,
+                "sort_index": 2,
+                "streamdetails": {
+                    "provider": "tidal--AQz2Eakq",
+                    "item_id": "55391450",
+                    "audio_format": {
+                        "content_type": "flac",
+                        "codec_type": "flac",
+                        "sample_rate": 96000,
+                        "bit_depth": 24,
+                        "channels": 2,
+                        "output_format_str": "flac",
+                        "bit_rate": 2775
+                    },
+                    "media_type": "track",
+                    "stream_type": "http",
+                    "duration": 191,
+                    "size": null,
+                    "stream_metadata": null,
+                    "audio_processing": {
+                        "input_fidelity": {
+                            "quality": "hi_res",
+                            "bit_perfect": null
+                        },
+                        "queue_processing": {
+                            "pcm_format": {
+                                "content_type": "f32le",
+                                "codec_type": "f32le",
+                                "sample_rate": 48000,
+                                "bit_depth": 32,
+                                "channels": 2,
+                                "output_format_str": "pcm;codec=pcm;rate=48000;bitrate=32;channels=2",
+                                "bit_rate": 3072
+                            },
+                            "normalization": {
+                                "mode": "measurement_only",
+                                "measurement_source": "track",
+                                "target_lufs": -14,
+                                "measured_lufs": -22.8,
+                                "applied_gain_db": 8.8
+                            },
+                            "playback_speed": 1,
+                            "crossfade_mode": "disabled",
+                            "overlay_active": false
+                        },
+                        "outputs": [
+                            {
+                                "player_ids": [
+                                    "fd3d5c09-8657-428e-9319-177755f3c55c"
+                                ],
+                                "dsp": {
+                                    "state": "disabled",
+                                    "input_gain": 0,
+                                    "filters": [],
+                                    "output_gain": 0,
+                                    "preset_id": null
+                                },
+                                "source_channel": null,
+                                "output_format": {
+                                    "content_type": "flac",
+                                    "codec_type": "?",
+                                    "sample_rate": 48000,
+                                    "bit_depth": 16,
+                                    "channels": 2,
+                                    "output_format_str": "flac",
+                                    "bit_rate": 1147
+                                },
+                                "fidelity": {
+                                    "quality": "lossless",
+                                    "bit_perfect": false
+                                }
+                            }
+                        ]
+                    },
+                    "loudness": -22.8,
+                    "loudness_album": null,
+                    "prefer_album_loudness": true,
+                    "volume_normalization_mode": "measurement_only",
+                    "volume_normalization_gain_correct": 8.8,
+                    "target_loudness": -14,
+                    "stream_title": null
+                },
+                "media_item": {
+                    "item_id": "55391450",
+                    "provider": "tidal--AQz2Eakq",
+                    "name": "Another Brick in the Wall, Pt. 1",
+                    "version": "",
+                    "sort_name": "another brick in the wall, pt. 1",
+                    "uri": "tidal--AQz2Eakq://track/55391450",
+                    "external_ids": [
+                        [
+                            "isrc",
+                            "GBN9Y1100097"
+                        ]
+                    ],
+                    "is_playable": true,
+                    "media_type": "track",
+                    "provider_mappings": [
+                        {
+                            "item_id": "55391450",
+                            "provider_domain": "tidal",
+                            "provider_instance": "tidal--AQz2Eakq",
+                            "available": true,
+                            "in_library": null,
+                            "is_unique": null,
+                            "audio_format": {
+                                "content_type": "flac",
+                                "codec_type": "?",
+                                "sample_rate": 44100,
+                                "bit_depth": 24,
+                                "channels": 2,
+                                "output_format_str": "flac",
+                                "bit_rate": 0
+                            },
+                            "url": "https://tidal.com/track/55391450",
+                            "details": null
+                        }
+                    ],
+                    "metadata": {
+                        "description": null,
+                        "description_language": null,
+                        "life_span": null,
+                        "artist_entity_type": null,
+                        "review": null,
+                        "explicit": false,
+                        "images": [
+                            {
+                                "type": "thumb",
+                                "path": "https://resources.tidal.com/images/60aca6f0/ea5c/4c81/9a6e/c1f7192c8480/750x750.jpg",
+                                "provider": "tidal--AQz2Eakq",
+                                "remotely_accessible": true,
+                                "proxy_id": "87b166fee5d72a78e78fbc467358623b246e2194452dce27e3cfa7725877d3fa"
+                            }
+                        ],
+                        "grouping": null,
+                        "genres": [
+                            "Classic Rock",
+                            "Pop",
+                            "Psychedelic Rock",
+                            "House",
+                            "Progressive House",
+                            "Dance",
+                            "Progressive Rock",
+                            "Rock",
+                            "Experimental Rock",
+                            "Electronic"
+                        ],
+                        "mood": null,
+                        "style": null,
+                        "copyright": "(P) 2016 The copyright in this sound recording is owned by Pink Floyd Music Ltd., marketed and distributed by Sony Music Entertainment",
+                        "lyrics": "Daddy's flown across the ocean\nLeaving just a memory\nA snapshot in the family album\nDaddy, what else did you leave for me?\n\nDaddy, what'd ya leave behind for me?\nAll in all it was just a brick in the wall\nAll in all it was all just bricks in the wall",
+                        "lrc_lyrics": "[00:17.72] Daddy's flown across the ocean\n[00:24.01] \n[00:27.33] Leaving just a memory\n[00:32.90] \n[00:36.93] A snapshot in the family album\n[00:46.68] Daddy, what else did you leave for me?\n[00:53.54] \n[00:58.75] Daddy, what'd ya leave behind for me?\n[01:03.72] \n[01:06.60] All in all it was just a brick in the wall\n[01:13.52] \n[01:16.35] All in all it was all just bricks in the wall\n[01:21.33] ",
+                        "transcript": null,
+                        "transcript_cues": null,
+                        "has_transcript": null,
+                        "label": null,
+                        "links": null,
+                        "performers": [
+                            "Roger Waters",
+                            "James Guthrie",
+                            "Richard Wright",
+                            "Patrice Quef",
+                            "Brian Christian",
+                            "David Gilmour",
+                            "Pink Floyd",
+                            "Nick Griffiths",
+                            "John McClure",
+                            "Rick Hart",
+                            "Joel Plante",
+                            "Bob Ezrin",
+                            "Michael Kamen"
+                        ],
+                        "preview": null,
+                        "popularity": 68,
+                        "release_date": null,
+                        "languages": null,
+                        "chapters": null,
+                        "collections": null,
+                        "last_refresh": null
+                    },
+                    "favorite": false,
+                    "position": null,
+                    "date_added": null,
+                    "duration": 191,
+                    "artists": [
+                        {
+                            "item_id": "9706",
+                            "provider": "tidal--AQz2Eakq",
+                            "name": "Pink Floyd",
+                            "version": "",
+                            "sort_name": "pink floyd",
+                            "uri": "tidal--AQz2Eakq://artist/9706",
+                            "external_ids": [],
+                            "is_playable": true,
+                            "media_type": "artist",
+                            "provider_mappings": [
+                                {
+                                    "item_id": "9706",
+                                    "provider_domain": "tidal",
+                                    "provider_instance": "tidal--AQz2Eakq",
+                                    "available": true,
+                                    "in_library": null,
+                                    "is_unique": null,
+                                    "audio_format": {
+                                        "content_type": "?",
+                                        "codec_type": "?",
+                                        "sample_rate": 44100,
+                                        "bit_depth": 16,
+                                        "channels": 2,
+                                        "output_format_str": "?",
+                                        "bit_rate": 0
+                                    },
+                                    "url": "https://tidal.com/artist/9706",
+                                    "details": null
+                                }
+                            ],
+                            "metadata": {
+                                "description": null,
+                                "description_language": null,
+                                "life_span": null,
+                                "artist_entity_type": null,
+                                "review": null,
+                                "explicit": null,
+                                "images": null,
+                                "grouping": null,
+                                "genres": null,
+                                "mood": null,
+                                "style": null,
+                                "copyright": null,
+                                "lyrics": null,
+                                "lrc_lyrics": null,
+                                "transcript": null,
+                                "transcript_cues": null,
+                                "has_transcript": null,
+                                "label": null,
+                                "links": null,
+                                "performers": null,
+                                "preview": null,
+                                "popularity": 93,
+                                "release_date": null,
+                                "languages": null,
+                                "chapters": null,
+                                "collections": null,
+                                "last_refresh": null
+                            },
+                            "favorite": false,
+                            "position": null,
+                            "date_added": null,
+                            "artist_type": "singer"
+                        }
+                    ],
+                    "last_played": 0,
+                    "album": {
+                        "item_id": "102",
+                        "provider": "library",
+                        "name": "The Wall",
+                        "version": "",
+                        "sort_name": "wall, the",
+                        "uri": "library://album/102",
+                        "external_ids": [
+                            [
+                                "barcode",
+                                "00886445613841"
+                            ]
+                        ],
+                        "is_playable": true,
+                        "media_type": "album",
+                        "provider_mappings": [
+                            {
+                                "item_id": "55391447",
+                                "provider_domain": "tidal",
+                                "provider_instance": "tidal--AQz2Eakq",
+                                "available": true,
+                                "in_library": true,
+                                "is_unique": null,
+                                "audio_format": {
+                                    "content_type": "flac",
+                                    "codec_type": "?",
+                                    "sample_rate": 44100,
+                                    "bit_depth": 16,
+                                    "channels": 2,
+                                    "output_format_str": "flac",
+                                    "bit_rate": 0
+                                },
+                                "url": "https://tidal.com/album/55391447",
+                                "details": null
+                            }
+                        ],
+                        "metadata": {
+                            "description": "The Wall is the eleventh studio album by the English progressive rock group Pink Floyd. Released as a double album on 30 November 1979, it was subsequently performed live with elaborate theatrical effects, and adapted into a feature film, Pink Floyd\u2014The Wall.\n\nAs with the band's previous three LPs, The Wall is a concept album and deals largely with themes of abandonment and personal isolation. It was first conceived during their 1977 In the Flesh Tour, when bassist and lyricist Roger Waters's frustration with the spectators' perceived boorishness became so acute that he imagined building a wall between the performers and audience. The album is a rock opera that centres on Pink, a character Waters modelled after himself, with some aspects based on the band's original leader, Syd Barrett. Pink's life experiences begin with the loss of his father during the Second World War, and continue with ridicule and abuse from his schoolteachers, an overprotective mother and finally, the breakdown of his marriage. All contribute to his eventual self-imposed isolation from society, represented by a metaphorical wall.\n\nThe Wall features a notably harsher and more theatrical style than Pink Floyd's previous releases. Keyboardist Richard Wright left the band during the album's production but remained as a salaried musician, performing with Pink Floyd during The Wall Tour. Commercially successful upon its release, the album was one of the best selling of 1980, and as of 1999, it had sold over 23 million RIAA certified units (11.5 million albums) in the United States. Rolling Stone magazine placed The Wall at number 87 on its list of The 500 Greatest Albums of All Time.",
+                            "description_language": "en",
+                            "life_span": null,
+                            "artist_entity_type": null,
+                            "review": "",
+                            "explicit": false,
+                            "images": [
+                                {
+                                    "type": "thumb",
+                                    "path": "https://resources.tidal.com/images/60aca6f0/ea5c/4c81/9a6e/c1f7192c8480/750x750.jpg",
+                                    "provider": "tidal--AQz2Eakq",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "87b166fee5d72a78e78fbc467358623b246e2194452dce27e3cfa7725877d3fa"
+                                },
+                                {
+                                    "type": "thumb",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/thumb/ndycf61616527694.jpg",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "bb7ebfa20f76b40f3fafec1bfcfe60938c5b395c065d7248d9360313badb117f"
+                                },
+                                {
+                                    "type": "discart",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/cdart/the-wall-4e7765a9d1611.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "4ff9e458222d2d017f848f31ea7b2990f59f80a9bd836861daa3f8c894042714"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dcase/yvtwss1553433789.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "10b8fce81a02f31f16b4f15e950b34d38ea24e2bb819470f76029c1590f96a50"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dflat/xtqqvu1553433775.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "04b722fa569b640defaa7671399cb8a20c04e9e5a7540138fd4976c370de9bf5"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dface/ryypyy1553433781.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "c9bfc06756425ed655a7b6e3edf8010add5305c86dc31e76a30798361a06d52a"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dthumb/d3cioh1664190489.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "49883777de30ef788862d65f53a87a7f1272fb4f4df1f90c68d13ba3170d4164"
+                                },
+                                {
+                                    "type": "thumb",
+                                    "path": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/3e/17/ec/3e17ec6d-f980-c64f-19e0-a6fd8bbf0c10/886445635850.jpg/1500x1500bb.jpg",
+                                    "provider": "itunes_artwork",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "d70a49b385b39e354d56cd9c2832da652c49ed60e0ceec8e2c232b8b0efc68f5"
+                                }
+                            ],
+                            "grouping": null,
+                            "genres": [
+                                "Progressive Rock"
+                            ],
+                            "mood": "Dreamy",
+                            "style": "Rock/Pop",
+                            "copyright": "(P) 2016 The copyright in this sound recording is owned by Pink Floyd Music Ltd., marketed and distributed by Sony Music Entertainment",
+                            "lyrics": null,
+                            "lrc_lyrics": null,
+                            "transcript": null,
+                            "transcript_cues": null,
+                            "has_transcript": null,
+                            "label": "Pink Floyd Records",
+                            "links": [
+                                {
+                                    "type": "wikipedia",
+                                    "url": "https://wikipedia.org/wiki/The_Wall"
+                                },
+                                {
+                                    "type": "allmusic",
+                                    "url": "https://www.allmusic.com/album/mw0000195292"
+                                }
+                            ],
+                            "performers": null,
+                            "preview": null,
+                            "popularity": 98,
+                            "release_date": "1979-11-30T00:00:00",
+                            "languages": null,
+                            "chapters": null,
+                            "collections": null,
+                            "last_refresh": 1789208686
+                        },
+                        "favorite": true,
+                        "position": null,
+                        "date_added": "2026-09-12T10:24:45+00:00",
+                        "year": 1979,
+                        "artists": [
+                            {
+                                "item_id": "187",
+                                "provider": "library",
+                                "name": "Pink Floyd",
+                                "version": "",
+                                "sort_name": "pink floyd",
+                                "uri": "library://artist/187",
+                                "external_ids": [],
+                                "is_playable": true,
+                                "media_type": "artist",
+                                "available": true,
+                                "image": null,
+                                "year": null
+                            }
+                        ],
+                        "album_type": "album"
+                    },
+                    "disc_number": 0,
+                    "track_number": 0,
+                    "audio_metadata": null
+                },
+                "image": {
+                    "type": "thumb",
+                    "path": "https://resources.tidal.com/images/60aca6f0/ea5c/4c81/9a6e/c1f7192c8480/750x750.jpg",
+                    "provider": "tidal--AQz2Eakq",
+                    "remotely_accessible": true,
+                    "proxy_id": "87b166fee5d72a78e78fbc467358623b246e2194452dce27e3cfa7725877d3fa"
+                },
+                "index": 0,
+                "available": true,
+                "extra_attributes": {}
+            },
+            "next_item": {
+                "queue_id": "fd3d5c09-8657-428e-9319-177755f3c55c",
+                "queue_item_id": "91d999d867af42f1ab9befa2868de4ce",
+                "name": "Pink Floyd - The Happiest Days of Our Lives",
+                "duration": 111,
+                "sort_index": 3,
+                "streamdetails": {
+                    "provider": "tidal--AQz2Eakq",
+                    "item_id": "55391451",
+                    "audio_format": {
+                        "content_type": "flac",
+                        "codec_type": "flac",
+                        "sample_rate": 96000,
+                        "bit_depth": 24,
+                        "channels": 2,
+                        "output_format_str": "flac",
+                        "bit_rate": 2601
+                    },
+                    "media_type": "track",
+                    "stream_type": "http",
+                    "duration": 111,
+                    "size": null,
+                    "stream_metadata": null,
+                    "audio_processing": {
+                        "input_fidelity": {
+                            "quality": "hi_res",
+                            "bit_perfect": null
+                        },
+                        "queue_processing": {
+                            "pcm_format": {
+                                "content_type": "f32le",
+                                "codec_type": "f32le",
+                                "sample_rate": 48000,
+                                "bit_depth": 32,
+                                "channels": 2,
+                                "output_format_str": "pcm;codec=pcm;rate=48000;bitrate=32;channels=2",
+                                "bit_rate": 3072
+                            },
+                            "normalization": {
+                                "mode": "measurement_only",
+                                "measurement_source": "track",
+                                "target_lufs": -14,
+                                "measured_lufs": -19.3,
+                                "applied_gain_db": 5.3
+                            },
+                            "playback_speed": 1,
+                            "crossfade_mode": "disabled",
+                            "overlay_active": false
+                        },
+                        "outputs": [
+                            {
+                                "player_ids": [
+                                    "fd3d5c09-8657-428e-9319-177755f3c55c"
+                                ],
+                                "dsp": {
+                                    "state": "disabled",
+                                    "input_gain": 0,
+                                    "filters": [],
+                                    "output_gain": 0,
+                                    "preset_id": null
+                                },
+                                "source_channel": null,
+                                "output_format": {
+                                    "content_type": "flac",
+                                    "codec_type": "?",
+                                    "sample_rate": 48000,
+                                    "bit_depth": 16,
+                                    "channels": 2,
+                                    "output_format_str": "flac",
+                                    "bit_rate": 1147
+                                },
+                                "fidelity": {
+                                    "quality": "lossless",
+                                    "bit_perfect": false
+                                }
+                            }
+                        ]
+                    },
+                    "loudness": -19.3,
+                    "loudness_album": null,
+                    "prefer_album_loudness": true,
+                    "volume_normalization_mode": "measurement_only",
+                    "volume_normalization_gain_correct": 5.3,
+                    "target_loudness": -14,
+                    "stream_title": null
+                },
+                "media_item": {
+                    "item_id": "55391451",
+                    "provider": "tidal--AQz2Eakq",
+                    "name": "The Happiest Days of Our Lives",
+                    "version": "",
+                    "sort_name": "happiest days of our lives, the",
+                    "uri": "tidal--AQz2Eakq://track/55391451",
+                    "external_ids": [
+                        [
+                            "isrc",
+                            "GBN9Y1100098"
+                        ]
+                    ],
+                    "is_playable": true,
+                    "media_type": "track",
+                    "provider_mappings": [
+                        {
+                            "item_id": "55391451",
+                            "provider_domain": "tidal",
+                            "provider_instance": "tidal--AQz2Eakq",
+                            "available": true,
+                            "in_library": null,
+                            "is_unique": null,
+                            "audio_format": {
+                                "content_type": "flac",
+                                "codec_type": "?",
+                                "sample_rate": 44100,
+                                "bit_depth": 24,
+                                "channels": 2,
+                                "output_format_str": "flac",
+                                "bit_rate": 0
+                            },
+                            "url": "https://tidal.com/track/55391451",
+                            "details": null
+                        }
+                    ],
+                    "metadata": {
+                        "description": null,
+                        "description_language": null,
+                        "life_span": null,
+                        "artist_entity_type": null,
+                        "review": null,
+                        "explicit": false,
+                        "images": [
+                            {
+                                "type": "thumb",
+                                "path": "https://resources.tidal.com/images/60aca6f0/ea5c/4c81/9a6e/c1f7192c8480/750x750.jpg",
+                                "provider": "tidal--AQz2Eakq",
+                                "remotely_accessible": true,
+                                "proxy_id": "87b166fee5d72a78e78fbc467358623b246e2194452dce27e3cfa7725877d3fa"
+                            }
+                        ],
+                        "grouping": null,
+                        "genres": [
+                            "Classic Rock",
+                            "Pop",
+                            "Psychedelic Rock",
+                            "House",
+                            "Progressive House",
+                            "Dance",
+                            "Progressive Rock",
+                            "Rock",
+                            "Experimental Rock",
+                            "Electronic"
+                        ],
+                        "mood": null,
+                        "style": null,
+                        "copyright": "(P) 2016 The copyright in this sound recording is owned by Pink Floyd Music Ltd., marketed and distributed by Sony Music Entertainment",
+                        "lyrics": "You, yes, you\nStand still, laddie\n\nWhen we grew up and went to school\nThere were certain teachers who would hurt the children\nIn any way they could (oof)\nBy pouring their derision upon anything we did\nExposing every weakness, however carefully hidden by the kid\n\nBut in, but in the town, it was well known, when they got home at night\nTheir fat and psychopathic wives would thrash them within inches of their lives",
+                        "lrc_lyrics": null,
+                        "transcript": null,
+                        "transcript_cues": null,
+                        "has_transcript": null,
+                        "label": null,
+                        "links": null,
+                        "performers": [
+                            "Roger Waters",
+                            "James Guthrie",
+                            "Richard Wright",
+                            "Patrice Quef",
+                            "Brian Christian",
+                            "David Gilmour",
+                            "Pink Floyd",
+                            "Nick Mason",
+                            "Nick Griffiths",
+                            "John McClure",
+                            "Rick Hart",
+                            "Joel Plante",
+                            "Bob Ezrin"
+                        ],
+                        "preview": null,
+                        "popularity": 63,
+                        "release_date": null,
+                        "languages": null,
+                        "chapters": null,
+                        "collections": null,
+                        "last_refresh": null
+                    },
+                    "favorite": false,
+                    "position": null,
+                    "date_added": null,
+                    "duration": 111,
+                    "artists": [
+                        {
+                            "item_id": "9706",
+                            "provider": "tidal--AQz2Eakq",
+                            "name": "Pink Floyd",
+                            "version": "",
+                            "sort_name": "pink floyd",
+                            "uri": "tidal--AQz2Eakq://artist/9706",
+                            "external_ids": [],
+                            "is_playable": true,
+                            "media_type": "artist",
+                            "provider_mappings": [
+                                {
+                                    "item_id": "9706",
+                                    "provider_domain": "tidal",
+                                    "provider_instance": "tidal--AQz2Eakq",
+                                    "available": true,
+                                    "in_library": null,
+                                    "is_unique": null,
+                                    "audio_format": {
+                                        "content_type": "?",
+                                        "codec_type": "?",
+                                        "sample_rate": 44100,
+                                        "bit_depth": 16,
+                                        "channels": 2,
+                                        "output_format_str": "?",
+                                        "bit_rate": 0
+                                    },
+                                    "url": "https://tidal.com/artist/9706",
+                                    "details": null
+                                }
+                            ],
+                            "metadata": {
+                                "description": null,
+                                "description_language": null,
+                                "life_span": null,
+                                "artist_entity_type": null,
+                                "review": null,
+                                "explicit": null,
+                                "images": null,
+                                "grouping": null,
+                                "genres": null,
+                                "mood": null,
+                                "style": null,
+                                "copyright": null,
+                                "lyrics": null,
+                                "lrc_lyrics": null,
+                                "transcript": null,
+                                "transcript_cues": null,
+                                "has_transcript": null,
+                                "label": null,
+                                "links": null,
+                                "performers": null,
+                                "preview": null,
+                                "popularity": 93,
+                                "release_date": null,
+                                "languages": null,
+                                "chapters": null,
+                                "collections": null,
+                                "last_refresh": null
+                            },
+                            "favorite": false,
+                            "position": null,
+                            "date_added": null,
+                            "artist_type": "singer"
+                        }
+                    ],
+                    "last_played": 0,
+                    "album": {
+                        "item_id": "102",
+                        "provider": "library",
+                        "name": "The Wall",
+                        "version": "",
+                        "sort_name": "wall, the",
+                        "uri": "library://album/102",
+                        "external_ids": [
+                            [
+                                "barcode",
+                                "00886445613841"
+                            ]
+                        ],
+                        "is_playable": true,
+                        "media_type": "album",
+                        "provider_mappings": [
+                            {
+                                "item_id": "55391447",
+                                "provider_domain": "tidal",
+                                "provider_instance": "tidal--AQz2Eakq",
+                                "available": true,
+                                "in_library": true,
+                                "is_unique": null,
+                                "audio_format": {
+                                    "content_type": "flac",
+                                    "codec_type": "?",
+                                    "sample_rate": 44100,
+                                    "bit_depth": 16,
+                                    "channels": 2,
+                                    "output_format_str": "flac",
+                                    "bit_rate": 0
+                                },
+                                "url": "https://tidal.com/album/55391447",
+                                "details": null
+                            }
+                        ],
+                        "metadata": {
+                            "description": "The Wall is the eleventh studio album by the English progressive rock group Pink Floyd. Released as a double album on 30 November 1979, it was subsequently performed live with elaborate theatrical effects, and adapted into a feature film, Pink Floyd\u2014The Wall.\n\nAs with the band's previous three LPs, The Wall is a concept album and deals largely with themes of abandonment and personal isolation. It was first conceived during their 1977 In the Flesh Tour, when bassist and lyricist Roger Waters's frustration with the spectators' perceived boorishness became so acute that he imagined building a wall between the performers and audience. The album is a rock opera that centres on Pink, a character Waters modelled after himself, with some aspects based on the band's original leader, Syd Barrett. Pink's life experiences begin with the loss of his father during the Second World War, and continue with ridicule and abuse from his schoolteachers, an overprotective mother and finally, the breakdown of his marriage. All contribute to his eventual self-imposed isolation from society, represented by a metaphorical wall.\n\nThe Wall features a notably harsher and more theatrical style than Pink Floyd's previous releases. Keyboardist Richard Wright left the band during the album's production but remained as a salaried musician, performing with Pink Floyd during The Wall Tour. Commercially successful upon its release, the album was one of the best selling of 1980, and as of 1999, it had sold over 23 million RIAA certified units (11.5 million albums) in the United States. Rolling Stone magazine placed The Wall at number 87 on its list of The 500 Greatest Albums of All Time.",
+                            "description_language": "en",
+                            "life_span": null,
+                            "artist_entity_type": null,
+                            "review": "",
+                            "explicit": false,
+                            "images": [
+                                {
+                                    "type": "thumb",
+                                    "path": "https://resources.tidal.com/images/60aca6f0/ea5c/4c81/9a6e/c1f7192c8480/750x750.jpg",
+                                    "provider": "tidal--AQz2Eakq",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "87b166fee5d72a78e78fbc467358623b246e2194452dce27e3cfa7725877d3fa"
+                                },
+                                {
+                                    "type": "thumb",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/thumb/ndycf61616527694.jpg",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "bb7ebfa20f76b40f3fafec1bfcfe60938c5b395c065d7248d9360313badb117f"
+                                },
+                                {
+                                    "type": "discart",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/cdart/the-wall-4e7765a9d1611.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "4ff9e458222d2d017f848f31ea7b2990f59f80a9bd836861daa3f8c894042714"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dcase/yvtwss1553433789.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "10b8fce81a02f31f16b4f15e950b34d38ea24e2bb819470f76029c1590f96a50"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dflat/xtqqvu1553433775.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "04b722fa569b640defaa7671399cb8a20c04e9e5a7540138fd4976c370de9bf5"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dface/ryypyy1553433781.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "c9bfc06756425ed655a7b6e3edf8010add5305c86dc31e76a30798361a06d52a"
+                                },
+                                {
+                                    "type": "other",
+                                    "path": "https://r2.theaudiodb.com/images/media/album/3dthumb/d3cioh1664190489.png",
+                                    "provider": "theaudiodb",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "49883777de30ef788862d65f53a87a7f1272fb4f4df1f90c68d13ba3170d4164"
+                                },
+                                {
+                                    "type": "thumb",
+                                    "path": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/3e/17/ec/3e17ec6d-f980-c64f-19e0-a6fd8bbf0c10/886445635850.jpg/1500x1500bb.jpg",
+                                    "provider": "itunes_artwork",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "d70a49b385b39e354d56cd9c2832da652c49ed60e0ceec8e2c232b8b0efc68f5"
+                                }
+                            ],
+                            "grouping": null,
+                            "genres": [
+                                "Progressive Rock"
+                            ],
+                            "mood": "Dreamy",
+                            "style": "Rock/Pop",
+                            "copyright": "(P) 2016 The copyright in this sound recording is owned by Pink Floyd Music Ltd., marketed and distributed by Sony Music Entertainment",
+                            "lyrics": null,
+                            "lrc_lyrics": null,
+                            "transcript": null,
+                            "transcript_cues": null,
+                            "has_transcript": null,
+                            "label": "Pink Floyd Records",
+                            "links": [
+                                {
+                                    "type": "wikipedia",
+                                    "url": "https://wikipedia.org/wiki/The_Wall"
+                                },
+                                {
+                                    "type": "allmusic",
+                                    "url": "https://www.allmusic.com/album/mw0000195292"
+                                }
+                            ],
+                            "performers": null,
+                            "preview": null,
+                            "popularity": 98,
+                            "release_date": "1979-11-30T00:00:00",
+                            "languages": null,
+                            "chapters": null,
+                            "collections": null,
+                            "last_refresh": 1789208686
+                        },
+                        "favorite": true,
+                        "position": null,
+                        "date_added": "2026-09-12T10:24:45+00:00",
+                        "year": 1979,
+                        "artists": [
+                            {
+                                "item_id": "187",
+                                "provider": "library",
+                                "name": "Pink Floyd",
+                                "version": "",
+                                "sort_name": "pink floyd",
+                                "uri": "library://artist/187",
+                                "external_ids": [],
+                                "is_playable": true,
+                                "media_type": "artist",
+                                "available": true,
+                                "image": null,
+                                "year": null
+                            }
+                        ],
+                        "album_type": "album"
+                    },
+                    "disc_number": 0,
+                    "track_number": 0,
+                    "audio_metadata": null
+                },
+                "image": {
+                    "type": "thumb",
+                    "path": "https://resources.tidal.com/images/60aca6f0/ea5c/4c81/9a6e/c1f7192c8480/750x750.jpg",
+                    "provider": "tidal--AQz2Eakq",
+                    "remotely_accessible": true,
+                    "proxy_id": "87b166fee5d72a78e78fbc467358623b246e2194452dce27e3cfa7725877d3fa"
+                },
+                "index": 0,
+                "available": true,
+                "extra_attributes": {}
+            },
+            "sources": [
+                {
+                    "item_id": "102",
+                    "provider": "library",
+                    "name": "The Wall",
+                    "version": "",
+                    "sort_name": "wall, the",
+                    "uri": "library://album/102",
+                    "external_ids": [
+                        [
+                            "barcode",
+                            "00886445613841"
+                        ]
+                    ],
+                    "is_playable": true,
+                    "media_type": "album",
+                    "available": true,
+                    "image": {
+                        "type": "thumb",
+                        "path": "https://resources.tidal.com/images/60aca6f0/ea5c/4c81/9a6e/c1f7192c8480/750x750.jpg",
+                        "provider": "tidal--AQz2Eakq",
+                        "remotely_accessible": true,
+                        "proxy_id": "87b166fee5d72a78e78fbc467358623b246e2194452dce27e3cfa7725877d3fa"
+                    },
+                    "year": 1979
+                }
+            ],
+            "flow_mode": true,
+            "resume_pos": 166,
+            "is_dynamic": false,
+            "extra_attributes": {
+                "play_action_in_progress": false
+            },
+            "dont_stop_the_music_enabled": true,
+            "radio_source": []
+        },
+        {
+            "queue_id": "6c8bd0ab-2f5f-62b1-b940-cead70e1cb30",
+            "active": true,
+            "display_name": "Hallen",
+            "available": true,
+            "items": 0,
+            "shuffle_enabled": false,
+            "repeat_mode": "off",
+            "crossfade_enabled": false,
+            "autoplay_enabled": true,
+            "overlay_enabled": false,
+            "overlay_source": null,
+            "overlay_volume": 100,
+            "smart_fades_active": false,
+            "smart_shuffle_active": false,
+            "current_index": null,
+            "index_in_buffer": null,
+            "ended": false,
+            "elapsed_time": 0,
+            "elapsed_time_last_updated": 1789116043.9823952,
+            "playback_speed": 1,
+            "state": "idle",
+            "current_item": null,
+            "next_item": null,
+            "sources": [],
+            "flow_mode": false,
+            "resume_pos": 0,
+            "is_dynamic": false,
+            "extra_attributes": {
+                "play_action_in_progress": false
+            },
+            "dont_stop_the_music_enabled": true,
+            "radio_source": []
+        },
+        {
+            "queue_id": "98984580-582c-c199-8f1e-5ec1f5d3d880",
+            "active": true,
+            "display_name": "Vardagsrummet",
+            "available": true,
+            "items": 0,
+            "shuffle_enabled": false,
+            "repeat_mode": "off",
+            "crossfade_enabled": false,
+            "autoplay_enabled": true,
+            "overlay_enabled": false,
+            "overlay_source": null,
+            "overlay_volume": 100,
+            "smart_fades_active": false,
+            "smart_shuffle_active": false,
+            "current_index": null,
+            "index_in_buffer": null,
+            "ended": false,
+            "elapsed_time": 0,
+            "elapsed_time_last_updated": 1789208710.1974616,
+            "playback_speed": 1,
+            "state": "idle",
+            "current_item": null,
+            "next_item": null,
+            "sources": [],
+            "flow_mode": false,
+            "resume_pos": 0,
+            "is_dynamic": false,
+            "extra_attributes": {
+                "play_action_in_progress": false
+            },
+            "dont_stop_the_music_enabled": true,
+            "radio_source": []
+        },
+        {
+            "queue_id": "RINCON_5CAAFD0B988801400",
+            "active": true,
+            "display_name": "Sonos 5",
+            "available": true,
+            "items": 31,
+            "shuffle_enabled": false,
+            "repeat_mode": "off",
+            "crossfade_enabled": false,
+            "autoplay_enabled": true,
+            "overlay_enabled": false,
+            "overlay_source": null,
+            "overlay_volume": 100,
+            "smart_fades_active": false,
+            "smart_shuffle_active": false,
+            "current_index": 11,
+            "index_in_buffer": 11,
+            "ended": false,
+            "elapsed_time": 0,
+            "elapsed_time_last_updated": 1788533610.4688976,
+            "playback_speed": 1,
+            "state": "idle",
+            "current_item": {
+                "queue_id": "RINCON_5CAAFD0B988801400",
+                "queue_item_id": "30dcc546444a4cd88c315899ff0fe8c7",
+                "name": "King Crimson - Thela Hun Ginjeet",
+                "duration": 387,
+                "sort_index": 22,
+                "streamdetails": {
+                    "provider": "tidal--AQz2Eakq",
+                    "item_id": "333606073",
+                    "audio_format": {
+                        "content_type": "flac",
+                        "codec_type": "flac",
+                        "sample_rate": 44100,
+                        "bit_depth": 16,
+                        "channels": 2,
+                        "output_format_str": "flac",
+                        "bit_rate": 639
+                    },
+                    "media_type": "track",
+                    "stream_type": "http",
+                    "duration": 386,
+                    "size": null,
+                    "stream_metadata": null,
+                    "audio_processing": {
+                        "input_fidelity": {
+                            "quality": "lossless",
+                            "bit_perfect": null
+                        },
+                        "queue_processing": {
+                            "pcm_format": {
+                                "content_type": "f32le",
+                                "codec_type": "?",
+                                "sample_rate": 44100,
+                                "bit_depth": 32,
+                                "channels": 2,
+                                "output_format_str": "pcm;codec=pcm;rate=44100;bitrate=32;channels=2",
+                                "bit_rate": 0
+                            },
+                            "normalization": {
+                                "mode": "measurement_only",
+                                "measurement_source": "track",
+                                "target_lufs": -14,
+                                "measured_lufs": -12.5,
+                                "applied_gain_db": -1.5
+                            },
+                            "playback_speed": 1,
+                            "crossfade_mode": "disabled",
+                            "overlay_active": false
+                        },
+                        "outputs": [
+                            {
+                                "player_ids": [
+                                    "RINCON_5CAAFD0B988801400"
+                                ],
+                                "dsp": {
+                                    "state": "disabled",
+                                    "input_gain": 0,
+                                    "filters": [],
+                                    "output_gain": 0,
+                                    "preset_id": null
+                                },
+                                "source_channel": null,
+                                "output_format": {
+                                    "content_type": "flac",
+                                    "codec_type": "?",
+                                    "sample_rate": 44100,
+                                    "bit_depth": 24,
+                                    "channels": 2,
+                                    "output_format_str": "flac",
+                                    "bit_rate": 1581
+                                },
+                                "fidelity": {
+                                    "quality": "lossless",
+                                    "bit_perfect": false
+                                }
+                            }
+                        ]
+                    },
+                    "loudness": -12.5,
+                    "loudness_album": null,
+                    "prefer_album_loudness": false,
+                    "volume_normalization_mode": "measurement_only",
+                    "volume_normalization_gain_correct": -1.5,
+                    "target_loudness": -14,
+                    "stream_title": null
+                },
+                "media_item": {
+                    "item_id": "333606073",
+                    "provider": "tidal--AQz2Eakq",
+                    "name": "Thela Hun Ginjeet",
+                    "version": "",
+                    "sort_name": "thela hun ginjeet",
+                    "uri": "tidal--AQz2Eakq://track/333606073",
+                    "external_ids": [
+                        [
+                            "isrc",
+                            "GBCTX1600006"
+                        ]
+                    ],
+                    "is_playable": true,
+                    "media_type": "track",
+                    "provider_mappings": [
+                        {
+                            "item_id": "333606073",
+                            "provider_domain": "tidal",
+                            "provider_instance": "tidal--AQz2Eakq",
+                            "available": true,
+                            "in_library": null,
+                            "is_unique": null,
+                            "audio_format": {
+                                "content_type": "flac",
+                                "codec_type": "?",
+                                "sample_rate": 44100,
+                                "bit_depth": 16,
+                                "channels": 2,
+                                "output_format_str": "flac",
+                                "bit_rate": 0
+                            },
+                            "url": "https://tidal.com/track/333606073",
+                            "details": null
+                        }
+                    ],
+                    "metadata": {
+                        "description": null,
+                        "description_language": null,
+                        "life_span": null,
+                        "artist_entity_type": null,
+                        "review": null,
+                        "explicit": false,
+                        "images": [
+                            {
+                                "type": "thumb",
+                                "path": "https://resources.tidal.com/images/0aafeb4f/4d10/4249/b03a/818d99184f0a/750x750.jpg",
+                                "provider": "tidal--AQz2Eakq",
+                                "remotely_accessible": true,
+                                "proxy_id": "7290bdd378c32789877a0949a6e509b99f816495a04fe9dc4a649ec5e3136d98"
+                            }
+                        ],
+                        "grouping": null,
+                        "genres": [
+                            "Rock"
+                        ],
+                        "mood": null,
+                        "style": null,
+                        "copyright": "2016 Discipline Global Mobile",
+                        "lyrics": "Thela Hun Ginjeet\nThela Hun Ginjeet\nThela Hun Ginjeet\nThela Hun Ginjeet\n\nThela Hun Ginjeet\nThela Hun Ginjeet\nThela Hun Ginjeet\nThela Hun Ginjeet\n\nQua tari mei\nThela Hun Ginjeet\nQua tari mei\nHeat in the Jungle street\n\nWell, first of all\nI couldn't even see his face\nI couldn't see his face\nHe was holding a gun against me\nUhm, I was thinking\nThis is a dangerous place\nOh, this is a dangerous place\n\nI said, \"I'm nervous as hell from this stuff\"\nI thought those guys were going to kill me for sure\nThey ganged up on me like that, I couldn't believe it\nLook, I'm still shakin', it's weird\nThere out in the streets like that\nIt's a dangerous place\nIt's a dangerous place\n\nSo, suddenly, these two guys appear in front of me\nThey stopped real aggressive\nStart at me, you know\n\"W-what's that? What's that on that tape?\"\n\"Yeah, what do you got there?\" I said, \"Nothing\"\n\"What are you talking into that for?\"\n\"It's just a tape, you know\"\n\"Well play it for me\" I said \"Oh, no\"\n\nI put 'em off as long as I could\nFinally they turned it on, you know\nThey grabbed it from me, took it away from me\nTurned it on and it says, \"He held a gun in his hand, this is a dangerous place\"\nThey said, \"What dangerous place?\" \"What gun?\" \"You're a policeman!\"\nAnd the deeper I fought, the worse I got into it\nI talked, I told him... I said, \"Look man, I'm not talkin'\"\nIt went on forever\n\nAnyway, I finally unbuttoned my shirt, and said\n\"Look, look, I'm in this band here, you know, I'm in this band you know\nAnd we're makin' a recording, you know\nAnd it's just about New York City, it's about crime in the streets\"\nThe explanation was going nowhere, but\n\nFinally, they just kinda let me go, I don't know why\nSo I walk around the corner and I'm like shakin' like a leaf now\nAnd I thought, \"This is a dangerous place\" once again, you know\nWho should appear but two policemen\n\nThela Hun Ginjeet\nThela Hun Ginjeet\nThela Hun Ginjeet\nThela Hun Ginjeet",
+                        "lrc_lyrics": "[00:29.58] Thela Hun Ginjeet\n[00:30.93] Thela Hun Ginjeet\n[00:33.16] Thela Hun Ginjeet\n[00:34.70] Thela Hun Ginjeet\n[00:36.77] Thela Hun Ginjeet\n[00:38.68] Thela Hun Ginjeet\n[00:40.21] Thela Hun Ginjeet\n[00:42.27] Thela Hun Ginjeet\n[00:43.90] Qua tari mei\n[00:47.75] Thela Hun Ginjeet\n[00:51.24] Qua tari mei\n[00:55.25] Heat in the Jungle street\n[01:04.27] Well, first of all\n[01:05.38] I couldn't even see his face\n[01:06.95] I couldn't see his face\n[01:11.88] He was holding a gun against me\n[01:15.47] Uhm, I was thinking\n[01:21.79] This is a dangerous place\n[01:27.63] Oh, this is a dangerous place\n[01:29.28] \n[02:54.93] I said, \"I'm nervous as hell from this stuff\"\n[02:57.18] I thought those guys were going to kill me for sure\n[03:00.76] They ganged up on me like that, I couldn't believe it\n[03:06.52] Look, I'm still shakin', it's weird\n[03:12.17] There out in the streets like that\n[03:15.22] It's a dangerous place\n[03:16.86] It's a dangerous place\n[03:23.30] So, suddenly, these two guys appear in front of me\n[03:26.97] They stopped real aggressive\n[03:29.63] Start at me, you know\n[03:31.56] \"W-what's that? What's that on that tape?\"\n[03:34.56] \"Yeah, what do you got there?\" I said, \"Nothing\"\n[03:37.21] \"What are you talking into that for?\"\n[03:40.29] \"It's just a tape, you know\"\n[03:41.63] \"Well play it for me\" I said \"Oh, no\"\n[03:46.02] I put 'em off as long as I could\n[03:47.57] Finally they turned it on, you know\n[03:49.22] They grabbed it from me, took it away from me\n[03:52.03] Turned it on and it says, \"He held a gun in his hand, this is a dangerous place\"\n[03:58.04] They said, \"What dangerous place?\" \"What gun?\" \"You're a policeman!\"\n[04:01.33] And the deeper I fought, the worse I got into it\n[04:04.09] I talked, I told him... I said, \"Look man, I'm not talkin'\"\n[04:07.09] It went on forever\n[04:08.59] Anyway, I finally unbuttoned my shirt, and said\n[04:11.06] \"Look, look, I'm in this band here, you know, I'm in this band you know\n[04:15.66] And we're makin' a recording, you know\n[04:17.33] And it's just about New York City, it's about crime in the streets\"\n[04:20.74] The explanation was going nowhere, but\n[04:23.14] Finally, they just kinda let me go, I don't know why\n[04:25.92] So I walk around the corner and I'm like shakin' like a leaf now\n[04:29.57] And I thought, \"This is a dangerous place\" once again, you know\n[04:34.78] Who should appear but two policemen\n[04:47.00] Thela Hun Ginjeet\n[04:48.54] Thela Hun Ginjeet\n[04:50.70] Thela Hun Ginjeet\n[04:52.27] Thela Hun Ginjeet\n[04:55.26] ",
+                        "transcript": null,
+                        "transcript_cues": null,
+                        "has_transcript": null,
+                        "label": null,
+                        "links": null,
+                        "performers": null,
+                        "preview": null,
+                        "popularity": 44,
+                        "release_date": null,
+                        "languages": null,
+                        "chapters": null,
+                        "collections": null,
+                        "last_refresh": null
+                    },
+                    "favorite": false,
+                    "position": null,
+                    "date_added": null,
+                    "duration": 387,
+                    "artists": [
+                        {
+                            "item_id": "3888180",
+                            "provider": "tidal--AQz2Eakq",
+                            "name": "King Crimson",
+                            "version": "",
+                            "sort_name": "king crimson",
+                            "uri": "tidal--AQz2Eakq://artist/3888180",
+                            "external_ids": [],
+                            "is_playable": true,
+                            "media_type": "artist",
+                            "provider_mappings": [
+                                {
+                                    "item_id": "3888180",
+                                    "provider_domain": "tidal",
+                                    "provider_instance": "tidal--AQz2Eakq",
+                                    "available": true,
+                                    "in_library": null,
+                                    "is_unique": null,
+                                    "audio_format": {
+                                        "content_type": "?",
+                                        "codec_type": "?",
+                                        "sample_rate": 44100,
+                                        "bit_depth": 16,
+                                        "channels": 2,
+                                        "output_format_str": "?",
+                                        "bit_rate": 0
+                                    },
+                                    "url": "https://tidal.com/artist/3888180",
+                                    "details": null
+                                }
+                            ],
+                            "metadata": {
+                                "description": null,
+                                "description_language": null,
+                                "life_span": null,
+                                "artist_entity_type": null,
+                                "review": null,
+                                "explicit": null,
+                                "images": null,
+                                "grouping": null,
+                                "genres": null,
+                                "mood": null,
+                                "style": null,
+                                "copyright": null,
+                                "lyrics": null,
+                                "lrc_lyrics": null,
+                                "transcript": null,
+                                "transcript_cues": null,
+                                "has_transcript": null,
+                                "label": null,
+                                "links": null,
+                                "performers": null,
+                                "preview": null,
+                                "popularity": 78,
+                                "release_date": null,
+                                "languages": null,
+                                "chapters": null,
+                                "collections": null,
+                                "last_refresh": null
+                            },
+                            "favorite": false,
+                            "position": null,
+                            "date_added": null,
+                            "artist_type": "singer"
+                        }
+                    ],
+                    "last_played": 0,
+                    "album": {
+                        "item_id": "333606065",
+                        "provider": "tidal--AQz2Eakq",
+                        "name": "Discipline",
+                        "version": "",
+                        "sort_name": "discipline",
+                        "uri": "tidal--AQz2Eakq://album/333606065",
+                        "external_ids": [],
+                        "is_playable": true,
+                        "media_type": "album",
+                        "available": true,
+                        "image": null,
+                        "year": null
+                    },
+                    "disc_number": 0,
+                    "track_number": 0,
+                    "audio_metadata": null
+                },
+                "image": {
+                    "type": "thumb",
+                    "path": "https://resources.tidal.com/images/0aafeb4f/4d10/4249/b03a/818d99184f0a/750x750.jpg",
+                    "provider": "tidal--AQz2Eakq",
+                    "remotely_accessible": true,
+                    "proxy_id": "7290bdd378c32789877a0949a6e509b99f816495a04fe9dc4a649ec5e3136d98"
+                },
+                "index": 0,
+                "available": true,
+                "extra_attributes": {}
+            },
+            "next_item": {
+                "queue_id": "RINCON_5CAAFD0B988801400",
+                "queue_item_id": "7e4815d49a67443e92394d50bd8a17c9",
+                "name": "The Who - Who Are You",
+                "duration": 386,
+                "sort_index": 24,
+                "streamdetails": {
+                    "provider": "tidal--AQz2Eakq",
+                    "item_id": "93427726",
+                    "audio_format": {
+                        "content_type": "flac",
+                        "codec_type": "flac",
+                        "sample_rate": 96000,
+                        "bit_depth": 24,
+                        "channels": 2,
+                        "output_format_str": "flac",
+                        "bit_rate": 2913
+                    },
+                    "media_type": "track",
+                    "stream_type": "http",
+                    "duration": 386,
+                    "size": null,
+                    "stream_metadata": null,
+                    "audio_processing": null,
+                    "loudness": -13.3,
+                    "loudness_album": null,
+                    "prefer_album_loudness": false,
+                    "volume_normalization_mode": "dynamic",
+                    "volume_normalization_gain_correct": null,
+                    "target_loudness": -14,
+                    "stream_title": null
+                },
+                "media_item": {
+                    "item_id": "93427726",
+                    "provider": "tidal--AQz2Eakq",
+                    "name": "Who Are You",
+                    "version": "",
+                    "sort_name": "who are you",
+                    "uri": "tidal--AQz2Eakq://track/93427726",
+                    "external_ids": [
+                        [
+                            "isrc",
+                            "GBAKW7801011"
+                        ]
+                    ],
+                    "is_playable": true,
+                    "media_type": "track",
+                    "provider_mappings": [
+                        {
+                            "item_id": "93427726",
+                            "provider_domain": "tidal",
+                            "provider_instance": "tidal--AQz2Eakq",
+                            "available": true,
+                            "in_library": null,
+                            "is_unique": null,
+                            "audio_format": {
+                                "content_type": "flac",
+                                "codec_type": "?",
+                                "sample_rate": 44100,
+                                "bit_depth": 24,
+                                "channels": 2,
+                                "output_format_str": "flac",
+                                "bit_rate": 0
+                            },
+                            "url": "https://tidal.com/track/93427726",
+                            "details": null
+                        }
+                    ],
+                    "metadata": {
+                        "description": null,
+                        "description_language": null,
+                        "life_span": null,
+                        "artist_entity_type": null,
+                        "review": null,
+                        "explicit": true,
+                        "images": [
+                            {
+                                "type": "thumb",
+                                "path": "https://resources.tidal.com/images/4a7166db/6a34/4343/a040/6731a925039f/750x750.jpg",
+                                "provider": "tidal--AQz2Eakq",
+                                "remotely_accessible": true,
+                                "proxy_id": "d90e0a09e963b432080e018048dae927b1c8f19e56b56f5e7aa05f79f7a666df"
+                            }
+                        ],
+                        "grouping": null,
+                        "genres": [
+                            "Rock",
+                            "Pop"
+                        ],
+                        "mood": null,
+                        "style": null,
+                        "copyright": "\u2117 1978 Polydor Ltd. (UK)",
+                        "lyrics": "Who are you?\nWho, who, who, who?\nWho are you?\nWho, who, who, who?\n\nWho are you?\nWho, who, who, who?\nWho are you?\nWho, who, who, who?\n\nI woke up in a Soho doorway\nA policeman knew my name\nHe said, \"You can go, sleep at home tonight\nIf you can get up and walk away\"\n\nI staggered back to the underground\nAnd the breeze blew back my hair\nI remember throwin' punches around\nAnd preachin' from my chair\n\nWell, who are you? (Who are you?)\nWho, who, who, who?\nI really wanna know (who are you?)\nWho, who, who, who?\n\nTell me, who are you? (Who are you?)\nWho, who, who, who?\n'Cause I really wanna know (who are you?)\nWho, who, who, who?\n\nI took the tube back out of town\nBack to the rollin' pin\nI felt a little like a dyin' clown\nWith a streak of rin tin tin\n\nI stretched back and I hiccupped\nThen looked back on my busy day\n11 hours in the tin pan\nGod, there's got to be another way\n\nWell, who are you? (Who are you?)\nWho, who, who, who?\nOh, who are you? (Who are you?)\nWho, who, who, who?\n\nCome on, tell me, who are you? (Who are you?)\nWho, who, who, who?\nAh, who the fuck are you? (Who are you?)\nWho, who, who, who?\n\nWho are you?\nWho are, who are, who are, who are, who are you?\nWho are, who are, who are, who are, who are you?\nWho are, who are, who are, who are, who are you?\nWho are, who are, who are, who are, who are you?\nWho are, who are, who are, who are, who are you?\nWho are, who are, who are, who are, who are you?\n\nWho are you?\nWho, who, who, who?\nWho are you?\nWho, who, who, who?\n\nWho are you?\nWho, who, who, who?\nWho are you?\nWho, who, who, who?\n\nI really wanna know (who are you?)\nWho, who, who, who?\nI really wanna know (who are you?)\nWho, who, who, who?\n\nCome on, tell me who are you (who are you?)\nWho, who, who, who?\n'Cause I really wanna know (who are you?)\nWho, who, who, who?\n\nI know there's a place you walked\nWhere love falls from the trees\nMy heart is like a broken cup\nI only feel right on my knees\n\nI spit out like a sewer hole\nYet still receive your kiss\nHow can I measure up to anyone now\nAfter such a love as this?\n\nWell, who are you? (Who are you?)\nWho, who, who, who?\nCome on, tell me who are you (who are you?)\nWho, who, who, who?\n\nOh, I really wanna know (who are you?)\nWho, who, who, who?\nTell me, tell me who are you (who are you?)\nWho, who, who, who?\n\nCome on, come on, who? (Who are you?)\nWho, who, who, who?\nAh, who the fuck are you? (Who are you?)\nWho, who, who, who?\n\nWho are you? (Who are you?)\nWho, who, who, who?\nOh, tell me, who are you? (Who are you, who?)\nOoh\n\nI really wanna know\nOh, I really wanna know\nCome on, tell me who are you, you, you\nAw, you",
+                        "lrc_lyrics": "[00:18.22] Who are you?\n[00:21.51] Who, who, who, who?\n[00:24.56] Who are you?\n[00:27.56] Who, who, who, who?\n[00:30.65] Who are you?\n[00:33.61] Who, who, who, who?\n[00:36.37] Who are you?\n[00:39.62] Who, who, who, who?\n[00:43.49] I woke up in a Soho doorway\n[00:46.03] A policeman knew my name\n[00:48.52] He said, \"You can go, sleep at home tonight\n[00:51.87] If you can get up and walk away\"\n[00:55.69] I staggered back to the underground\n[00:58.30] And the breeze blew back my hair\n[01:01.91] I remember throwin' punches around\n[01:04.12] And preachin' from my chair\n[01:07.22] Well, who are you? (Who are you?)\n[01:10.90] Who, who, who, who?\n[01:12.79] I really wanna know (who are you?)\n[01:17.06] Who, who, who, who?\n[01:19.27] Tell me, who are you? (Who are you?)\n[01:23.24] Who, who, who, who?\n[01:25.21] 'Cause I really wanna know (who are you?)\n[01:29.37] Who, who, who, who?\n[01:32.71] I took the tube back out of town\n[01:35.32] Back to the rollin' pin\n[01:38.94] I felt a little like a dyin' clown\n[01:41.54] With a streak of rin tin tin\n[01:44.91] I stretched back and I hiccupped\n[01:47.25] Then looked back on my busy day\n[01:51.28] 11 hours in the tin pan\n[01:53.43] God, there's got to be another way\n[01:56.66] Well, who are you? (Who are you?)\n[02:00.25] Who, who, who, who?\n[02:01.99] Oh, who are you? (Who are you?)\n[02:06.32] Who, who, who, who?\n[02:08.36] Come on, tell me, who are you? (Who are you?)\n[02:12.57] Who, who, who, who?\n[02:14.45] Ah, who the fuck are you? (Who are you?)\n[02:18.56] Who, who, who, who?\n[02:21.28] \n[03:02.40] Who are you?\n[03:08.58] Who are, who are, who are, who are, who are you?\n[03:14.53] Who are, who are, who are, who are, who are you?\n[03:20.60] Who are, who are, who are, who are, who are you?\n[03:26.97] Who are, who are, who are, who are, who are you?\n[03:33.05] Who are, who are, who are, who are, who are you?\n[03:39.32] Who are, who are, who are, who are, who are you?\n[03:44.98] \n[03:57.60] Who are you?\n[04:00.65] Who, who, who, who?\n[04:03.81] Who are you?\n[04:06.77] Who, who, who, who?\n[04:09.91] Who are you?\n[04:13.16] Who, who, who, who?\n[04:16.38] Who are you?\n[04:19.39] Who, who, who, who?\n[04:21.27] I really wanna know (who are you?)\n[04:25.40] Who, who, who, who?\n[04:27.23] I really wanna know (who are you?)\n[04:31.71] Who, who, who, who?\n[04:33.22] Come on, tell me who are you (who are you?)\n[04:37.78] Who, who, who, who?\n[04:39.60] 'Cause I really wanna know (who are you?)\n[04:43.86] Who, who, who, who?\n[04:47.56] I know there's a place you walked\n[04:49.96] Where love falls from the trees\n[04:53.76] My heart is like a broken cup\n[04:55.99] I only feel right on my knees\n[04:59.63] I spit out like a sewer hole\n[05:02.23] Yet still receive your kiss\n[05:05.53] How can I measure up to anyone now\n[05:07.99] After such a love as this?\n[05:11.13] Well, who are you? (Who are you?)\n[05:14.90] Who, who, who, who?\n[05:16.73] Come on, tell me who are you (who are you?)\n[05:21.04] Who, who, who, who?\n[05:23.08] Oh, I really wanna know (who are you?)\n[05:27.27] Who, who, who, who?\n[05:29.06] Tell me, tell me who are you (who are you?)\n[05:33.59] Who, who, who, who?\n[05:35.23] Come on, come on, who? (Who are you?)\n[05:39.68] Who, who, who, who?\n[05:41.36] Ah, who the fuck are you? (Who are you?)\n[05:45.96] Who, who, who, who?\n[05:47.83] Who are you? (Who are you?)\n[05:52.06] Who, who, who, who?\n[05:53.85] Oh, tell me, who are you? (Who are you, who?)\n[05:58.10] Ooh\n[06:00.17] I really wanna know\n[06:03.08] Oh, I really wanna know\n[06:06.12] Come on, tell me who are you, you, you\n[06:09.68] Aw, you\n[06:12.65] ",
+                        "transcript": null,
+                        "transcript_cues": null,
+                        "has_transcript": null,
+                        "label": null,
+                        "links": null,
+                        "performers": [
+                            "Jon Astley",
+                            "ROGER DALTREY",
+                            "John Entwistle",
+                            "Keith Moon",
+                            "Andy Fairweather Low",
+                            "Pete Townshend",
+                            "Glyn Johns"
+                        ],
+                        "preview": null,
+                        "popularity": 70,
+                        "release_date": null,
+                        "languages": null,
+                        "chapters": null,
+                        "collections": null,
+                        "last_refresh": null
+                    },
+                    "favorite": false,
+                    "position": null,
+                    "date_added": null,
+                    "duration": 386,
+                    "artists": [
+                        {
+                            "item_id": "24915",
+                            "provider": "tidal--AQz2Eakq",
+                            "name": "The Who",
+                            "version": "",
+                            "sort_name": "who, the",
+                            "uri": "tidal--AQz2Eakq://artist/24915",
+                            "external_ids": [],
+                            "is_playable": true,
+                            "media_type": "artist",
+                            "provider_mappings": [
+                                {
+                                    "item_id": "24915",
+                                    "provider_domain": "tidal",
+                                    "provider_instance": "tidal--AQz2Eakq",
+                                    "available": true,
+                                    "in_library": null,
+                                    "is_unique": null,
+                                    "audio_format": {
+                                        "content_type": "?",
+                                        "codec_type": "?",
+                                        "sample_rate": 44100,
+                                        "bit_depth": 16,
+                                        "channels": 2,
+                                        "output_format_str": "?",
+                                        "bit_rate": 0
+                                    },
+                                    "url": "https://tidal.com/artist/24915",
+                                    "details": null
+                                }
+                            ],
+                            "metadata": {
+                                "description": null,
+                                "description_language": null,
+                                "life_span": null,
+                                "artist_entity_type": null,
+                                "review": null,
+                                "explicit": null,
+                                "images": null,
+                                "grouping": null,
+                                "genres": null,
+                                "mood": null,
+                                "style": null,
+                                "copyright": null,
+                                "lyrics": null,
+                                "lrc_lyrics": null,
+                                "transcript": null,
+                                "transcript_cues": null,
+                                "has_transcript": null,
+                                "label": null,
+                                "links": null,
+                                "performers": null,
+                                "preview": null,
+                                "popularity": 86,
+                                "release_date": null,
+                                "languages": null,
+                                "chapters": null,
+                                "collections": null,
+                                "last_refresh": null
+                            },
+                            "favorite": false,
+                            "position": null,
+                            "date_added": null,
+                            "artist_type": "singer"
+                        }
+                    ],
+                    "last_played": 0,
+                    "album": {
+                        "item_id": "93427715",
+                        "provider": "tidal--AQz2Eakq",
+                        "name": "Who Are You",
+                        "version": "",
+                        "sort_name": "who are you",
+                        "uri": "tidal--AQz2Eakq://album/93427715",
+                        "external_ids": [],
+                        "is_playable": true,
+                        "media_type": "album",
+                        "available": true,
+                        "image": null,
+                        "year": null
+                    },
+                    "disc_number": 0,
+                    "track_number": 0,
+                    "audio_metadata": null
+                },
+                "image": {
+                    "type": "thumb",
+                    "path": "https://resources.tidal.com/images/4a7166db/6a34/4343/a040/6731a925039f/750x750.jpg",
+                    "provider": "tidal--AQz2Eakq",
+                    "remotely_accessible": true,
+                    "proxy_id": "d90e0a09e963b432080e018048dae927b1c8f19e56b56f5e7aa05f79f7a666df"
+                },
+                "index": 0,
+                "available": true,
+                "extra_attributes": {}
+            },
+            "sources": [],
+            "flow_mode": false,
+            "resume_pos": 271,
+            "is_dynamic": false,
+            "extra_attributes": {
+                "play_action_in_progress": false
+            },
+            "dont_stop_the_music_enabled": true,
+            "radio_source": []
+        },
+        {
+            "queue_id": "RINCON_542A1B55F1F801400",
+            "active": true,
+            "display_name": "Symfonisk",
+            "available": true,
+            "items": 35,
+            "shuffle_enabled": false,
+            "repeat_mode": "off",
+            "crossfade_enabled": false,
+            "autoplay_enabled": true,
+            "overlay_enabled": false,
+            "overlay_source": null,
+            "overlay_volume": 100,
+            "smart_fades_active": false,
+            "smart_shuffle_active": false,
+            "current_index": 10,
+            "index_in_buffer": 10,
+            "ended": false,
+            "elapsed_time": 0,
+            "elapsed_time_last_updated": 1788549226.3620775,
+            "playback_speed": 1,
+            "state": "idle",
+            "current_item": {
+                "queue_id": "RINCON_542A1B55F1F801400",
+                "queue_item_id": "55ab550db13445b59c63f62c9cf9fa5b",
+                "name": "Cornelis Vreeswijk - Sommarkort",
+                "duration": 216,
+                "sort_index": 11,
+                "streamdetails": {
+                    "provider": "tidal--AQz2Eakq",
+                    "item_id": "2031663",
+                    "audio_format": {
+                        "content_type": "flac",
+                        "codec_type": "flac",
+                        "sample_rate": 44100,
+                        "bit_depth": 16,
+                        "channels": 2,
+                        "output_format_str": "flac",
+                        "bit_rate": 476
+                    },
+                    "media_type": "track",
+                    "stream_type": "http",
+                    "duration": 215,
+                    "size": null,
+                    "stream_metadata": null,
+                    "audio_processing": {
+                        "input_fidelity": {
+                            "quality": "lossless",
+                            "bit_perfect": null
+                        },
+                        "queue_processing": {
+                            "pcm_format": {
+                                "content_type": "f32le",
+                                "codec_type": "?",
+                                "sample_rate": 44100,
+                                "bit_depth": 32,
+                                "channels": 2,
+                                "output_format_str": "pcm;codec=pcm;rate=44100;bitrate=32;channels=2",
+                                "bit_rate": 0
+                            },
+                            "normalization": {
+                                "mode": "dynamic",
+                                "measurement_source": "live",
+                                "target_lufs": -14,
+                                "measured_lufs": null,
+                                "applied_gain_db": null
+                            },
+                            "playback_speed": 1,
+                            "crossfade_mode": "disabled",
+                            "overlay_active": false
+                        },
+                        "outputs": [
+                            {
+                                "player_ids": [
+                                    "RINCON_542A1B55F1F801400"
+                                ],
+                                "dsp": {
+                                    "state": "disabled",
+                                    "input_gain": 0,
+                                    "filters": [],
+                                    "output_gain": 0,
+                                    "preset_id": null
+                                },
+                                "source_channel": null,
+                                "output_format": {
+                                    "content_type": "flac",
+                                    "codec_type": "?",
+                                    "sample_rate": 44100,
+                                    "bit_depth": 24,
+                                    "channels": 2,
+                                    "output_format_str": "flac",
+                                    "bit_rate": 1581
+                                },
+                                "fidelity": {
+                                    "quality": "lossless",
+                                    "bit_perfect": false
+                                }
+                            }
+                        ]
+                    },
+                    "loudness": -15.3,
+                    "loudness_album": null,
+                    "prefer_album_loudness": false,
+                    "volume_normalization_mode": "dynamic",
+                    "volume_normalization_gain_correct": null,
+                    "target_loudness": -14,
+                    "stream_title": null
+                },
+                "media_item": {
+                    "item_id": "2031663",
+                    "provider": "tidal--AQz2Eakq",
+                    "name": "Sommarkort",
+                    "version": "",
+                    "sort_name": "sommarkort",
+                    "uri": "tidal--AQz2Eakq://track/2031663",
+                    "external_ids": [
+                        [
+                            "isrc",
+                            "SEBFO8701010"
+                        ]
+                    ],
+                    "is_playable": true,
+                    "media_type": "track",
+                    "provider_mappings": [
+                        {
+                            "item_id": "2031663",
+                            "provider_domain": "tidal",
+                            "provider_instance": "tidal--AQz2Eakq",
+                            "available": true,
+                            "in_library": null,
+                            "is_unique": null,
+                            "audio_format": {
+                                "content_type": "flac",
+                                "codec_type": "?",
+                                "sample_rate": 44100,
+                                "bit_depth": 16,
+                                "channels": 2,
+                                "output_format_str": "flac",
+                                "bit_rate": 0
+                            },
+                            "url": "https://tidal.com/track/2031663",
+                            "details": null
+                        }
+                    ],
+                    "metadata": {
+                        "description": null,
+                        "description_language": null,
+                        "life_span": null,
+                        "artist_entity_type": null,
+                        "review": null,
+                        "explicit": false,
+                        "images": [
+                            {
+                                "type": "thumb",
+                                "path": "https://resources.tidal.com/images/c5594869/8d84/4d0b/b8a9/504d7d2fa4d8/750x750.jpg",
+                                "provider": "tidal--AQz2Eakq",
+                                "remotely_accessible": true,
+                                "proxy_id": "1d4f7ae7b274449f45aac5296ddc7be60a29eca0d542028013cbb1e8a3cc291e"
+                            }
+                        ],
+                        "grouping": null,
+                        "genres": [
+                            "Pop"
+                        ],
+                        "mood": null,
+                        "style": null,
+                        "copyright": "\u2117 1987 Universal Music AB",
+                        "lyrics": "Somliga s\u00e4ger vi lever i evighet\nFast d\u00f6den \u00e4r det sannaste som de vet\nAndra s\u00e4ger lyckan finns i ett \u00f6gonblick\nFast de aldrig hann ifatt det de fick\n\nI k\u00e4rlek och hat, fiende, kamrat\nGl\u00e4dje och sorg, hydda och borg\nTar vi ett kort p\u00e5 barnen i sommartid\nN\u00e4r de dansar, n\u00e4r vi dansar\nEn stund p\u00e5 jorden\n\nOm du g\u00e5r runt i cirklar, eller rakt dit du vill\nOm du st\u00e5r l\u00e5ngt ifr\u00e5n eller t\u00e4tt intill\nVi spar alla l\u00f6gner till morgonen efter\nOch reser de glas som f\u00f6ll under festen\n\nI k\u00e4rlek och hat, fiende, kamrat\nGl\u00e4dje och sorg, hydda och borg\nTar vi ett kort p\u00e5 barnen i sommartid\nN\u00e4r de dansar, n\u00e4r vi dansar\nEn stund p\u00e5 jorden\n\nTar vi ett kort p\u00e5 barnen i sommartid\nN\u00e4r de dansar, n\u00e4r vi dansar\nEn stund p\u00e5 jorden",
+                        "lrc_lyrics": "[00:22.10] Somliga s\u00e4ger vi lever i evighet\n[00:27.27] Fast d\u00f6den \u00e4r det sannaste som de vet\n[00:33.23] Andra s\u00e4ger lyckan finns i ett \u00f6gonblick\n[00:38.36] Fast de aldrig hann ifatt det de fick\n[00:44.36] I k\u00e4rlek och hat, fiende, kamrat\n[00:49.31] Gl\u00e4dje och sorg, hydda och borg\n[00:57.99] Tar vi ett kort p\u00e5 barnen i sommartid\n[01:05.43] N\u00e4r de dansar, n\u00e4r vi dansar\n[01:16.52] En stund p\u00e5 jorden\n[01:28.67] Om du g\u00e5r runt i cirklar, eller rakt dit du vill\n[01:33.62] Om du st\u00e5r l\u00e5ngt ifr\u00e5n eller t\u00e4tt intill\n[01:38.73] Vi spar alla l\u00f6gner till morgonen efter\n[01:44.74] Och reser de glas som f\u00f6ll under festen\n[01:49.83] I k\u00e4rlek och hat, fiende, kamrat\n[01:54.89] Gl\u00e4dje och sorg, hydda och borg\n[02:03.69] Tar vi ett kort p\u00e5 barnen i sommartid\n[02:11.09] N\u00e4r de dansar, n\u00e4r vi dansar\n[02:22.06] En stund p\u00e5 jorden\n[02:55.66] Tar vi ett kort p\u00e5 barnen i sommartid\n[03:03.33] N\u00e4r de dansar, n\u00e4r vi dansar\n[03:14.34] En stund p\u00e5 jorden\n[03:29.44] ",
+                        "transcript": null,
+                        "transcript_cues": null,
+                        "has_transcript": null,
+                        "label": null,
+                        "links": null,
+                        "performers": [
+                            "Lasse Hoflund",
+                            "Peter Roland Ericsson",
+                            "Peter Ericson",
+                            "Per Andreasson",
+                            "Cornelis Vreeswijk",
+                            "Bill \u00d6hrstr\u00f6m",
+                            "Annika Fr\u00f6lander"
+                        ],
+                        "preview": null,
+                        "popularity": 73,
+                        "release_date": null,
+                        "languages": null,
+                        "chapters": null,
+                        "collections": null,
+                        "last_refresh": null
+                    },
+                    "favorite": false,
+                    "position": null,
+                    "date_added": null,
+                    "duration": 216,
+                    "artists": [
+                        {
+                            "item_id": "13795",
+                            "provider": "tidal--AQz2Eakq",
+                            "name": "Cornelis Vreeswijk",
+                            "version": "",
+                            "sort_name": "cornelis vreeswijk",
+                            "uri": "tidal--AQz2Eakq://artist/13795",
+                            "external_ids": [],
+                            "is_playable": true,
+                            "media_type": "artist",
+                            "provider_mappings": [
+                                {
+                                    "item_id": "13795",
+                                    "provider_domain": "tidal",
+                                    "provider_instance": "tidal--AQz2Eakq",
+                                    "available": true,
+                                    "in_library": null,
+                                    "is_unique": null,
+                                    "audio_format": {
+                                        "content_type": "?",
+                                        "codec_type": "?",
+                                        "sample_rate": 44100,
+                                        "bit_depth": 16,
+                                        "channels": 2,
+                                        "output_format_str": "?",
+                                        "bit_rate": 0
+                                    },
+                                    "url": "https://tidal.com/artist/13795",
+                                    "details": null
+                                }
+                            ],
+                            "metadata": {
+                                "description": null,
+                                "description_language": null,
+                                "life_span": null,
+                                "artist_entity_type": null,
+                                "review": null,
+                                "explicit": null,
+                                "images": null,
+                                "grouping": null,
+                                "genres": null,
+                                "mood": null,
+                                "style": null,
+                                "copyright": null,
+                                "lyrics": null,
+                                "lrc_lyrics": null,
+                                "transcript": null,
+                                "transcript_cues": null,
+                                "has_transcript": null,
+                                "label": null,
+                                "links": null,
+                                "performers": null,
+                                "preview": null,
+                                "popularity": 59,
+                                "release_date": null,
+                                "languages": null,
+                                "chapters": null,
+                                "collections": null,
+                                "last_refresh": null
+                            },
+                            "favorite": false,
+                            "position": null,
+                            "date_added": null,
+                            "artist_type": "singer"
+                        }
+                    ],
+                    "last_played": 0,
+                    "album": {
+                        "item_id": "2031660",
+                        "provider": "tidal--AQz2Eakq",
+                        "name": "Svenska favoriter",
+                        "version": "",
+                        "sort_name": "svenska favoriter",
+                        "uri": "tidal--AQz2Eakq://album/2031660",
+                        "external_ids": [],
+                        "is_playable": true,
+                        "media_type": "album",
+                        "available": true,
+                        "image": null,
+                        "year": null
+                    },
+                    "disc_number": 0,
+                    "track_number": 0,
+                    "audio_metadata": null
+                },
+                "image": {
+                    "type": "thumb",
+                    "path": "https://resources.tidal.com/images/c5594869/8d84/4d0b/b8a9/504d7d2fa4d8/750x750.jpg",
+                    "provider": "tidal--AQz2Eakq",
+                    "remotely_accessible": true,
+                    "proxy_id": "1d4f7ae7b274449f45aac5296ddc7be60a29eca0d542028013cbb1e8a3cc291e"
+                },
+                "index": 0,
+                "available": true,
+                "extra_attributes": {}
+            },
+            "next_item": {
+                "queue_id": "RINCON_542A1B55F1F801400",
+                "queue_item_id": "771bfed0539447d1aeec312aa46503be",
+                "name": "Peter LeMarc - Ett av dom s\u00e4tt",
+                "duration": 154,
+                "sort_index": 12,
+                "streamdetails": {
+                    "provider": "tidal--AQz2Eakq",
+                    "item_id": "132742454",
+                    "audio_format": {
+                        "content_type": "flac",
+                        "codec_type": "?",
+                        "sample_rate": 44100,
+                        "bit_depth": 16,
+                        "channels": 2,
+                        "output_format_str": "flac",
+                        "bit_rate": 0
+                    },
+                    "media_type": "track",
+                    "stream_type": "http",
+                    "duration": 154,
+                    "size": null,
+                    "stream_metadata": null,
+                    "audio_processing": null,
+                    "loudness": null,
+                    "loudness_album": null,
+                    "prefer_album_loudness": false,
+                    "volume_normalization_mode": "dynamic",
+                    "volume_normalization_gain_correct": null,
+                    "target_loudness": -14,
+                    "stream_title": null
+                },
+                "media_item": {
+                    "item_id": "132742454",
+                    "provider": "tidal--AQz2Eakq",
+                    "name": "Ett av dom s\u00e4tt",
+                    "version": "",
+                    "sort_name": "ett av dom saett",
+                    "uri": "tidal--AQz2Eakq://track/132742454",
+                    "external_ids": [
+                        [
+                            "isrc",
+                            "SELAA9100204"
+                        ]
+                    ],
+                    "is_playable": true,
+                    "media_type": "track",
+                    "provider_mappings": [
+                        {
+                            "item_id": "132742454",
+                            "provider_domain": "tidal",
+                            "provider_instance": "tidal--AQz2Eakq",
+                            "available": true,
+                            "in_library": null,
+                            "is_unique": null,
+                            "audio_format": {
+                                "content_type": "flac",
+                                "codec_type": "?",
+                                "sample_rate": 44100,
+                                "bit_depth": 16,
+                                "channels": 2,
+                                "output_format_str": "flac",
+                                "bit_rate": 0
+                            },
+                            "url": "https://tidal.com/track/132742454",
+                            "details": null
+                        }
+                    ],
+                    "metadata": {
+                        "description": null,
+                        "description_language": null,
+                        "life_span": null,
+                        "artist_entity_type": null,
+                        "review": null,
+                        "explicit": false,
+                        "images": [
+                            {
+                                "type": "thumb",
+                                "path": "https://resources.tidal.com/images/2f0bf4e6/2cc6/401b/b979/9a294ce0b245/750x750.jpg",
+                                "provider": "tidal--AQz2Eakq",
+                                "remotely_accessible": true,
+                                "proxy_id": "352c5b91e107807ae60efb23531a2b44e24c233f5375e2d47abad35349d68344"
+                            }
+                        ],
+                        "grouping": null,
+                        "genres": [
+                            "Rock",
+                            "Pop"
+                        ],
+                        "mood": null,
+                        "style": null,
+                        "copyright": "(P) 1991 Peter LeMarc Musik AB. Distributed by Sony Music Entertainment Sweden AB",
+                        "lyrics": "\u00d6ppna famnen och ta emot mig\nMin hand \u00e4r full av saknad och den l\u00e4ngtar s\u00e5\nDetta \u00e4r ett av de s\u00e4tt jag \u00e5tr\u00e5r dig p\u00e5\n\nEn m\u00e5ndagmorgon som du ska gl\u00f6mma\nSkriver jag ett k\u00e4rleksbrev du aldrig f\u00e5r\nDetta \u00e4r ett av de s\u00e4tt jag \u00e5tr\u00e5r dig p\u00e5\n\nHalspulsen hamrar, hj\u00e4rtat sl\u00e5r\nSm\u00e5, sm\u00e5 v\u00e5gor d\u00e5 och d\u00e5\nF\u00f6r att h\u00e5lla kvar dem och komma ih\u00e5g\nR\u00e4knar jag s\u00e4tten jag \u00e5tr\u00e5r dig p\u00e5\n\nN\u00e4r du just somnat och ligger s\u00e5rbar\nVilar jag min panna mellan dina l\u00e5r\nDetta \u00e4r ett av de s\u00e4tt jag \u00e5tr\u00e5r dig p\u00e5\n\n(Ah)\n\nMmm\nHalspulsen hamrar, hj\u00e4rtat sl\u00e5r\nSm\u00e5, sm\u00e5 v\u00e5gor d\u00e5 och d\u00e5\nF\u00f6r att h\u00e5lla kvar dem och komma ih\u00e5g\nR\u00e4knar jag s\u00e4tten jag \u00e5tr\u00e5r dig p\u00e5\n\nN\u00e4r vi blir gamla och kanske gl\u00f6mda\nGer jag dig de \u00f6gonblick jag sparat p\u00e5\nDetta blir ett av de s\u00e4tt jag \u00e5tr\u00e5r dig p\u00e5\n\nBara ett av de s\u00e4tt jag \u00e5tr\u00e5r dig p\u00e5\nBara ett av de s\u00e4tt jag \u00e5tr\u00e5r dig p\u00e5",
+                        "lrc_lyrics": "[00:16.99] \u00d6ppna famnen och ta emot mig\n[00:20.86] Min hand \u00e4r full av saknad och den l\u00e4ngtar s\u00e5\n[00:25.18] Detta \u00e4r ett av de s\u00e4tt jag \u00e5tr\u00e5r dig p\u00e5\n[00:33.20] En m\u00e5ndagmorgon som du ska gl\u00f6mma\n[00:37.56] Skriver jag ett k\u00e4rleksbrev du aldrig f\u00e5r\n[00:41.75] Detta \u00e4r ett av de s\u00e4tt jag \u00e5tr\u00e5r dig p\u00e5\n[00:50.05] Halspulsen hamrar, hj\u00e4rtat sl\u00e5r\n[00:54.44] Sm\u00e5, sm\u00e5 v\u00e5gor d\u00e5 och d\u00e5\n[00:58.24] F\u00f6r att h\u00e5lla kvar dem och komma ih\u00e5g\n[01:02.29] R\u00e4knar jag s\u00e4tten jag \u00e5tr\u00e5r dig p\u00e5\n[01:06.24] N\u00e4r du just somnat och ligger s\u00e5rbar\n[01:10.72] Vilar jag min panna mellan dina l\u00e5r\n[01:14.78] Detta \u00e4r ett av de s\u00e4tt jag \u00e5tr\u00e5r dig p\u00e5\n[01:22.02] (Ah)\n[01:23.08] \n[01:38.62] Mmm\n[01:39.44] Halspulsen hamrar, hj\u00e4rtat sl\u00e5r\n[01:43.97] Sm\u00e5, sm\u00e5 v\u00e5gor d\u00e5 och d\u00e5\n[01:47.67] F\u00f6r att h\u00e5lla kvar dem och komma ih\u00e5g\n[01:51.89] R\u00e4knar jag s\u00e4tten jag \u00e5tr\u00e5r dig p\u00e5\n[01:55.78] N\u00e4r vi blir gamla och kanske gl\u00f6mda\n[02:00.12] Ger jag dig de \u00f6gonblick jag sparat p\u00e5\n[02:04.13] Detta blir ett av de s\u00e4tt jag \u00e5tr\u00e5r dig p\u00e5\n[02:12.48] Bara ett av de s\u00e4tt jag \u00e5tr\u00e5r dig p\u00e5\n[02:21.08] Bara ett av de s\u00e4tt jag \u00e5tr\u00e5r dig p\u00e5\n[02:25.51] ",
+                        "transcript": null,
+                        "transcript_cues": null,
+                        "has_transcript": null,
+                        "label": null,
+                        "links": null,
+                        "performers": [
+                            "Peter Lemarc",
+                            "Classe Persson",
+                            "Tony Thor\u00e9n"
+                        ],
+                        "preview": null,
+                        "popularity": 64,
+                        "release_date": null,
+                        "languages": null,
+                        "chapters": null,
+                        "collections": null,
+                        "last_refresh": null
+                    },
+                    "favorite": false,
+                    "position": null,
+                    "date_added": null,
+                    "duration": 154,
+                    "artists": [
+                        {
+                            "item_id": "4760",
+                            "provider": "tidal--AQz2Eakq",
+                            "name": "Peter LeMarc",
+                            "version": "",
+                            "sort_name": "peter lemarc",
+                            "uri": "tidal--AQz2Eakq://artist/4760",
+                            "external_ids": [],
+                            "is_playable": true,
+                            "media_type": "artist",
+                            "provider_mappings": [
+                                {
+                                    "item_id": "4760",
+                                    "provider_domain": "tidal",
+                                    "provider_instance": "tidal--AQz2Eakq",
+                                    "available": true,
+                                    "in_library": null,
+                                    "is_unique": null,
+                                    "audio_format": {
+                                        "content_type": "?",
+                                        "codec_type": "?",
+                                        "sample_rate": 44100,
+                                        "bit_depth": 16,
+                                        "channels": 2,
+                                        "output_format_str": "?",
+                                        "bit_rate": 0
+                                    },
+                                    "url": "https://tidal.com/artist/4760",
+                                    "details": null
+                                }
+                            ],
+                            "metadata": {
+                                "description": null,
+                                "description_language": null,
+                                "life_span": null,
+                                "artist_entity_type": null,
+                                "review": null,
+                                "explicit": null,
+                                "images": null,
+                                "grouping": null,
+                                "genres": null,
+                                "mood": null,
+                                "style": null,
+                                "copyright": null,
+                                "lyrics": null,
+                                "lrc_lyrics": null,
+                                "transcript": null,
+                                "transcript_cues": null,
+                                "has_transcript": null,
+                                "label": null,
+                                "links": null,
+                                "performers": null,
+                                "preview": null,
+                                "popularity": 53,
+                                "release_date": null,
+                                "languages": null,
+                                "chapters": null,
+                                "collections": null,
+                                "last_refresh": null
+                            },
+                            "favorite": false,
+                            "position": null,
+                            "date_added": null,
+                            "artist_type": "singer"
+                        }
+                    ],
+                    "last_played": 0,
+                    "album": {
+                        "item_id": "132742439",
+                        "provider": "tidal--AQz2Eakq",
+                        "name": "LeMarc - Klassiker",
+                        "version": "",
+                        "sort_name": "lemarc - klassiker",
+                        "uri": "tidal--AQz2Eakq://album/132742439",
+                        "external_ids": [],
+                        "is_playable": true,
+                        "media_type": "album",
+                        "available": true,
+                        "image": null,
+                        "year": null
+                    },
+                    "disc_number": 0,
+                    "track_number": 0,
+                    "audio_metadata": null
+                },
+                "image": {
+                    "type": "thumb",
+                    "path": "https://resources.tidal.com/images/2f0bf4e6/2cc6/401b/b979/9a294ce0b245/750x750.jpg",
+                    "provider": "tidal--AQz2Eakq",
+                    "remotely_accessible": true,
+                    "proxy_id": "352c5b91e107807ae60efb23531a2b44e24c233f5375e2d47abad35349d68344"
+                },
+                "index": 0,
+                "available": true,
+                "extra_attributes": {}
+            },
+            "sources": [
+                {
+                    "item_id": "133205692",
+                    "provider": "tidal--AQz2Eakq",
+                    "name": "Artattack",
+                    "version": "",
+                    "sort_name": "artattack",
+                    "uri": "tidal--AQz2Eakq://album/133205692",
+                    "external_ids": [
+                        [
+                            "barcode",
+                            "0793420479401"
+                        ]
+                    ],
+                    "is_playable": true,
+                    "media_type": "album",
+                    "available": true,
+                    "image": {
+                        "type": "thumb",
+                        "path": "https://resources.tidal.com/images/b417a5e3/61ce/4dfc/be61/eeead9d8a978/750x750.jpg",
+                        "provider": "tidal--AQz2Eakq",
+                        "remotely_accessible": true,
+                        "proxy_id": "b247d7d87f3b055f0b98818373d15759e9b71f3914eefe447d2341b54317ca9d"
+                    },
+                    "year": 2020
+                }
+            ],
+            "flow_mode": false,
+            "resume_pos": 37,
+            "is_dynamic": false,
+            "extra_attributes": {
+                "play_action_in_progress": false
+            },
+            "dont_stop_the_music_enabled": true,
+            "radio_source": []
+        },
+        {
+            "queue_id": "lDUQCwXwicR2wA3rrdrx6kK47LutE6lodg2GVLiCOzs",
+            "active": true,
+            "display_name": "Web (Firefox on Linux)",
+            "available": true,
+            "items": 0,
+            "shuffle_enabled": false,
+            "repeat_mode": "off",
+            "crossfade_enabled": false,
+            "autoplay_enabled": true,
+            "overlay_enabled": false,
+            "overlay_source": null,
+            "overlay_volume": 100,
+            "smart_fades_active": false,
+            "smart_shuffle_active": false,
+            "current_index": null,
+            "index_in_buffer": null,
+            "ended": false,
+            "elapsed_time": 0,
+            "elapsed_time_last_updated": 1789207949.3732886,
+            "playback_speed": 1,
+            "state": "idle",
+            "current_item": null,
+            "next_item": null,
+            "sources": [],
+            "flow_mode": false,
+            "resume_pos": 0,
+            "is_dynamic": false,
+            "extra_attributes": {},
+            "dont_stop_the_music_enabled": true,
+            "radio_source": []
+        },
+        {
+            "queue_id": "ap52ee2c22c7b2",
+            "active": true,
+            "display_name": "K\u00f6ket Apple TV",
+            "available": true,
+            "items": 24,
+            "shuffle_enabled": false,
+            "repeat_mode": "off",
+            "crossfade_enabled": false,
+            "autoplay_enabled": true,
+            "overlay_enabled": false,
+            "overlay_source": null,
+            "overlay_volume": 100,
+            "smart_fades_active": false,
+            "smart_shuffle_active": false,
+            "current_index": 2,
+            "index_in_buffer": 2,
+            "ended": false,
+            "elapsed_time": 62.99576025481451,
+            "elapsed_time_last_updated": 1789212195.002503,
+            "playback_speed": 1,
+            "state": "playing",
+            "current_item": {
+                "queue_id": "ap52ee2c22c7b2",
+                "queue_item_id": "cd724a5a3096451997741d70a95c7529",
+                "name": "Hansson de Wolfe United - Tur o Retur",
+                "duration": 309,
+                "sort_index": 2,
+                "streamdetails": {
+                    "provider": "tidal--AQz2Eakq",
+                    "item_id": "133205701",
+                    "audio_format": {
+                        "content_type": "flac",
+                        "codec_type": "flac",
+                        "sample_rate": 44100,
+                        "bit_depth": 16,
+                        "channels": 2,
+                        "output_format_str": "flac",
+                        "bit_rate": 681
+                    },
+                    "media_type": "track",
+                    "stream_type": "http",
+                    "duration": 309,
+                    "size": null,
+                    "stream_metadata": null,
+                    "audio_processing": {
+                        "input_fidelity": {
+                            "quality": "lossless",
+                            "bit_perfect": null
+                        },
+                        "queue_processing": {
+                            "pcm_format": {
+                                "content_type": "f32le",
+                                "codec_type": "?",
+                                "sample_rate": 44100,
+                                "bit_depth": 32,
+                                "channels": 2,
+                                "output_format_str": "pcm;codec=pcm;rate=44100;bitrate=32;channels=2",
+                                "bit_rate": 0
+                            },
+                            "normalization": {
+                                "mode": "measurement_only",
+                                "measurement_source": "track",
+                                "target_lufs": -14,
+                                "measured_lufs": -10.3,
+                                "applied_gain_db": -3.7
+                            },
+                            "playback_speed": 1,
+                            "crossfade_mode": "disabled",
+                            "overlay_active": false
+                        },
+                        "outputs": [
+                            {
+                                "player_ids": [
+                                    "ap52ee2c22c7b2"
+                                ],
+                                "dsp": {
+                                    "state": "disabled",
+                                    "input_gain": 0,
+                                    "filters": [],
+                                    "output_gain": 0,
+                                    "preset_id": null
+                                },
+                                "source_channel": null,
+                                "output_format": {
+                                    "content_type": "alac",
+                                    "codec_type": "?",
+                                    "sample_rate": 44100,
+                                    "bit_depth": 24,
+                                    "channels": 2,
+                                    "output_format_str": "alac",
+                                    "bit_rate": 0
+                                },
+                                "fidelity": {
+                                    "quality": "lossless",
+                                    "bit_perfect": false
+                                }
+                            }
+                        ]
+                    },
+                    "loudness": -10.3,
+                    "loudness_album": null,
+                    "prefer_album_loudness": true,
+                    "volume_normalization_mode": "measurement_only",
+                    "volume_normalization_gain_correct": -3.7,
+                    "target_loudness": -14,
+                    "stream_title": null
+                },
+                "media_item": {
+                    "item_id": "133205701",
+                    "provider": "tidal--AQz2Eakq",
+                    "name": "Tur o Retur",
+                    "version": "",
+                    "sort_name": "tur o retur",
+                    "uri": "tidal--AQz2Eakq://track/133205701",
+                    "external_ids": [
+                        [
+                            "isrc",
+                            "SE5752043988"
+                        ]
+                    ],
+                    "is_playable": true,
+                    "media_type": "track",
+                    "provider_mappings": [
+                        {
+                            "item_id": "133205701",
+                            "provider_domain": "tidal",
+                            "provider_instance": "tidal--AQz2Eakq",
+                            "available": true,
+                            "in_library": null,
+                            "is_unique": null,
+                            "audio_format": {
+                                "content_type": "flac",
+                                "codec_type": "?",
+                                "sample_rate": 44100,
+                                "bit_depth": 16,
+                                "channels": 2,
+                                "output_format_str": "flac",
+                                "bit_rate": 0
+                            },
+                            "url": "https://tidal.com/track/133205701",
+                            "details": null
+                        }
+                    ],
+                    "metadata": {
+                        "description": null,
+                        "description_language": null,
+                        "life_span": null,
+                        "artist_entity_type": null,
+                        "review": null,
+                        "explicit": false,
+                        "images": [
+                            {
+                                "type": "thumb",
+                                "path": "https://resources.tidal.com/images/b417a5e3/61ce/4dfc/be61/eeead9d8a978/750x750.jpg",
+                                "provider": "tidal--AQz2Eakq",
+                                "remotely_accessible": true,
+                                "proxy_id": "b247d7d87f3b055f0b98818373d15759e9b71f3914eefe447d2341b54317ca9d"
+                            }
+                        ],
+                        "grouping": null,
+                        "genres": [
+                            "Pop"
+                        ],
+                        "mood": null,
+                        "style": null,
+                        "copyright": "Colibriasis",
+                        "lyrics": null,
+                        "lrc_lyrics": null,
+                        "transcript": null,
+                        "transcript_cues": null,
+                        "has_transcript": null,
+                        "label": null,
+                        "links": null,
+                        "performers": [
+                            "Lorne De Wolfe",
+                            "Dick Hansson",
+                            "Copyright Control"
+                        ],
+                        "preview": null,
+                        "popularity": 19,
+                        "release_date": null,
+                        "languages": null,
+                        "chapters": null,
+                        "collections": null,
+                        "last_refresh": null
+                    },
+                    "favorite": false,
+                    "position": null,
+                    "date_added": null,
+                    "duration": 309,
+                    "artists": [
+                        {
+                            "item_id": "3740715",
+                            "provider": "tidal--AQz2Eakq",
+                            "name": "Hansson de Wolfe United",
+                            "version": "",
+                            "sort_name": "hansson de wolfe united",
+                            "uri": "tidal--AQz2Eakq://artist/3740715",
+                            "external_ids": [],
+                            "is_playable": true,
+                            "media_type": "artist",
+                            "provider_mappings": [
+                                {
+                                    "item_id": "3740715",
+                                    "provider_domain": "tidal",
+                                    "provider_instance": "tidal--AQz2Eakq",
+                                    "available": true,
+                                    "in_library": null,
+                                    "is_unique": null,
+                                    "audio_format": {
+                                        "content_type": "?",
+                                        "codec_type": "?",
+                                        "sample_rate": 44100,
+                                        "bit_depth": 16,
+                                        "channels": 2,
+                                        "output_format_str": "?",
+                                        "bit_rate": 0
+                                    },
+                                    "url": "https://tidal.com/artist/3740715",
+                                    "details": null
+                                }
+                            ],
+                            "metadata": {
+                                "description": null,
+                                "description_language": null,
+                                "life_span": null,
+                                "artist_entity_type": null,
+                                "review": null,
+                                "explicit": null,
+                                "images": null,
+                                "grouping": null,
+                                "genres": null,
+                                "mood": null,
+                                "style": null,
+                                "copyright": null,
+                                "lyrics": null,
+                                "lrc_lyrics": null,
+                                "transcript": null,
+                                "transcript_cues": null,
+                                "has_transcript": null,
+                                "label": null,
+                                "links": null,
+                                "performers": null,
+                                "preview": null,
+                                "popularity": 38,
+                                "release_date": null,
+                                "languages": null,
+                                "chapters": null,
+                                "collections": null,
+                                "last_refresh": null
+                            },
+                            "favorite": false,
+                            "position": null,
+                            "date_added": null,
+                            "artist_type": "singer"
+                        }
+                    ],
+                    "last_played": 0,
+                    "album": {
+                        "item_id": "100",
+                        "provider": "library",
+                        "name": "Artattack",
+                        "version": "",
+                        "sort_name": "artattack",
+                        "uri": "library://album/100",
+                        "external_ids": [
+                            [
+                                "barcode",
+                                "00793420479401"
+                            ]
+                        ],
+                        "is_playable": true,
+                        "media_type": "album",
+                        "provider_mappings": [
+                            {
+                                "item_id": "133205692",
+                                "provider_domain": "tidal",
+                                "provider_instance": "tidal--AQz2Eakq",
+                                "available": true,
+                                "in_library": true,
+                                "is_unique": null,
+                                "audio_format": {
+                                    "content_type": "flac",
+                                    "codec_type": "?",
+                                    "sample_rate": 44100,
+                                    "bit_depth": 16,
+                                    "channels": 2,
+                                    "output_format_str": "flac",
+                                    "bit_rate": 0
+                                },
+                                "url": "https://tidal.com/album/133205692",
+                                "details": null
+                            }
+                        ],
+                        "metadata": {
+                            "description": null,
+                            "description_language": null,
+                            "life_span": null,
+                            "artist_entity_type": null,
+                            "review": null,
+                            "explicit": false,
+                            "images": [
+                                {
+                                    "type": "thumb",
+                                    "path": "https://resources.tidal.com/images/b417a5e3/61ce/4dfc/be61/eeead9d8a978/750x750.jpg",
+                                    "provider": "tidal--AQz2Eakq",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "b247d7d87f3b055f0b98818373d15759e9b71f3914eefe447d2341b54317ca9d"
+                                },
+                                {
+                                    "type": "thumb",
+                                    "path": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/61/39/a5/6139a592-208a-209a-5d2a-662dd7a3537d/251951e2-9f76-4625-a946-65e350fef872.jpg/1500x1500bb.jpg",
+                                    "provider": "itunes_artwork",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "69b166ff66965eee6ce3c48d3a7aa8ffbbcff88ed460d4b3a88d62756e38888e"
+                                }
+                            ],
+                            "grouping": null,
+                            "genres": null,
+                            "mood": null,
+                            "style": null,
+                            "copyright": "Colibriasis",
+                            "lyrics": null,
+                            "lrc_lyrics": null,
+                            "transcript": null,
+                            "transcript_cues": null,
+                            "has_transcript": null,
+                            "label": null,
+                            "links": null,
+                            "performers": null,
+                            "preview": null,
+                            "popularity": 34,
+                            "release_date": "2020-03-23T00:00:00",
+                            "languages": null,
+                            "chapters": null,
+                            "collections": null,
+                            "last_refresh": 1789208371
+                        },
+                        "favorite": true,
+                        "position": null,
+                        "date_added": "2026-09-12T10:18:58+00:00",
+                        "year": 2020,
+                        "artists": [
+                            {
+                                "item_id": "189",
+                                "provider": "library",
+                                "name": "Hansson de Wolfe United",
+                                "version": "",
+                                "sort_name": "hansson de wolfe united",
+                                "uri": "library://artist/189",
+                                "external_ids": [],
+                                "is_playable": true,
+                                "media_type": "artist",
+                                "available": true,
+                                "image": null,
+                                "year": null
+                            }
+                        ],
+                        "album_type": "album"
+                    },
+                    "disc_number": 0,
+                    "track_number": 0,
+                    "audio_metadata": null
+                },
+                "image": {
+                    "type": "thumb",
+                    "path": "https://resources.tidal.com/images/b417a5e3/61ce/4dfc/be61/eeead9d8a978/750x750.jpg",
+                    "provider": "tidal--AQz2Eakq",
+                    "remotely_accessible": true,
+                    "proxy_id": "b247d7d87f3b055f0b98818373d15759e9b71f3914eefe447d2341b54317ca9d"
+                },
+                "index": 0,
+                "available": true,
+                "extra_attributes": {}
+            },
+            "next_item": {
+                "queue_id": "ap52ee2c22c7b2",
+                "queue_item_id": "b98f89b57d064b07a1d15b5567ee7bda",
+                "name": "Hansson de Wolfe United - Kriterium",
+                "duration": 39,
+                "sort_index": 3,
+                "streamdetails": {
+                    "provider": "tidal--AQz2Eakq",
+                    "item_id": "133205702",
+                    "audio_format": {
+                        "content_type": "flac",
+                        "codec_type": "?",
+                        "sample_rate": 44100,
+                        "bit_depth": 16,
+                        "channels": 2,
+                        "output_format_str": "flac",
+                        "bit_rate": 0
+                    },
+                    "media_type": "track",
+                    "stream_type": "http",
+                    "duration": 39,
+                    "size": null,
+                    "stream_metadata": null,
+                    "audio_processing": null,
+                    "loudness": null,
+                    "loudness_album": null,
+                    "prefer_album_loudness": true,
+                    "volume_normalization_mode": "dynamic",
+                    "volume_normalization_gain_correct": null,
+                    "target_loudness": -14,
+                    "stream_title": null
+                },
+                "media_item": {
+                    "item_id": "133205702",
+                    "provider": "tidal--AQz2Eakq",
+                    "name": "Kriterium",
+                    "version": "",
+                    "sort_name": "kriterium",
+                    "uri": "tidal--AQz2Eakq://track/133205702",
+                    "external_ids": [
+                        [
+                            "isrc",
+                            "SE5752043989"
+                        ]
+                    ],
+                    "is_playable": true,
+                    "media_type": "track",
+                    "provider_mappings": [
+                        {
+                            "item_id": "133205702",
+                            "provider_domain": "tidal",
+                            "provider_instance": "tidal--AQz2Eakq",
+                            "available": true,
+                            "in_library": null,
+                            "is_unique": null,
+                            "audio_format": {
+                                "content_type": "flac",
+                                "codec_type": "?",
+                                "sample_rate": 44100,
+                                "bit_depth": 16,
+                                "channels": 2,
+                                "output_format_str": "flac",
+                                "bit_rate": 0
+                            },
+                            "url": "https://tidal.com/track/133205702",
+                            "details": null
+                        }
+                    ],
+                    "metadata": {
+                        "description": null,
+                        "description_language": null,
+                        "life_span": null,
+                        "artist_entity_type": null,
+                        "review": null,
+                        "explicit": false,
+                        "images": [
+                            {
+                                "type": "thumb",
+                                "path": "https://resources.tidal.com/images/b417a5e3/61ce/4dfc/be61/eeead9d8a978/750x750.jpg",
+                                "provider": "tidal--AQz2Eakq",
+                                "remotely_accessible": true,
+                                "proxy_id": "b247d7d87f3b055f0b98818373d15759e9b71f3914eefe447d2341b54317ca9d"
+                            }
+                        ],
+                        "grouping": null,
+                        "genres": [
+                            "Pop"
+                        ],
+                        "mood": null,
+                        "style": null,
+                        "copyright": "Colibriasis",
+                        "lyrics": null,
+                        "lrc_lyrics": null,
+                        "transcript": null,
+                        "transcript_cues": null,
+                        "has_transcript": null,
+                        "label": null,
+                        "links": null,
+                        "performers": [
+                            "Lorne De Wolfe",
+                            "Dick Hansson",
+                            "Copyright Control"
+                        ],
+                        "preview": null,
+                        "popularity": 14,
+                        "release_date": null,
+                        "languages": null,
+                        "chapters": null,
+                        "collections": null,
+                        "last_refresh": null
+                    },
+                    "favorite": false,
+                    "position": null,
+                    "date_added": null,
+                    "duration": 39,
+                    "artists": [
+                        {
+                            "item_id": "3740715",
+                            "provider": "tidal--AQz2Eakq",
+                            "name": "Hansson de Wolfe United",
+                            "version": "",
+                            "sort_name": "hansson de wolfe united",
+                            "uri": "tidal--AQz2Eakq://artist/3740715",
+                            "external_ids": [],
+                            "is_playable": true,
+                            "media_type": "artist",
+                            "provider_mappings": [
+                                {
+                                    "item_id": "3740715",
+                                    "provider_domain": "tidal",
+                                    "provider_instance": "tidal--AQz2Eakq",
+                                    "available": true,
+                                    "in_library": null,
+                                    "is_unique": null,
+                                    "audio_format": {
+                                        "content_type": "?",
+                                        "codec_type": "?",
+                                        "sample_rate": 44100,
+                                        "bit_depth": 16,
+                                        "channels": 2,
+                                        "output_format_str": "?",
+                                        "bit_rate": 0
+                                    },
+                                    "url": "https://tidal.com/artist/3740715",
+                                    "details": null
+                                }
+                            ],
+                            "metadata": {
+                                "description": null,
+                                "description_language": null,
+                                "life_span": null,
+                                "artist_entity_type": null,
+                                "review": null,
+                                "explicit": null,
+                                "images": null,
+                                "grouping": null,
+                                "genres": null,
+                                "mood": null,
+                                "style": null,
+                                "copyright": null,
+                                "lyrics": null,
+                                "lrc_lyrics": null,
+                                "transcript": null,
+                                "transcript_cues": null,
+                                "has_transcript": null,
+                                "label": null,
+                                "links": null,
+                                "performers": null,
+                                "preview": null,
+                                "popularity": 38,
+                                "release_date": null,
+                                "languages": null,
+                                "chapters": null,
+                                "collections": null,
+                                "last_refresh": null
+                            },
+                            "favorite": false,
+                            "position": null,
+                            "date_added": null,
+                            "artist_type": "singer"
+                        }
+                    ],
+                    "last_played": 0,
+                    "album": {
+                        "item_id": "100",
+                        "provider": "library",
+                        "name": "Artattack",
+                        "version": "",
+                        "sort_name": "artattack",
+                        "uri": "library://album/100",
+                        "external_ids": [
+                            [
+                                "barcode",
+                                "00793420479401"
+                            ]
+                        ],
+                        "is_playable": true,
+                        "media_type": "album",
+                        "provider_mappings": [
+                            {
+                                "item_id": "133205692",
+                                "provider_domain": "tidal",
+                                "provider_instance": "tidal--AQz2Eakq",
+                                "available": true,
+                                "in_library": true,
+                                "is_unique": null,
+                                "audio_format": {
+                                    "content_type": "flac",
+                                    "codec_type": "?",
+                                    "sample_rate": 44100,
+                                    "bit_depth": 16,
+                                    "channels": 2,
+                                    "output_format_str": "flac",
+                                    "bit_rate": 0
+                                },
+                                "url": "https://tidal.com/album/133205692",
+                                "details": null
+                            }
+                        ],
+                        "metadata": {
+                            "description": null,
+                            "description_language": null,
+                            "life_span": null,
+                            "artist_entity_type": null,
+                            "review": null,
+                            "explicit": false,
+                            "images": [
+                                {
+                                    "type": "thumb",
+                                    "path": "https://resources.tidal.com/images/b417a5e3/61ce/4dfc/be61/eeead9d8a978/750x750.jpg",
+                                    "provider": "tidal--AQz2Eakq",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "b247d7d87f3b055f0b98818373d15759e9b71f3914eefe447d2341b54317ca9d"
+                                },
+                                {
+                                    "type": "thumb",
+                                    "path": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/61/39/a5/6139a592-208a-209a-5d2a-662dd7a3537d/251951e2-9f76-4625-a946-65e350fef872.jpg/1500x1500bb.jpg",
+                                    "provider": "itunes_artwork",
+                                    "remotely_accessible": true,
+                                    "proxy_id": "69b166ff66965eee6ce3c48d3a7aa8ffbbcff88ed460d4b3a88d62756e38888e"
+                                }
+                            ],
+                            "grouping": null,
+                            "genres": null,
+                            "mood": null,
+                            "style": null,
+                            "copyright": "Colibriasis",
+                            "lyrics": null,
+                            "lrc_lyrics": null,
+                            "transcript": null,
+                            "transcript_cues": null,
+                            "has_transcript": null,
+                            "label": null,
+                            "links": null,
+                            "performers": null,
+                            "preview": null,
+                            "popularity": 34,
+                            "release_date": "2020-03-23T00:00:00",
+                            "languages": null,
+                            "chapters": null,
+                            "collections": null,
+                            "last_refresh": 1789208371
+                        },
+                        "favorite": true,
+                        "position": null,
+                        "date_added": "2026-09-12T10:18:58+00:00",
+                        "year": 2020,
+                        "artists": [
+                            {
+                                "item_id": "189",
+                                "provider": "library",
+                                "name": "Hansson de Wolfe United",
+                                "version": "",
+                                "sort_name": "hansson de wolfe united",
+                                "uri": "library://artist/189",
+                                "external_ids": [],
+                                "is_playable": true,
+                                "media_type": "artist",
+                                "available": true,
+                                "image": null,
+                                "year": null
+                            }
+                        ],
+                        "album_type": "album"
+                    },
+                    "disc_number": 0,
+                    "track_number": 0,
+                    "audio_metadata": null
+                },
+                "image": {
+                    "type": "thumb",
+                    "path": "https://resources.tidal.com/images/b417a5e3/61ce/4dfc/be61/eeead9d8a978/750x750.jpg",
+                    "provider": "tidal--AQz2Eakq",
+                    "remotely_accessible": true,
+                    "proxy_id": "b247d7d87f3b055f0b98818373d15759e9b71f3914eefe447d2341b54317ca9d"
+                },
+                "index": 0,
+                "available": true,
+                "extra_attributes": {}
+            },
+            "sources": [
+                {
+                    "item_id": "100",
+                    "provider": "library",
+                    "name": "Artattack",
+                    "version": "",
+                    "sort_name": "artattack",
+                    "uri": "library://album/100",
+                    "external_ids": [
+                        [
+                            "barcode",
+                            "00793420479401"
+                        ]
+                    ],
+                    "is_playable": true,
+                    "media_type": "album",
+                    "available": true,
+                    "image": {
+                        "type": "thumb",
+                        "path": "https://resources.tidal.com/images/b417a5e3/61ce/4dfc/be61/eeead9d8a978/750x750.jpg",
+                        "provider": "tidal--AQz2Eakq",
+                        "remotely_accessible": true,
+                        "proxy_id": "b247d7d87f3b055f0b98818373d15759e9b71f3914eefe447d2341b54317ca9d"
+                    },
+                    "year": 2020
+                }
+            ],
+            "flow_mode": true,
+            "resume_pos": 0,
+            "is_dynamic": false,
+            "extra_attributes": {
+                "play_action_in_progress": false
+            },
+            "dont_stop_the_music_enabled": true,
+            "radio_source": []
+        }
+    ]
+}
