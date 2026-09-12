@@ -5,6 +5,20 @@ export type NowPlaying = {
   image: string | null;
 };
 
+export type QueuePreviewItem = {
+  id: string | null;
+  title: string | null;
+  artist: string | null;
+  album: string | null;
+  image: string | null;
+};
+
+export type QueueContext = {
+  previous: QueuePreviewItem | null;
+  current: QueuePreviewItem | null;
+  next: QueuePreviewItem | null;
+};
+
 export type Player = {
   id: string;
   name: string;
@@ -14,6 +28,7 @@ export type Player = {
   items: number;
   elapsedTime: number | null;
   duration: number | null;
+  volumeLevel: number | null;
   nowPlaying: NowPlaying | null;
 };
 
@@ -21,6 +36,16 @@ type PlayersResponse = {
   status: string;
   count: number;
   players: Player[];
+};
+
+type QueueContextResponse = QueueContext & {
+  status: string;
+  playerId: string;
+};
+
+type RawStatusResponse = {
+  status: string;
+  musicAssistant: unknown;
 };
 
 async function request(path: string, init?: RequestInit) {
@@ -34,9 +59,79 @@ async function request(path: string, init?: RequestInit) {
   return response.json();
 }
 
+function asArray(value: any): any[] {
+  if (Array.isArray(value)) {
+    return value;
+  }
+
+  if (Array.isArray(value?.result)) {
+    return value.result;
+  }
+
+  return [];
+}
+
+function positiveNumber(...values: unknown[]): number | null {
+  for (const value of values) {
+    const number = Number(value);
+    if (Number.isFinite(number) && number > 0) {
+      return number;
+    }
+  }
+
+  return null;
+}
+
+function rawQueueDuration(queue: any): number | null {
+  const currentItem = queue?.current_item;
+  const mediaItem = currentItem?.media_item ?? currentItem?.media_item_data;
+
+  return positiveNumber(
+    queue?.duration,
+    currentItem?.duration,
+    currentItem?.media_item?.duration,
+    currentItem?.media_item_data?.duration,
+    mediaItem?.duration,
+    mediaItem?.metadata?.duration
+  );
+}
+
 export async function getPlayers(): Promise<Player[]> {
   const data = (await request("/api/players")) as PlayersResponse;
-  return data.players;
+
+  if (data.players.every((player) => (player.duration ?? 0) > 0)) {
+    return data.players;
+  }
+
+  try {
+    const raw = (await request("/api/ma/status")) as RawStatusResponse;
+    const queues = asArray(raw.musicAssistant);
+
+    return data.players.map((player) => {
+      if ((player.duration ?? 0) > 0) {
+        return player;
+      }
+
+      const queue = queues.find((entry: any) => entry?.queue_id === player.id);
+      const duration = rawQueueDuration(queue);
+
+      return duration ? { ...player, duration } : player;
+    });
+  } catch {
+    return data.players;
+  }
+}
+
+export async function getQueueContext(playerId: string): Promise<QueueContext> {
+  const data = (await request(
+    `/api/players/${encodeURIComponent(playerId)}/queue-context`
+  )) as QueueContextResponse;
+
+  return {
+    previous: data.previous,
+    current: data.current,
+    next: data.next,
+  };
 }
 
 export async function playPause(playerId: string) {
