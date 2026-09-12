@@ -1,16 +1,52 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   getPlayers,
+  getQueueContext,
   nextTrack,
   playPause,
   previousTrack,
   setVolume,
   type Player,
+  type QueueContext,
+  type QueuePreviewItem,
 } from "./api";
 
 const PLAYER_STORAGE_KEY = "music-assistant-web.selected-player";
 
-function PlayerCard({ player, onChanged }: { player: Player; onChanged: () => Promise<void> }) {
+function TrackPreview({
+  item,
+  label,
+}: {
+  item: QueuePreviewItem | null;
+  label: string;
+}) {
+  return (
+    <aside className={`queue-preview ${item ? "" : "queue-preview-empty"}`}>
+      <p className="info-label">{label}</p>
+      <div className="preview-artwork-wrap">
+        {item?.image ? (
+          <img className="preview-artwork" src={item.image} alt="" />
+        ) : (
+          <div className="preview-artwork preview-placeholder">♫</div>
+        )}
+      </div>
+      <div className="preview-text">
+        <strong>{item?.title ?? "Ingen låt"}</strong>
+        <span>{item?.artist ?? ""}</span>
+      </div>
+    </aside>
+  );
+}
+
+function PlayerCard({
+  player,
+  queueContext,
+  onChanged,
+}: {
+  player: Player;
+  queueContext: QueueContext | null;
+  onChanged: () => Promise<void>;
+}) {
   const [busy, setBusy] = useState(false);
   const [volume, setLocalVolume] = useState(25);
 
@@ -24,42 +60,61 @@ function PlayerCard({ player, onChanged }: { player: Player; onChanged: () => Pr
     }
   };
 
-  const now = player.nowPlaying;
+  const now = queueContext?.current ?? player.nowPlaying;
   const isPlaying = player.state === "playing";
 
   return (
     <article className="player-card player-card-single">
-      <section className="media-panel" aria-label="Nu spelas">
-        <div className="artwork-wrap">
-          {now?.image ? (
-            <img className="artwork" src={now.image} alt="" />
-          ) : (
-            <div className="artwork artwork-placeholder">♫</div>
-          )}
-          <span className={`status-dot ${isPlaying ? "playing" : ""}`} />
-        </div>
+      <div className="queue-stage">
+        <TrackPreview item={queueContext?.previous ?? null} label="Föregående" />
 
-        <div className="track-info">
-          <p className="info-label">Nu spelas</p>
-          <div className="now-playing">
-            <strong>{now?.title ?? "Inget spelar"}</strong>
-            <span>{now?.artist ?? "Välj musik i Music Assistant"}</span>
-            {now?.album && <small>{now.album}</small>}
+        <section className="media-panel" aria-label="Nu spelas">
+          <div className="artwork-wrap">
+            {now?.image ? (
+              <img className="artwork" src={now.image} alt="" />
+            ) : (
+              <div className="artwork artwork-placeholder">♫</div>
+            )}
+            <span className={`status-dot ${isPlaying ? "playing" : ""}`} />
           </div>
 
-          <div className="transport" aria-label={`Styr ${player.name}`}>
-            <button disabled={busy} onClick={() => run(() => previousTrack(player.id))} aria-label="Föregående">
-              ◀◀
-            </button>
-            <button className="primary-control" disabled={busy} onClick={() => run(() => playPause(player.id))} aria-label="Spela eller pausa">
-              {isPlaying ? "❚❚" : "▶"}
-            </button>
-            <button disabled={busy} onClick={() => run(() => nextTrack(player.id))} aria-label="Nästa">
-              ▶▶
-            </button>
+          <div className="track-info">
+            <p className="info-label">Nu spelas</p>
+            <div className="now-playing">
+              <strong>{now?.title ?? "Inget spelar"}</strong>
+              <span>{now?.artist ?? "Välj musik i Music Assistant"}</span>
+              {now?.album && <small>{now.album}</small>}
+            </div>
+
+            <div className="transport" aria-label={`Styr ${player.name}`}>
+              <button
+                disabled={busy}
+                onClick={() => run(() => previousTrack(player.id))}
+                aria-label="Föregående"
+              >
+                ◀◀
+              </button>
+              <button
+                className="primary-control"
+                disabled={busy}
+                onClick={() => run(() => playPause(player.id))}
+                aria-label="Spela eller pausa"
+              >
+                {isPlaying ? "❚❚" : "▶"}
+              </button>
+              <button
+                disabled={busy}
+                onClick={() => run(() => nextTrack(player.id))}
+                aria-label="Nästa"
+              >
+                ▶▶
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        <TrackPreview item={queueContext?.next ?? null} label="Nästa" />
+      </div>
 
       <div className="player-controls-row">
         <section className="player-info" aria-label="Spelarinfo">
@@ -96,6 +151,7 @@ function PlayerCard({ player, onChanged }: { player: Player; onChanged: () => Pr
 
 export default function App() {
   const [players, setPlayers] = useState<Player[]>([]);
+  const [queueContext, setQueueContext] = useState<QueueContext | null>(null);
   const [selectedPlayerId, setSelectedPlayerId] = useState<string>(() =>
     window.localStorage.getItem(PLAYER_STORAGE_KEY) ?? ""
   );
@@ -107,12 +163,22 @@ export default function App() {
       const data = await getPlayers();
       setPlayers(data);
       setError(null);
+
+      if (selectedPlayerId) {
+        try {
+          setQueueContext(await getQueueContext(selectedPlayerId));
+        } catch {
+          setQueueContext(null);
+        }
+      } else {
+        setQueueContext(null);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Kunde inte läsa spelarna");
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [selectedPlayerId]);
 
   useEffect(() => {
     void refresh();
@@ -140,6 +206,7 @@ export default function App() {
 
   const choosePlayer = (playerId: string) => {
     setSelectedPlayerId(playerId);
+    setQueueContext(null);
     window.localStorage.setItem(PLAYER_STORAGE_KEY, playerId);
   };
 
@@ -182,7 +249,11 @@ export default function App() {
 
           {selectedPlayer && (
             <section className="selected-player">
-              <PlayerCard player={selectedPlayer} onChanged={refresh} />
+              <PlayerCard
+                player={selectedPlayer}
+                queueContext={queueContext}
+                onChanged={refresh}
+              />
             </section>
           )}
         </>
