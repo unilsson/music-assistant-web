@@ -1,4 +1,5 @@
 export type NowPlaying = {
+  uri: string | null;
   title: string | null;
   artist: string | null;
   album: string | null;
@@ -12,6 +13,7 @@ export type NowPlaying = {
 
 export type QueuePreviewItem = {
   id: string | null;
+  uri: string | null;
   title: string | null;
   artist: string | null;
   album: string | null;
@@ -27,6 +29,15 @@ export type QueueContext = {
   previous: QueuePreviewItem | null;
   current: QueuePreviewItem | null;
   next: QueuePreviewItem | null;
+};
+
+export type RadioStation = {
+  id: string;
+  name: string;
+  uri: string;
+  image: string | null;
+  provider: string | null;
+  favorite: boolean;
 };
 
 export type Player = {
@@ -51,6 +62,12 @@ type PlayersResponse = {
 type QueueContextResponse = QueueContext & {
   status: string;
   playerId: string;
+};
+
+type RadiosResponse = {
+  status: string;
+  count: number;
+  radios: RadioStation[];
 };
 
 type RawStatusResponse = {
@@ -130,6 +147,21 @@ export async function getPlayers(): Promise<Player[]> {
   } catch {
     return data.players;
   }
+}
+
+export async function getRadios(): Promise<RadioStation[]> {
+  const data = (await request("/api/radios")) as RadiosResponse;
+  return data.radios;
+}
+
+export async function playRadio(playerId: string, uri: string) {
+  return request(`/api/radios/${encodeURIComponent(playerId)}/play`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ uri }),
+  });
 }
 
 export async function getQueueContext(playerId: string): Promise<QueueContext> {
