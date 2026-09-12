@@ -2,15 +2,19 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   getPlayers,
   getQueueContext,
+  getRadios,
   nextTrack,
   playPause,
+  playRadio,
   previousTrack,
   setVolume,
   type NowPlaying,
   type Player,
   type QueueContext,
   type QueuePreviewItem,
+  type RadioStation,
 } from "./api";
+import RadioLibrary from "./RadioLibrary";
 
 const PLAYER_STORAGE_KEY = "music-assistant-web.selected-player";
 
@@ -329,6 +333,10 @@ function PlayerCard({
 export default function App() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [queueContext, setQueueContext] = useState<QueueContext | null>(null);
+  const [radios, setRadios] = useState<RadioStation[]>([]);
+  const [radiosLoading, setRadiosLoading] = useState(true);
+  const [radioError, setRadioError] = useState<string | null>(null);
+  const [startingRadioUri, setStartingRadioUri] = useState<string | null>(null);
   const [selectedPlayerId, setSelectedPlayerId] = useState<string>(() =>
     window.localStorage.getItem(PLAYER_STORAGE_KEY) ?? ""
   );
@@ -365,6 +373,33 @@ export default function App() {
   }, [refresh]);
 
   useEffect(() => {
+    let cancelled = false;
+
+    const loadRadios = async () => {
+      try {
+        const data = await getRadios();
+        if (!cancelled) {
+          setRadios(data);
+          setRadioError(null);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setRadioError(err instanceof Error ? err.message : "Kunde inte läsa radiostationerna");
+        }
+      } finally {
+        if (!cancelled) {
+          setRadiosLoading(false);
+        }
+      }
+    };
+
+    void loadRadios();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
     if (players.length === 0) {
       return;
     }
@@ -386,6 +421,25 @@ export default function App() {
     setSelectedPlayerId(playerId);
     setQueueContext(null);
     window.localStorage.setItem(PLAYER_STORAGE_KEY, playerId);
+  };
+
+  const startRadioStation = async (station: RadioStation) => {
+    if (!selectedPlayer || startingRadioUri) {
+      return;
+    }
+
+    setStartingRadioUri(station.uri);
+    setRadioError(null);
+
+    try {
+      await playRadio(selectedPlayer.id, station.uri);
+      setQueueContext(null);
+      await refresh();
+    } catch (err) {
+      setRadioError(err instanceof Error ? err.message : "Kunde inte starta radiostationen");
+    } finally {
+      setStartingRadioUri(null);
+    }
   };
 
   return (
@@ -432,13 +486,34 @@ export default function App() {
           </section>
 
           {selectedPlayer && (
-            <section className="selected-player">
-              <PlayerCard
-                player={selectedPlayer}
-                queueContext={queueContext}
-                onChanged={refresh}
+            <>
+              <section className="selected-player">
+                <PlayerCard
+                  player={selectedPlayer}
+                  queueContext={queueContext}
+                  onChanged={refresh}
+                />
+              </section>
+
+              <RadioLibrary
+                stations={radios}
+                playerName={selectedPlayer.name}
+                currentUri={
+                  selectedPlayer.nowPlaying?.mediaType === "radio"
+                    ? selectedPlayer.nowPlaying.uri
+                    : null
+                }
+                currentName={
+                  selectedPlayer.nowPlaying?.mediaType === "radio"
+                    ? selectedPlayer.nowPlaying.stationName ?? selectedPlayer.nowPlaying.title
+                    : null
+                }
+                loading={radiosLoading}
+                error={radioError}
+                busyUri={startingRadioUri}
+                onPlay={(station) => void startRadioStation(station)}
               />
-            </section>
+            </>
           )}
         </>
       )}
