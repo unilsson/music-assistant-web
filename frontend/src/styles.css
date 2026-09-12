@@ -325,6 +325,33 @@ h1 {
   font-size: 0.72rem;
 }
 
+.playback-progress {
+  margin-top: 12px;
+}
+
+.playback-times {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  color: #64748b;
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-track {
+  height: 5px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: #60a5fa;
+  transition: width 0.35s linear;
+}
+
 .transport {
   display: flex;
   align-items: center;
