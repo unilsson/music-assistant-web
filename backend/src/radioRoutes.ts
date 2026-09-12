@@ -33,5 +33,39 @@ export function createRadioRouter(command: Command) {
     }
   });
 
+  router.post("/:playerId/play", async (req, res) => {
+    try {
+      const playerId = req.params.playerId;
+      const uri = typeof req.body?.uri === "string" ? req.body.uri.trim() : "";
+
+      if (!uri.startsWith("library://radio/")) {
+        res.status(400).json({
+          status: "error",
+          error: "A Music Assistant library radio URI is required",
+        });
+        return;
+      }
+
+      const result = await command("player_queues/play_media", {
+        queue_id: playerId,
+        media: uri,
+        option: "replace",
+      });
+
+      res.json({
+        status: "ok",
+        playerId,
+        uri,
+        result,
+      });
+    } catch (error) {
+      console.error("Music Assistant radio playback error:", error);
+      res.status(502).json({
+        status: "error",
+        error: "Unable to start radio station",
+      });
+    }
+  });
+
   return router;
 }
