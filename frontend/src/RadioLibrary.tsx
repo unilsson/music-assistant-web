@@ -19,14 +19,49 @@ type RadioLibraryProps = {
   onPlay: (station: RadioStation) => void;
 };
 
+function stationBadge(name: string) {
+  const words = name
+    .toLocaleUpperCase("sv")
+    .replace(/[^A-ZÅÄÖ0-9]+/g, " ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .filter((word) => !["RADIO", "FM", "AM"].includes(word));
+
+  if (words.length === 0) {
+    return "RAD";
+  }
+
+  const last = words[words.length - 1];
+  if (/^[A-ZÅÄÖ]*\d+$/.test(last) && last.length <= 5) {
+    return last;
+  }
+
+  if (words.length === 1) {
+    return words[0].slice(0, 4);
+  }
+
+  return words.slice(0, 3).map((word) => word[0]).join("");
+}
+
 function StationArtwork({ station }: { station: RadioStation }) {
-  if (station.image) {
-    return <img src={station.image} alt="" loading="lazy" />;
+  const [imageFailed, setImageFailed] = useState(false);
+
+  if (station.image && !imageFailed) {
+    return (
+      <img
+        src={station.image}
+        alt=""
+        loading="lazy"
+        onError={() => setImageFailed(true)}
+      />
+    );
   }
 
   return (
     <div className="station-artwork-placeholder" aria-hidden="true">
-      <span>♪</span>
+      <span className="station-fallback-wave" />
+      <strong>{stationBadge(station.name)}</strong>
     </div>
   );
 }
