@@ -114,7 +114,7 @@ h1 {
 }
 
 .selected-player {
-  max-width: 760px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -129,11 +129,14 @@ h1 {
 
 .player-card-single {
   width: 100%;
+  display: grid;
+  grid-template-columns: minmax(240px, 42%) minmax(0, 1fr);
+  min-height: 320px;
 }
 
 .artwork-wrap {
   position: relative;
-  aspect-ratio: 16 / 9;
+  min-height: 100%;
   overflow: hidden;
   background: #111827;
 }
@@ -141,6 +144,7 @@ h1 {
 .artwork {
   width: 100%;
   height: 100%;
+  min-height: 320px;
   display: block;
   object-fit: cover;
 }
@@ -171,7 +175,11 @@ h1 {
 }
 
 .player-body {
-  padding: 22px;
+  min-width: 0;
+  padding: 26px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .player-heading {
@@ -192,8 +200,8 @@ h1 {
 }
 
 .now-playing {
-  min-height: 88px;
-  margin-top: 20px;
+  min-height: 76px;
+  margin-top: 18px;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -208,7 +216,7 @@ h1 {
 }
 
 .now-playing strong {
-  font-size: 1.08rem;
+  font-size: 1.2rem;
 }
 
 .now-playing span {
@@ -222,9 +230,9 @@ h1 {
 .transport {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 14px;
-  margin: 16px 0 22px;
+  margin: 18px 0 22px;
 }
 
 .transport button {
@@ -286,7 +294,7 @@ h1 {
   color: #fecaca;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 700px) {
   .app-shell {
     width: min(100% - 20px, 980px);
     padding-top: 24px;
@@ -308,5 +316,28 @@ h1 {
 
   .player-selector select {
     max-width: none;
+  }
+
+  .player-card-single {
+    display: block;
+    min-height: 0;
+  }
+
+  .artwork-wrap {
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+  }
+
+  .artwork {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+
+  .player-body {
+    padding: 22px;
+  }
+
+  .transport {
+    justify-content: center;
   }
 }
