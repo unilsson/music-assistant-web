@@ -3,6 +3,11 @@ export type NowPlaying = {
   artist: string | null;
   album: string | null;
   image: string | null;
+  mediaType: string | null;
+  stationName: string | null;
+  liveTitle: string | null;
+  liveArtist: string | null;
+  streamTitle: string | null;
 };
 
 export type QueuePreviewItem = {
@@ -11,6 +16,11 @@ export type QueuePreviewItem = {
   artist: string | null;
   album: string | null;
   image: string | null;
+  mediaType: string | null;
+  stationName: string | null;
+  liveTitle: string | null;
+  liveArtist: string | null;
+  streamTitle: string | null;
 };
 
 export type QueueContext = {
@@ -99,7 +109,7 @@ function rawQueueDuration(queue: any): number | null {
 export async function getPlayers(): Promise<Player[]> {
   const data = (await request("/api/players")) as PlayersResponse;
 
-  if (data.players.every((player) => (player.duration ?? 0) > 0)) {
+  if (data.players.every((player) => (player.duration ?? 0) > 0 || player.nowPlaying?.mediaType === "radio")) {
     return data.players;
   }
 
@@ -108,7 +118,7 @@ export async function getPlayers(): Promise<Player[]> {
     const queues = asArray(raw.musicAssistant);
 
     return data.players.map((player) => {
-      if ((player.duration ?? 0) > 0) {
+      if ((player.duration ?? 0) > 0 || player.nowPlaying?.mediaType === "radio") {
         return player;
       }
 
