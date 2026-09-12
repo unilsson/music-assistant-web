@@ -87,7 +87,7 @@ function PlayerCard({
   onChanged: () => Promise<void>;
 }) {
   const [busy, setBusy] = useState(false);
-  const [volume, setLocalVolume] = useState(25);
+  const [volume, setLocalVolume] = useState(player.volumeLevel ?? 25);
   const [progress, setProgress] = useState(player.elapsedTime ?? 0);
 
   const run = async (action: () => Promise<unknown>) => {
@@ -105,6 +105,12 @@ function PlayerCard({
   const duration = Number.isFinite(player.duration) && (player.duration ?? 0) > 0
     ? player.duration ?? 0
     : 0;
+
+  useEffect(() => {
+    if (player.volumeLevel != null) {
+      setLocalVolume(player.volumeLevel);
+    }
+  }, [player.volumeLevel, player.id]);
 
   useEffect(() => {
     setProgress(Math.max(0, player.elapsedTime ?? 0));
@@ -214,31 +220,28 @@ function PlayerCard({
 
       <div className="player-controls-row">
         <section className="player-info" aria-label="Spelarinfo">
-          <p className="info-label">Spelare</p>
-          <h2>{player.name}</h2>
-          <p className="state">
+          <strong className="player-name">{player.name}</strong>
+          <span className={`player-state ${isPlaying ? "playing" : ""}`}>
             {isPlaying ? "Spelar" : player.state === "paused" ? "Pausad" : "Redo"}
-          </p>
+          </span>
         </section>
 
         <label className="volume-control">
           <span>Volym</span>
-          <div className="volume-slider-row">
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={volume}
-              onChange={(event) => setLocalVolume(Number(event.target.value))}
-              onPointerUp={() => run(() => setVolume(player.id, volume))}
-              onKeyUp={(event) => {
-                if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
-                  void run(() => setVolume(player.id, volume));
-                }
-              }}
-            />
-            <output>{volume}%</output>
-          </div>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={volume}
+            onChange={(event) => setLocalVolume(Number(event.target.value))}
+            onPointerUp={() => run(() => setVolume(player.id, volume))}
+            onKeyUp={(event) => {
+              if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+                void run(() => setVolume(player.id, volume));
+              }
+            }}
+          />
+          <output>{volume}%</output>
         </label>
       </div>
     </article>
@@ -314,9 +317,6 @@ export default function App() {
           <h1>Musik hemma</h1>
           <p className="subtitle">Välj spelare och styr musiken på ett enkelt sätt</p>
         </div>
-        <button className="refresh-button" onClick={() => void refresh()}>
-          Uppdatera
-        </button>
       </header>
 
       {error && <div className="message error">{error}</div>}
@@ -341,6 +341,15 @@ export default function App() {
                 </option>
               ))}
             </select>
+            <button
+              type="button"
+              className="refresh-icon"
+              onClick={() => void refresh()}
+              aria-label="Uppdatera"
+              title="Uppdatera"
+            >
+              ↻
+            </button>
           </section>
 
           {selectedPlayer && (
