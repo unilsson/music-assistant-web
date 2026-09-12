@@ -1,0 +1,7 @@
+{
+  "appName": "Music Assistant Web",
+  "defaultPlayer": null,
+  "showRadio": true,
+  "showFavorites": true,
+  "showSearch": true
+}
