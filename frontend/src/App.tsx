@@ -6,6 +6,7 @@ import {
   playPause,
   previousTrack,
   setVolume,
+  type NowPlaying,
   type Player,
   type QueueContext,
   type QueuePreviewItem,
@@ -77,6 +78,68 @@ function TrackPreview({
   );
 }
 
+function RadioPanel({
+  item,
+  isPlaying,
+  busy,
+  onPlayPause,
+}: {
+  item: NowPlaying | QueuePreviewItem;
+  isPlaying: boolean;
+  busy: boolean;
+  onPlayPause: () => void;
+}) {
+  const hasLiveMetadata = Boolean(item.liveArtist || item.liveTitle || item.streamTitle);
+
+  return (
+    <div className="radio-stage">
+      <section className="radio-panel" aria-label="Direktsänd radio">
+        <div className="live-badge">
+          <span className="live-dot" />
+          LIVE
+        </div>
+
+        <div className="artwork-wrap radio-artwork-wrap">
+          {item.image ? (
+            <img className="artwork" src={item.image} alt="" />
+          ) : (
+            <div className="artwork artwork-placeholder">♫</div>
+          )}
+          <span className={`status-dot ${isPlaying ? "playing" : ""}`} />
+        </div>
+
+        <h2 className="radio-station-name">{item.stationName ?? item.title ?? "Radio"}</h2>
+
+        <div className="radio-now-playing">
+          <p className="info-label">Nu sänds</p>
+          {hasLiveMetadata ? (
+            <div className="radio-live-metadata">
+              {item.liveArtist && <strong>{item.liveArtist}</strong>}
+              {item.liveTitle && <span>{item.liveTitle}</span>}
+              {!item.liveArtist && !item.liveTitle && item.streamTitle && (
+                <span>{item.streamTitle}</span>
+              )}
+            </div>
+          ) : (
+            <span className="radio-live-fallback">Direktsändning</span>
+          )}
+        </div>
+
+        <div className="transport radio-transport" aria-label="Styr radio">
+          <button
+            className="primary-control"
+            disabled={busy}
+            onClick={onPlayPause}
+            aria-label="Spela eller pausa"
+          >
+            {isPlaying ? "❚❚" : "▶"}
+          </button>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 function PlayerCard({
   player,
   queueContext,
@@ -102,6 +165,7 @@ function PlayerCard({
 
   const now = queueContext?.current ?? player.nowPlaying;
   const isPlaying = player.state === "playing";
+  const isRadio = now?.mediaType === "radio";
   const duration = Number.isFinite(player.duration) && (player.duration ?? 0) > 0
     ? player.duration ?? 0
     : 0;
@@ -117,7 +181,7 @@ function PlayerCard({
   }, [player.elapsedTime, player.id, now?.title]);
 
   useEffect(() => {
-    if (!isPlaying) {
+    if (!isPlaying || isRadio) {
       return;
     }
 
@@ -129,7 +193,7 @@ function PlayerCard({
     }, 1000);
 
     return () => window.clearInterval(timer);
-  }, [isPlaying, duration]);
+  }, [isPlaying, isRadio, duration]);
 
   const progressPercent = duration > 0
     ? Math.min(100, Math.max(0, (progress / duration) * 100))
@@ -137,86 +201,95 @@ function PlayerCard({
 
   return (
     <article className="player-card player-card-single">
-      <div className="queue-stage">
-        <TrackPreview
-          item={queueContext?.previous ?? null}
-          label="Föregående"
-          disabled={busy}
-          onActivate={() => void run(() => previousTrack(player.id))}
+      {isRadio && now ? (
+        <RadioPanel
+          item={now}
+          isPlaying={isPlaying}
+          busy={busy}
+          onPlayPause={() => void run(() => playPause(player.id))}
         />
+      ) : (
+        <div className="queue-stage">
+          <TrackPreview
+            item={queueContext?.previous ?? null}
+            label="Föregående"
+            disabled={busy}
+            onActivate={() => void run(() => previousTrack(player.id))}
+          />
 
-        <section className="media-panel" aria-label="Nu spelas">
-          <div className="artwork-wrap">
-            {now?.image ? (
-              <img className="artwork" src={now.image} alt="" />
-            ) : (
-              <div className="artwork artwork-placeholder">♫</div>
-            )}
-            <span className={`status-dot ${isPlaying ? "playing" : ""}`} />
-          </div>
-
-          <div className="track-info">
-            <p className="info-label">Nu spelas</p>
-            <div className="now-playing">
-              <strong>{now?.title ?? "Inget spelar"}</strong>
-              <span>{now?.artist ?? "Välj musik i Music Assistant"}</span>
-              {now?.album && <small>{now.album}</small>}
+          <section className="media-panel" aria-label="Nu spelas">
+            <div className="artwork-wrap">
+              {now?.image ? (
+                <img className="artwork" src={now.image} alt="" />
+              ) : (
+                <div className="artwork artwork-placeholder">♫</div>
+              )}
+              <span className={`status-dot ${isPlaying ? "playing" : ""}`} />
             </div>
 
-            <div className="playback-progress">
-              <div className="playback-times">
-                <span>{formatTime(progress)}</span>
-                <span>{formatTime(duration)}</span>
+            <div className="track-info">
+              <p className="info-label">Nu spelas</p>
+              <div className="now-playing">
+                <strong>{now?.title ?? "Inget spelar"}</strong>
+                <span>{now?.artist ?? "Välj musik i Music Assistant"}</span>
+                {now?.album && <small>{now.album}</small>}
               </div>
-              <div
-                className="progress-track"
-                role="progressbar"
-                aria-label="Uppspelning"
-                aria-valuemin={0}
-                aria-valuemax={duration || 0}
-                aria-valuenow={Math.min(progress, duration || progress)}
-              >
+
+              <div className="playback-progress">
+                <div className="playback-times">
+                  <span>{formatTime(progress)}</span>
+                  <span>{formatTime(duration)}</span>
+                </div>
                 <div
-                  className="progress-fill"
-                  style={{ width: `${progressPercent}%` }}
-                />
+                  className="progress-track"
+                  role="progressbar"
+                  aria-label="Uppspelning"
+                  aria-valuemin={0}
+                  aria-valuemax={duration || 0}
+                  aria-valuenow={Math.min(progress, duration || progress)}
+                >
+                  <div
+                    className="progress-fill"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="transport" aria-label={`Styr ${player.name}`}>
+                <button
+                  disabled={busy}
+                  onClick={() => run(() => previousTrack(player.id))}
+                  aria-label="Föregående"
+                >
+                  ◀◀
+                </button>
+                <button
+                  className="primary-control"
+                  disabled={busy}
+                  onClick={() => run(() => playPause(player.id))}
+                  aria-label="Spela eller pausa"
+                >
+                  {isPlaying ? "❚❚" : "▶"}
+                </button>
+                <button
+                  disabled={busy}
+                  onClick={() => run(() => nextTrack(player.id))}
+                  aria-label="Nästa"
+                >
+                  ▶▶
+                </button>
               </div>
             </div>
+          </section>
 
-            <div className="transport" aria-label={`Styr ${player.name}`}>
-              <button
-                disabled={busy}
-                onClick={() => run(() => previousTrack(player.id))}
-                aria-label="Föregående"
-              >
-                ◀◀
-              </button>
-              <button
-                className="primary-control"
-                disabled={busy}
-                onClick={() => run(() => playPause(player.id))}
-                aria-label="Spela eller pausa"
-              >
-                {isPlaying ? "❚❚" : "▶"}
-              </button>
-              <button
-                disabled={busy}
-                onClick={() => run(() => nextTrack(player.id))}
-                aria-label="Nästa"
-              >
-                ▶▶
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <TrackPreview
-          item={queueContext?.next ?? null}
-          label="Nästa"
-          disabled={busy}
-          onActivate={() => void run(() => nextTrack(player.id))}
-        />
-      </div>
+          <TrackPreview
+            item={queueContext?.next ?? null}
+            label="Nästa"
+            disabled={busy}
+            onActivate={() => void run(() => nextTrack(player.id))}
+          />
+        </div>
+      )}
 
       <div className="player-controls-row">
         <section className="player-info" aria-label="Spelarinfo">
