@@ -27,6 +27,9 @@ function summarizeQueueItem(item: any) {
   }
 
   const mediaItem = item?.media_item ?? item?.media_item_data ?? null;
+  const streamDetails = item?.streamdetails ?? null;
+  const streamMetadata = streamDetails?.stream_metadata ?? null;
+  const mediaType = streamDetails?.media_type ?? mediaItem?.media_type ?? null;
 
   let artist: string | null = null;
 
@@ -59,6 +62,11 @@ function summarizeQueueItem(item: any) {
     artist,
     album,
     image,
+    mediaType,
+    stationName: mediaType === "radio" ? mediaItem?.name ?? item?.name ?? null : null,
+    liveTitle: streamMetadata?.title ?? null,
+    liveArtist: streamMetadata?.artist ?? null,
+    streamTitle: streamDetails?.stream_title ?? null,
   };
 }
 
