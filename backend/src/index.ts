@@ -65,6 +65,7 @@ function summarizeQueueItem(item: any) {
 
   return {
     id: item?.queue_item_id ?? mediaItem?.item_id ?? null,
+    uri: mediaItem?.uri ?? item?.uri ?? null,
     title: mediaItem?.name ?? item?.name ?? null,
     artist,
     album,
