@@ -39,29 +39,35 @@ function PlayerCard({ player, onChanged }: { player: Player; onChanged: () => Pr
       </div>
 
       <div className="player-body">
-        <div className="player-heading">
-          <div>
+        <div className="info-row">
+          <section className="player-info" aria-label="Spelarinfo">
+            <p className="info-label">Spelare</p>
             <h2>{player.name}</h2>
-            <p className="state">{isPlaying ? "Spelar" : player.state === "paused" ? "Pausad" : "Redo"}</p>
-          </div>
-        </div>
+            <p className="state">
+              {isPlaying ? "Spelar" : player.state === "paused" ? "Pausad" : "Redo"}
+            </p>
+          </section>
 
-        <div className="now-playing">
-          <strong>{now?.title ?? "Inget spelar"}</strong>
-          <span>{now?.artist ?? "Välj musik i Music Assistant"}</span>
-          {now?.album && <small>{now.album}</small>}
-        </div>
+          <section className="track-info" aria-label="Låtinfo">
+            <p className="info-label">Nu spelas</p>
+            <div className="now-playing">
+              <strong>{now?.title ?? "Inget spelar"}</strong>
+              <span>{now?.artist ?? "Välj musik i Music Assistant"}</span>
+              {now?.album && <small>{now.album}</small>}
+            </div>
 
-        <div className="transport" aria-label={`Styr ${player.name}`}>
-          <button disabled={busy} onClick={() => run(() => previousTrack(player.id))} aria-label="Föregående">
-            ◀◀
-          </button>
-          <button className="primary-control" disabled={busy} onClick={() => run(() => playPause(player.id))} aria-label="Spela eller pausa">
-            {isPlaying ? "❚❚" : "▶"}
-          </button>
-          <button disabled={busy} onClick={() => run(() => nextTrack(player.id))} aria-label="Nästa">
-            ▶▶
-          </button>
+            <div className="transport" aria-label={`Styr ${player.name}`}>
+              <button disabled={busy} onClick={() => run(() => previousTrack(player.id))} aria-label="Föregående">
+                ◀◀
+              </button>
+              <button className="primary-control" disabled={busy} onClick={() => run(() => playPause(player.id))} aria-label="Spela eller pausa">
+                {isPlaying ? "❚❚" : "▶"}
+              </button>
+              <button disabled={busy} onClick={() => run(() => nextTrack(player.id))} aria-label="Nästa">
+                ▶▶
+              </button>
+            </div>
+          </section>
         </div>
 
         <label className="volume-control">
