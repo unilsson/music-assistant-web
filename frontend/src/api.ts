@@ -28,6 +28,7 @@ export type Player = {
   items: number;
   elapsedTime: number | null;
   duration: number | null;
+  volumeLevel: number | null;
   nowPlaying: NowPlaying | null;
 };
 
