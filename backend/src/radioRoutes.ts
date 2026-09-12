@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { normalizeRadioLibrary } from "./radioLibrary.js";
+import {
+  normalizeRadioGenres,
+  normalizeRadioLibrary,
+  type RadioGenre,
+  type RadioStation,
+} from "./radioLibrary.js";
 
 type Command = (command: string, args?: Record<string, unknown>) => Promise<unknown>;
 
@@ -13,16 +18,71 @@ function asArray(value: any): any[] {
   return [];
 }
 
+async function loadRadioLibraryWithGenres(command: Command): Promise<RadioStation[]> {
+  const response = await command("music/radios/library_items", {
+    limit: 200,
+    offset: 0,
+  });
+  const radios = normalizeRadioLibrary(asArray(response));
+
+  try {
+    const genreResponse = await command("music/genres/library_items", {
+      limit: 500,
+      offset: 0,
+      media_type: "radio",
+      content_type: "music",
+    });
+    const genres = normalizeRadioGenres(asArray(genreResponse));
+
+    const memberships = await Promise.all(
+      genres.map(async (genre) => {
+        const genreId = Number(genre.id);
+        if (!Number.isFinite(genreId)) {
+          return { genre, stationIds: new Set<string>() };
+        }
+
+        try {
+          const genreRadiosResponse = await command("music/radios/library_items", {
+            limit: 200,
+            offset: 0,
+            genre: genreId,
+          });
+          const stationIds = new Set(
+            normalizeRadioLibrary(asArray(genreRadiosResponse)).map((station) => station.id)
+          );
+          return { genre, stationIds };
+        } catch (error) {
+          console.warn(`Unable to retrieve radio stations for genre ${genre.name}:`, error);
+          return { genre, stationIds: new Set<string>() };
+        }
+      })
+    );
+
+    const genresByStationId = new Map<string, RadioGenre[]>();
+    for (const { genre, stationIds } of memberships) {
+      for (const stationId of stationIds) {
+        const stationGenres = genresByStationId.get(stationId) ?? [];
+        stationGenres.push(genre);
+        genresByStationId.set(stationId, stationGenres);
+      }
+    }
+
+    return radios.map((station) => ({
+      ...station,
+      genres: genresByStationId.get(station.id) ?? [],
+    }));
+  } catch (error) {
+    console.warn("Unable to retrieve Music Assistant radio genres:", error);
+    return radios;
+  }
+}
+
 export function createRadioRouter(command: Command) {
   const router = Router();
 
   router.get("/", async (_req, res) => {
     try {
-      const response = await command("music/radios/library_items", {
-        limit: 200,
-        offset: 0,
-      });
-      const radios = normalizeRadioLibrary(asArray(response));
+      const radios = await loadRadioLibraryWithGenres(command);
       res.json({ status: "ok", count: radios.length, radios });
     } catch (error) {
       console.error("Music Assistant radios error:", error);
