@@ -13,15 +13,9 @@ import {
 
 const PLAYER_STORAGE_KEY = "music-assistant-web.selected-player";
 
-function TrackPreview({
-  item,
-  label,
-}: {
-  item: QueuePreviewItem | null;
-  label: string;
-}) {
+function PreviewContent({ item, label }: { item: QueuePreviewItem | null; label: string }) {
   return (
-    <aside className={`queue-preview ${item ? "" : "queue-preview-empty"}`}>
+    <>
       <p className="info-label">{label}</p>
       <div className="preview-artwork-wrap">
         {item?.image ? (
@@ -34,7 +28,40 @@ function TrackPreview({
         <strong>{item?.title ?? "Ingen låt"}</strong>
         <span>{item?.artist ?? ""}</span>
       </div>
-    </aside>
+    </>
+  );
+}
+
+function TrackPreview({
+  item,
+  label,
+  onActivate,
+  disabled = false,
+}: {
+  item: QueuePreviewItem | null;
+  label: string;
+  onActivate?: () => void;
+  disabled?: boolean;
+}) {
+  if (!item || !onActivate) {
+    return (
+      <aside className="queue-preview queue-preview-empty">
+        <PreviewContent item={item} label={label} />
+      </aside>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      className="queue-preview queue-preview-button"
+      onClick={onActivate}
+      disabled={disabled}
+      aria-label={`${label}: ${item.title ?? "låt"}`}
+      title={`Spela ${label.toLowerCase()} låt`}
+    >
+      <PreviewContent item={item} label={label} />
+    </button>
   );
 }
 
@@ -66,7 +93,12 @@ function PlayerCard({
   return (
     <article className="player-card player-card-single">
       <div className="queue-stage">
-        <TrackPreview item={queueContext?.previous ?? null} label="Föregående" />
+        <TrackPreview
+          item={queueContext?.previous ?? null}
+          label="Föregående"
+          disabled={busy}
+          onActivate={() => void run(() => previousTrack(player.id))}
+        />
 
         <section className="media-panel" aria-label="Nu spelas">
           <div className="artwork-wrap">
@@ -113,7 +145,12 @@ function PlayerCard({
           </div>
         </section>
 
-        <TrackPreview item={queueContext?.next ?? null} label="Nästa" />
+        <TrackPreview
+          item={queueContext?.next ?? null}
+          label="Nästa"
+          disabled={busy}
+          onActivate={() => void run(() => nextTrack(player.id))}
+        />
       </div>
 
       <div className="player-controls-row">
