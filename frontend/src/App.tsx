@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   getPlayers,
   nextTrack,
@@ -7,6 +7,8 @@ import {
   setVolume,
   type Player,
 } from "./api";
+
+const PLAYER_STORAGE_KEY = "music-assistant-web.selected-player";
 
 function PlayerCard({ player, onChanged }: { player: Player; onChanged: () => Promise<void> }) {
   const [busy, setBusy] = useState(false);
@@ -26,7 +28,7 @@ function PlayerCard({ player, onChanged }: { player: Player; onChanged: () => Pr
   const isPlaying = player.state === "playing";
 
   return (
-    <article className="player-card">
+    <article className="player-card player-card-single">
       <div className="artwork-wrap">
         {now?.image ? (
           <img className="artwork" src={now.image} alt="" />
@@ -86,6 +88,9 @@ function PlayerCard({ player, onChanged }: { player: Player; onChanged: () => Pr
 
 export default function App() {
   const [players, setPlayers] = useState<Player[]>([]);
+  const [selectedPlayerId, setSelectedPlayerId] = useState<string>(() =>
+    window.localStorage.getItem(PLAYER_STORAGE_KEY) ?? ""
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -107,13 +112,36 @@ export default function App() {
     return () => window.clearInterval(timer);
   }, [refresh]);
 
+  useEffect(() => {
+    if (players.length === 0) {
+      return;
+    }
+
+    const selectedStillExists = players.some((player) => player.id === selectedPlayerId);
+    if (!selectedPlayerId || !selectedStillExists) {
+      const firstPlayerId = players[0].id;
+      setSelectedPlayerId(firstPlayerId);
+      window.localStorage.setItem(PLAYER_STORAGE_KEY, firstPlayerId);
+    }
+  }, [players, selectedPlayerId]);
+
+  const selectedPlayer = useMemo(
+    () => players.find((player) => player.id === selectedPlayerId) ?? null,
+    [players, selectedPlayerId]
+  );
+
+  const choosePlayer = (playerId: string) => {
+    setSelectedPlayerId(playerId);
+    window.localStorage.setItem(PLAYER_STORAGE_KEY, playerId);
+  };
+
   return (
     <main className="app-shell">
       <header className="topbar">
         <div>
           <p className="eyebrow">Music Assistant</p>
           <h1>Musik hemma</h1>
-          <p className="subtitle">Enkel styrning av dina tillgängliga spelare</p>
+          <p className="subtitle">Välj spelare och styr musiken på ett enkelt sätt</p>
         </div>
         <button className="refresh-button" onClick={() => void refresh()}>
           Uppdatera
@@ -127,11 +155,30 @@ export default function App() {
         <div className="message">Inga tillgängliga spelare hittades.</div>
       )}
 
-      <section className="player-grid">
-        {players.map((player) => (
-          <PlayerCard key={player.id} player={player} onChanged={refresh} />
-        ))}
-      </section>
+      {!loading && !error && players.length > 0 && (
+        <>
+          <section className="player-selector" aria-label="Välj spelare">
+            <label htmlFor="player-select">Spelare</label>
+            <select
+              id="player-select"
+              value={selectedPlayerId}
+              onChange={(event) => choosePlayer(event.target.value)}
+            >
+              {players.map((player) => (
+                <option key={player.id} value={player.id}>
+                  {player.name}
+                </option>
+              ))}
+            </select>
+          </section>
+
+          {selectedPlayer && (
+            <section className="selected-player">
+              <PlayerCard player={selectedPlayer} onChanged={refresh} />
+            </section>
+          )}
+        </>
+      )}
     </main>
   );
 }
