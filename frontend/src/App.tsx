@@ -171,13 +171,22 @@ function PlayerCard({
     }
   };
 
-  const radioItem = player.nowPlaying?.mediaType === "radio"
-    ? player.nowPlaying
-    : queueContext?.current?.mediaType === "radio"
-      ? queueContext.current
-      : null;
+  const radioStateActive = player.state === "playing" || player.state === "paused";
+  const radioItem = radioStateActive
+    ? player.nowPlaying?.mediaType === "radio"
+      ? player.nowPlaying
+      : queueContext?.current?.mediaType === "radio"
+        ? queueContext.current
+        : null
+    : null;
   const isRadio = radioItem !== null;
-  const now = isRadio ? radioItem : queueContext?.current ?? player.nowPlaying;
+  const now = isRadio
+    ? radioItem
+    : queueContext?.current?.mediaType === "radio"
+      ? null
+      : player.nowPlaying?.mediaType === "radio"
+        ? queueContext?.current ?? null
+        : queueContext?.current ?? player.nowPlaying;
   const isPlaying = player.state === "playing";
   const duration = Number.isFinite(player.duration) && (player.duration ?? 0) > 0
     ? player.duration ?? 0
@@ -456,7 +465,9 @@ export default function App() {
     }
   };
 
-  const radioIsPlaying = selectedPlayer?.nowPlaying?.mediaType === "radio";
+  const radioIsActive =
+    selectedPlayer?.nowPlaying?.mediaType === "radio" &&
+    (selectedPlayer.state === "playing" || selectedPlayer.state === "paused");
 
   return (
     <main className="app-shell">
@@ -528,11 +539,13 @@ export default function App() {
 
           {selectedPlayer && activeView === "music" && (
             <section id="music-view" role="tabpanel" className="selected-player">
-              {radioIsPlaying ? (
+              {radioIsActive ? (
                 <div className="view-empty-state">
                   <span className="view-empty-icon" aria-hidden="true">●</span>
                   <div>
-                    <strong>Radio spelar just nu</strong>
+                    <strong>
+                      {selectedPlayer.state === "paused" ? "Radio är pausad" : "Radio spelar just nu"}
+                    </strong>
                     <p>Välj Radio ovan för att se stationen och byta kanal.</p>
                   </div>
                 </div>
@@ -548,7 +561,7 @@ export default function App() {
 
           {selectedPlayer && activeView === "radio" && (
             <section id="radio-view" role="tabpanel" className="radio-view">
-              {radioIsPlaying && (
+              {radioIsActive && (
                 <section className="radio-player-section" aria-label="Radio spelar nu">
                   <PlayerCard
                     player={selectedPlayer}
@@ -562,12 +575,12 @@ export default function App() {
                 stations={radios}
                 playerName={selectedPlayer.name}
                 currentUri={
-                  radioIsPlaying
+                  radioIsActive
                     ? selectedPlayer.nowPlaying?.uri ?? null
                     : null
                 }
                 currentName={
-                  radioIsPlaying
+                  radioIsActive
                     ? selectedPlayer.nowPlaying?.stationName ?? selectedPlayer.nowPlaying?.title ?? null
                     : null
                 }
