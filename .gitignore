@@ -154,3 +154,6 @@ compose.override.yml
 # ------------------------------------------------------------
 *.local
 config.local.*
+
+.vite/
+frontend/.vite/
