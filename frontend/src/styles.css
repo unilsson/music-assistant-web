@@ -21,7 +21,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -36,7 +37,7 @@ button:disabled {
 }
 
 .app-shell {
-  width: min(1180px, calc(100% - 32px));
+  width: min(980px, calc(100% - 32px));
   margin: 0 auto;
   padding: 42px 0 64px;
 }
@@ -46,7 +47,7 @@ button:disabled {
   align-items: end;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .eyebrow {
@@ -82,10 +83,39 @@ h1 {
   background: rgba(255, 255, 255, 0.13);
 }
 
-.player-grid {
+.player-selector {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-  gap: 20px;
+  grid-template-columns: auto minmax(220px, 360px);
+  align-items: center;
+  justify-content: end;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.player-selector label {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.player-selector select {
+  width: 100%;
+  padding: 12px 42px 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: #111827;
+  color: #f8fafc;
+  outline: none;
+}
+
+.player-selector select:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+}
+
+.selected-player {
+  max-width: 760px;
+  margin: 0 auto;
 }
 
 .player-card {
@@ -97,9 +127,13 @@ h1 {
   backdrop-filter: blur(14px);
 }
 
+.player-card-single {
+  width: 100%;
+}
+
 .artwork-wrap {
   position: relative;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #111827;
 }
@@ -137,7 +171,7 @@ h1 {
 }
 
 .player-body {
-  padding: 20px;
+  padding: 22px;
 }
 
 .player-heading {
@@ -148,7 +182,7 @@ h1 {
 
 .player-heading h2 {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.35rem;
 }
 
 .state {
@@ -174,7 +208,7 @@ h1 {
 }
 
 .now-playing strong {
-  font-size: 1.05rem;
+  font-size: 1.08rem;
 }
 
 .now-playing span {
@@ -254,7 +288,7 @@ h1 {
 
 @media (max-width: 640px) {
   .app-shell {
-    width: min(100% - 20px, 1180px);
+    width: min(100% - 20px, 980px);
     padding-top: 24px;
   }
 
@@ -267,7 +301,12 @@ h1 {
     align-self: stretch;
   }
 
-  .player-grid {
+  .player-selector {
     grid-template-columns: 1fr;
+    justify-content: stretch;
+  }
+
+  .player-selector select {
+    max-width: none;
   }
 }
