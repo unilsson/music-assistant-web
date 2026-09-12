@@ -114,7 +114,7 @@ h1 {
 }
 
 .selected-player {
-  max-width: 760px;
+  max-width: 860px;
   margin: 0 auto;
 }
 
@@ -131,10 +131,19 @@ h1 {
   width: 100%;
 }
 
+.media-panel {
+  width: min(300px, calc(100% - 40px));
+  margin: 24px auto 20px;
+}
+
 .artwork-wrap {
   position: relative;
-  aspect-ratio: 16 / 8;
+  width: 240px;
+  max-width: 100%;
+  aspect-ratio: 1;
+  margin: 0 auto;
   overflow: hidden;
+  border-radius: 18px;
   background: #111827;
 }
 
@@ -148,17 +157,17 @@ h1 {
 .artwork-placeholder {
   display: grid;
   place-items: center;
-  font-size: 5rem;
+  font-size: 4rem;
   color: #475569;
   background: linear-gradient(145deg, #182235, #111827);
 }
 
 .status-dot {
   position: absolute;
-  right: 16px;
-  bottom: 16px;
-  width: 13px;
-  height: 13px;
+  right: 12px;
+  bottom: 12px;
+  width: 12px;
+  height: 12px;
   border: 3px solid #111827;
   border-radius: 50%;
   background: #64748b;
@@ -170,29 +179,14 @@ h1 {
   box-shadow: 0 0 18px rgba(52, 211, 153, 0.65);
 }
 
-.player-body {
-  padding: 22px 24px 24px;
-}
-
-.info-row {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
-  gap: 28px;
-  align-items: start;
-}
-
-.player-info,
 .track-info {
   min-width: 0;
-}
-
-.player-info {
-  padding-right: 24px;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 16px;
+  text-align: center;
 }
 
 .info-label {
-  margin: 0 0 8px;
+  margin: 0 0 7px;
   color: #64748b;
   font-size: 0.72rem;
   font-weight: 800;
@@ -200,23 +194,11 @@ h1 {
   text-transform: uppercase;
 }
 
-.player-info h2 {
-  margin: 0;
-  font-size: 1.35rem;
-  line-height: 1.15;
-}
-
-.state {
-  margin: 7px 0 0;
-  color: #94a3b8;
-  font-size: 0.9rem;
-}
-
 .now-playing {
-  min-height: 64px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
+  min-height: 58px;
 }
 
 .now-playing strong,
@@ -228,7 +210,7 @@ h1 {
 }
 
 .now-playing strong {
-  font-size: 1.15rem;
+  font-size: 1.08rem;
 }
 
 .now-playing span {
@@ -242,18 +224,18 @@ h1 {
 .transport {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 12px;
-  margin-top: 16px;
+  margin-top: 14px;
 }
 
 .transport button {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: #1e293b;
   color: #f8fafc;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
 }
 
 .transport button:hover {
@@ -261,11 +243,11 @@ h1 {
 }
 
 .transport .primary-control {
-  width: 56px;
-  height: 56px;
+  width: 54px;
+  height: 54px;
   background: #f8fafc;
   color: #0f172a;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   box-shadow: 0 10px 30px rgba(255, 255, 255, 0.12);
 }
 
@@ -273,16 +255,49 @@ h1 {
   background: #dbeafe;
 }
 
-.volume-control {
+.player-controls-row {
   display: grid;
-  grid-template-columns: auto 1fr 46px;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(300px, 1.7fr);
+  gap: 28px;
   align-items: center;
-  gap: 12px;
-  margin-top: 22px;
-  padding-top: 18px;
+  padding: 20px 26px 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.player-info {
+  min-width: 0;
+}
+
+.player-info h2 {
+  margin: 0;
+  font-size: 1.22rem;
+  line-height: 1.15;
+}
+
+.state {
+  margin: 6px 0 0;
   color: #94a3b8;
   font-size: 0.88rem;
+}
+
+.volume-control {
+  min-width: 0;
+  color: #94a3b8;
+  font-size: 0.88rem;
+}
+
+.volume-control > span {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.volume-slider-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 46px;
+  align-items: center;
+  gap: 12px;
 }
 
 .volume-control input {
@@ -333,23 +348,18 @@ h1 {
     max-width: none;
   }
 
+  .media-panel {
+    width: min(280px, calc(100% - 32px));
+    margin-top: 18px;
+  }
+
   .artwork-wrap {
-    aspect-ratio: 16 / 9;
+    width: 210px;
   }
 
-  .info-row {
+  .player-controls-row {
     grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .player-info {
-    padding-right: 0;
-    padding-bottom: 18px;
-    border-right: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .transport {
-    justify-content: center;
+    gap: 18px;
+    padding: 18px 20px 22px;
   }
 }
