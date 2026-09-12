@@ -9,6 +9,59 @@ const port = Number(process.env.PORT ?? 3001);
 
 app.use(express.json());
 
+function unwrapArray(response: any): any[] {
+  if (Array.isArray(response)) {
+    return response;
+  }
+
+  if (Array.isArray(response?.result)) {
+    return response.result;
+  }
+
+  return [];
+}
+
+function summarizeQueueItem(item: any) {
+  if (!item) {
+    return null;
+  }
+
+  const mediaItem = item?.media_item ?? item?.media_item_data ?? null;
+
+  let artist: string | null = null;
+
+  if (Array.isArray(mediaItem?.artists)) {
+    artist = mediaItem.artists
+      .map((entry: any) => entry?.name)
+      .filter(Boolean)
+      .join(", ");
+  } else if (typeof mediaItem?.artist === "string") {
+    artist = mediaItem.artist;
+  } else if (typeof item?.artist === "string") {
+    artist = item.artist;
+  }
+
+  const album =
+    mediaItem?.album?.name ??
+    mediaItem?.album ??
+    item?.album ??
+    null;
+
+  const image =
+    mediaItem?.image?.path ??
+    mediaItem?.metadata?.images?.[0]?.path ??
+    item?.image?.path ??
+    null;
+
+  return {
+    id: item?.queue_item_id ?? mediaItem?.item_id ?? null,
+    title: mediaItem?.name ?? item?.name ?? null,
+    artist,
+    album,
+    image,
+  };
+}
+
 app.get("/api/health", (_req, res) => {
   res.json({
     status: "ok",
@@ -46,72 +99,21 @@ app.get("/api/ma/status", async (_req, res) => {
 app.get("/api/players", async (_req, res) => {
   try {
     const response = await maCommand("player_queues/all");
-
-    const queues = Array.isArray(response)
-      ? response
-      : Array.isArray(response?.result)
-        ? response.result
-        : [];
+    const queues = unwrapArray(response);
 
     const players = queues
       .filter((queue: any) => queue.available === true)
-      .map((queue: any) => {
-        const currentItem = queue.current_item ?? null;
-
-        const mediaItem =
-          currentItem?.media_item ??
-          currentItem?.media_item_data ??
-          null;
-
-        let artist: string | null = null;
-
-        if (Array.isArray(mediaItem?.artists)) {
-          artist = mediaItem.artists
-            .map((item: any) => item?.name)
-            .filter(Boolean)
-            .join(", ");
-        } else if (typeof mediaItem?.artist === "string") {
-          artist = mediaItem.artist;
-        } else if (typeof currentItem?.artist === "string") {
-          artist = currentItem.artist;
-        }
-
-        const album =
-          mediaItem?.album?.name ??
-          mediaItem?.album ??
-          currentItem?.album ??
-          null;
-
-        const image =
-          mediaItem?.image?.path ??
-          mediaItem?.metadata?.images?.[0]?.path ??
-          currentItem?.image?.path ??
-          null;
-
-        return {
-          id: queue.queue_id,
-          name: queue.display_name ?? queue.queue_id,
-          available: queue.available ?? false,
-          state: queue.state ?? "unknown",
-          active: queue.active ?? false,
-          items: queue.items ?? 0,
-          elapsedTime: queue.elapsed_time ?? null,
-          duration: queue.duration ?? null,
-
-          nowPlaying: currentItem
-            ? {
-                title:
-                  mediaItem?.name ??
-                  currentItem?.name ??
-                  currentItem?.media_item?.name ??
-                  null,
-                artist,
-                album,
-                image,
-              }
-            : null,
-        };
-      });
+      .map((queue: any) => ({
+        id: queue.queue_id,
+        name: queue.display_name ?? queue.queue_id,
+        available: queue.available ?? false,
+        state: queue.state ?? "unknown",
+        active: queue.active ?? false,
+        items: queue.items ?? 0,
+        elapsedTime: queue.elapsed_time ?? null,
+        duration: queue.duration ?? null,
+        nowPlaying: summarizeQueueItem(queue.current_item),
+      }));
 
     res.json({
       status: "ok",
@@ -124,6 +126,81 @@ app.get("/api/players", async (_req, res) => {
     res.status(502).json({
       status: "error",
       error: "Unable to retrieve players from Music Assistant",
+    });
+  }
+});
+
+/*
+ * Return only the small slice of the selected player's queue that the
+ * frontend needs for previous/current/next previews.
+ */
+app.get("/api/players/:id/queue-context", async (req, res) => {
+  try {
+    const playerId = req.params.id;
+    const queuesResponse = await maCommand("player_queues/all");
+    const queues = unwrapArray(queuesResponse);
+    const queue = queues.find((entry: any) => entry.queue_id === playerId);
+
+    if (!queue) {
+      res.status(404).json({
+        status: "error",
+        error: "Player queue not found",
+      });
+      return;
+    }
+
+    const currentIndex =
+      typeof queue.current_index === "number" ? queue.current_index : null;
+
+    if (currentIndex === null) {
+      res.json({
+        status: "ok",
+        playerId,
+        previous: null,
+        current: summarizeQueueItem(queue.current_item),
+        next: null,
+      });
+      return;
+    }
+
+    const offset = Math.max(0, currentIndex - 1);
+    const itemsResponse = await maCommand("player_queues/items", {
+      queue_id: playerId,
+      limit: 3,
+      offset,
+    });
+    const items = unwrapArray(itemsResponse);
+
+    let relativeIndex = currentIndex - offset;
+    const currentQueueItemId = queue.current_item?.queue_item_id;
+
+    if (currentQueueItemId) {
+      const foundIndex = items.findIndex(
+        (item: any) => item?.queue_item_id === currentQueueItemId
+      );
+      if (foundIndex >= 0) {
+        relativeIndex = foundIndex;
+      }
+    }
+
+    const previousItem = relativeIndex > 0 ? items[relativeIndex - 1] : null;
+    const currentItem = items[relativeIndex] ?? queue.current_item ?? null;
+    const nextItem =
+      relativeIndex + 1 < items.length ? items[relativeIndex + 1] : null;
+
+    res.json({
+      status: "ok",
+      playerId,
+      previous: summarizeQueueItem(previousItem),
+      current: summarizeQueueItem(currentItem),
+      next: summarizeQueueItem(nextItem),
+    });
+  } catch (error) {
+    console.error("Music Assistant queue context error:", error);
+
+    res.status(502).json({
+      status: "error",
+      error: "Unable to retrieve queue context from Music Assistant",
     });
   }
 });
