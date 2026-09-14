@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type FormEvent } from "react";
 import {
   getMusicPlaylist,
   getMusicPlaylists,
@@ -12,10 +12,12 @@ import {
 } from "../api";
 import PlayerCard from "../player/PlayerCard";
 import FavoritesView from "./FavoritesView";
+import SearchView from "./SearchView";
 import "./music.css";
 
 type MusicPage =
   | { kind: "home" }
+  | { kind: "search"; query: string }
   | { kind: "favorites" }
   | { kind: "playlists" }
   | { kind: "playlist"; playlistId: string; returnTo: "favorites" | "playlists" };
@@ -98,6 +100,7 @@ export default function MusicView({
   onChanged: () => Promise<void>;
 }) {
   const [page, setPage] = useState<MusicPage>({ kind: "home" });
+  const [homeSearch, setHomeSearch] = useState("");
   const [playlists, setPlaylists] = useState<MusicPlaylist[]>([]);
   const [playlistsLoaded, setPlaylistsLoaded] = useState(false);
   const [playlistsLoading, setPlaylistsLoading] = useState(false);
@@ -182,6 +185,16 @@ export default function MusicView({
     }
   };
 
+  const submitHomeSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const query = homeSearch.trim();
+    if (query.length < 2) {
+      return;
+    }
+    setError(null);
+    setPage({ kind: "search", query });
+  };
+
   const returnFromPlaylist = () => {
     if (page.kind !== "playlist") {
       return;
@@ -219,16 +232,20 @@ export default function MusicView({
               </div>
             </div>
 
-            <label className="music-search-disabled" title="Sök byggs i Sprint 5C">
+            <form className="music-search" onSubmit={submitHomeSearch} role="search">
               <span aria-hidden="true">⌕</span>
               <input
                 type="search"
+                value={homeSearch}
+                onChange={(event) => setHomeSearch(event.target.value)}
                 placeholder="Sök efter artist, album eller låt…"
-                disabled
-                aria-label="Sök kommer i en senare del av Sprint 5"
+                autoComplete="off"
+                aria-label="Sök efter musik"
               />
-              <small>kommer snart</small>
-            </label>
+              <button type="submit" disabled={homeSearch.trim().length < 2}>
+                Sök
+              </button>
+            </form>
 
             <div className="music-home-actions">
               <button
@@ -254,6 +271,15 @@ export default function MusicView({
               </button>
             </div>
           </>
+        )}
+
+        {page.kind === "search" && (
+          <SearchView
+            player={player}
+            initialQuery={page.query}
+            onBack={() => setPage({ kind: "home" })}
+            onChanged={onChanged}
+          />
         )}
 
         {page.kind === "favorites" && (
