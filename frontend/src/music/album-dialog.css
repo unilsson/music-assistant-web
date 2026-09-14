@@ -85,3 +85,32 @@
 .album-dialog-message {
   margin-bottom: 16px;
 }
+
+.album-dialog-empty {
+  margin-top: 4px;
+}
+
+@media (max-width: 620px) {
+  .album-dialog-backdrop {
+    padding: 0;
+  }
+
+  .album-dialog {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    border: 0;
+    border-radius: 0;
+    padding: 18px;
+  }
+
+  .album-dialog-header {
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: 16px;
+    padding-right: 32px;
+  }
+
+  .album-dialog-artwork {
+    width: 104px;
+  }
+}
