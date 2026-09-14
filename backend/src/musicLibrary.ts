@@ -19,6 +19,24 @@ export type MusicTrack = {
   provider: string | null;
 };
 
+export type MusicAlbum = {
+  id: string;
+  uri: string;
+  name: string;
+  artist: string | null;
+  image: string | null;
+  year: number | null;
+  provider: string | null;
+};
+
+export type MusicArtist = {
+  id: string;
+  uri: string;
+  name: string;
+  image: string | null;
+  provider: string | null;
+};
+
 function imagePath(item: any): string | null {
   return (
     item?.image?.path ??
@@ -58,6 +76,11 @@ function positionNumber(value: unknown): number | null {
   return Number.isFinite(position) && position >= 0 ? position : null;
 }
 
+function yearNumber(value: unknown): number | null {
+  const year = Number(value);
+  return Number.isInteger(year) && year > 0 ? year : null;
+}
+
 export function normalizeMusicPlaylists(items: any[]): MusicPlaylist[] {
   return items
     .map((item: any) => ({
@@ -94,4 +117,36 @@ export function normalizeMusicTracks(items: any[]): MusicTrack[] {
       provider: typeof item?.provider === "string" ? item.provider : null,
     }))
     .filter((track: MusicTrack) => track.uri.length > 0);
+}
+
+export function normalizeMusicAlbums(items: any[]): MusicAlbum[] {
+  return items
+    .map((item: any) => ({
+      id: String(item?.item_id ?? item?.id ?? ""),
+      uri: typeof item?.uri === "string" ? item.uri : "",
+      name: String(item?.name ?? "Album").trim() || "Album",
+      artist: artistName(item),
+      image: imagePath(item),
+      year: yearNumber(item?.year),
+      provider: typeof item?.provider === "string" ? item.provider : null,
+    }))
+    .filter(
+      (album: MusicAlbum) => album.id.length > 0 && album.uri.startsWith("library://album/")
+    )
+    .sort((a: MusicAlbum, b: MusicAlbum) => a.name.localeCompare(b.name, "sv"));
+}
+
+export function normalizeMusicArtists(items: any[]): MusicArtist[] {
+  return items
+    .map((item: any) => ({
+      id: String(item?.item_id ?? item?.id ?? ""),
+      uri: typeof item?.uri === "string" ? item.uri : "",
+      name: String(item?.name ?? "Artist").trim() || "Artist",
+      image: imagePath(item),
+      provider: typeof item?.provider === "string" ? item.provider : null,
+    }))
+    .filter(
+      (artist: MusicArtist) => artist.id.length > 0 && artist.uri.startsWith("library://artist/")
+    )
+    .sort((a: MusicArtist, b: MusicArtist) => a.name.localeCompare(b.name, "sv"));
 }
