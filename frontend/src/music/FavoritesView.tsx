@@ -10,6 +10,7 @@ import {
   type MusicTrack,
   type Player,
 } from "../api";
+import "./favorites.css";
 
 type FavoriteArtworkProps = {
   image: string | null;
