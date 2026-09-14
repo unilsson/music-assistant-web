@@ -5,6 +5,7 @@ import {
   type FavoriteKind,
   type MusicAlbum,
   type MusicArtist,
+  type MusicArtistRef,
   type MusicFavorites,
   type MusicPlaylist,
   type MusicTrack,
@@ -16,6 +17,15 @@ type FavoriteArtworkProps = {
   image: string | null;
   className?: string;
   round?: boolean;
+};
+
+type FavoriteArtistGroup = {
+  key: string;
+  name: string;
+  image: string | null;
+  artist: MusicArtist | null;
+  albums: MusicAlbum[];
+  tracks: MusicTrack[];
 };
 
 function FavoriteArtwork({ image, className = "", round = false }: FavoriteArtworkProps) {
@@ -64,7 +74,7 @@ function FavoriteTrackRow({
       <FavoriteArtwork image={track.image} className="favorite-track-artwork" />
       <span className="favorite-track-text">
         <strong>{track.title}</strong>
-        <small>{[track.artist, track.album].filter(Boolean).join(" · ")}</small>
+        <small>{track.album ?? track.artist ?? ""}</small>
       </span>
       <span className="favorite-play-indicator" aria-hidden="true">▶</span>
     </button>
@@ -91,36 +101,33 @@ function FavoriteAlbumCard({
       <FavoriteArtwork image={album.image} />
       <span className="favorite-media-card-text">
         <strong>{album.name}</strong>
-        <small>{[album.artist, album.year].filter(Boolean).join(" · ")}</small>
+        <small>{album.year ?? "Album"}</small>
       </span>
       <span className="favorite-card-play" aria-hidden="true">▶</span>
     </button>
   );
 }
 
-function FavoriteArtistCard({
-  artist,
-  busy,
-  onPlay,
+function FavoriteArtistGroupCard({
+  group,
+  onOpen,
 }: {
-  artist: MusicArtist;
-  busy: boolean;
-  onPlay: () => void;
+  group: FavoriteArtistGroup;
+  onOpen: () => void;
 }) {
   return (
     <button
       type="button"
       className="favorite-media-card favorite-artist-card"
-      disabled={busy}
-      onClick={onPlay}
-      aria-label={`Spela ${artist.name}`}
+      onClick={onOpen}
+      aria-label={`Öppna favoriter för ${group.name}`}
     >
-      <FavoriteArtwork image={artist.image} round />
+      <FavoriteArtwork image={group.image} round />
       <span className="favorite-media-card-text">
-        <strong>{artist.name}</strong>
-        <small>Artist</small>
+        <strong>{group.name}</strong>
+        <small>{favoriteArtistSummary(group)}</small>
       </span>
-      <span className="favorite-card-play" aria-hidden="true">▶</span>
+      <span className="favorite-card-open" aria-hidden="true">›</span>
     </button>
   );
 }
@@ -149,6 +156,124 @@ function FavoritePlaylistCard({
   );
 }
 
+function normalizedArtistName(name: string) {
+  return name.trim().toLocaleLowerCase("sv-SE");
+}
+
+function refKey(ref: MusicArtistRef | null): string | null {
+  if (!ref) {
+    return null;
+  }
+  if (ref.id) {
+    return `id:${ref.id}`;
+  }
+  if (ref.uri) {
+    return `uri:${ref.uri}`;
+  }
+  return ref.name ? `name:${normalizedArtistName(ref.name)}` : null;
+}
+
+function artistKey(artist: MusicArtist) {
+  return artist.id
+    ? `id:${artist.id}`
+    : artist.uri
+      ? `uri:${artist.uri}`
+      : `name:${normalizedArtistName(artist.name)}`;
+}
+
+function favoriteArtistSummary(group: FavoriteArtistGroup) {
+  const parts: string[] = [];
+  if (group.albums.length > 0) {
+    parts.push(`${group.albums.length} album`);
+  }
+  if (group.tracks.length > 0) {
+    parts.push(
+      group.tracks.length === 1 ? "1 favoritlåt" : `${group.tracks.length} favoritlåtar`
+    );
+  }
+  if (parts.length === 0 && group.artist) {
+    return "Favoritartist";
+  }
+  return parts.join(" · ");
+}
+
+function groupFavoritesByArtist(favorites: MusicFavorites): FavoriteArtistGroup[] {
+  const groups = new Map<string, FavoriteArtistGroup>();
+  const nameAliases = new Map<string, string>();
+
+  const ensureGroup = (
+    key: string,
+    name: string,
+    image: string | null,
+    artist: MusicArtist | null = null
+  ) => {
+    const existing = groups.get(key);
+    if (existing) {
+      if (!existing.image && image) {
+        existing.image = image;
+      }
+      if (!existing.artist && artist) {
+        existing.artist = artist;
+      }
+      return existing;
+    }
+
+    const group: FavoriteArtistGroup = {
+      key,
+      name,
+      image,
+      artist,
+      albums: [],
+      tracks: [],
+    };
+    groups.set(key, group);
+    nameAliases.set(normalizedArtistName(name), key);
+    return group;
+  };
+
+  for (const artist of favorites.artists) {
+    ensureGroup(artistKey(artist), artist.name, artist.image, artist);
+  }
+
+  const groupForMedia = (
+    artists: MusicArtistRef[],
+    fallbackArtist: string | null,
+    image: string | null
+  ) => {
+    const primary = artists[0] ?? null;
+    const name = primary?.name ?? fallbackArtist?.trim() ?? "Okänd artist";
+    const directKey = refKey(primary);
+    const aliasKey = nameAliases.get(normalizedArtistName(name));
+    const key = (directKey && groups.has(directKey) ? directKey : aliasKey) ??
+      directKey ??
+      `name:${normalizedArtistName(name)}`;
+    return ensureGroup(key, name, image);
+  };
+
+  for (const album of favorites.albums) {
+    const group = groupForMedia(album.artists, album.artist, album.image);
+    group.albums.push(album);
+  }
+
+  for (const track of favorites.tracks) {
+    const group = groupForMedia(track.artists, track.artist, track.image);
+    group.tracks.push(track);
+  }
+
+  return [...groups.values()]
+    .map((group) => ({
+      ...group,
+      albums: [...group.albums].sort((a, b) => {
+        if (a.year && b.year && a.year !== b.year) {
+          return a.year - b.year;
+        }
+        return a.name.localeCompare(b.name, "sv");
+      }),
+      tracks: [...group.tracks].sort((a, b) => a.title.localeCompare(b.title, "sv")),
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name, "sv"));
+}
+
 export default function FavoritesView({
   player,
   onBack,
@@ -161,6 +286,7 @@ export default function FavoritesView({
   onChanged: () => Promise<void>;
 }) {
   const [favorites, setFavorites] = useState<MusicFavorites | null>(null);
+  const [selectedArtistKey, setSelectedArtistKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [busyKey, setBusyKey] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -180,6 +306,16 @@ export default function FavoritesView({
   useEffect(() => {
     void loadFavorites();
   }, [loadFavorites]);
+
+  const artistGroups = useMemo(
+    () => (favorites ? groupFavoritesByArtist(favorites) : []),
+    [favorites]
+  );
+
+  const selectedArtist = useMemo(
+    () => artistGroups.find((group) => group.key === selectedArtistKey) ?? null,
+    [artistGroups, selectedArtistKey]
+  );
 
   const total = useMemo(() => {
     if (!favorites) {
@@ -211,6 +347,87 @@ export default function FavoritesView({
     }
   };
 
+  if (selectedArtist) {
+    return (
+      <>
+        <div className="music-browser-heading">
+          <button
+            type="button"
+            className="music-back-button"
+            onClick={() => setSelectedArtistKey(null)}
+          >
+            ← Favoriter
+          </button>
+        </div>
+
+        {error && <div className="message error music-message">{error}</div>}
+
+        <header className="favorite-artist-detail-header">
+          <FavoriteArtwork
+            image={selectedArtist.image}
+            className="favorite-artist-detail-artwork"
+            round
+          />
+          <div>
+            <p className="eyebrow">Favoriter</p>
+            <h2>{selectedArtist.name}</h2>
+            <p>{favoriteArtistSummary(selectedArtist)}</p>
+            {selectedArtist.artist && (
+              <button
+                type="button"
+                className="music-primary-action"
+                disabled={busyKey !== null}
+                onClick={() =>
+                  void playFavorite("artist", selectedArtist.artist!.id, true)
+                }
+              >
+                ▶ Spela artist
+              </button>
+            )}
+          </div>
+        </header>
+
+        {selectedArtist.albums.length > 0 && (
+          <section className="favorite-section" aria-labelledby="favorite-artist-albums-heading">
+            <div className="favorite-section-heading">
+              <h3 id="favorite-artist-albums-heading">Album</h3>
+              <span>{selectedArtist.albums.length}</span>
+            </div>
+            <div className="favorite-media-grid">
+              {selectedArtist.albums.map((album) => (
+                <FavoriteAlbumCard
+                  key={album.id}
+                  album={album}
+                  busy={busyKey !== null}
+                  onPlay={() => void playFavorite("album", album.id)}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {selectedArtist.tracks.length > 0 && (
+          <section className="favorite-section" aria-labelledby="favorite-artist-tracks-heading">
+            <div className="favorite-section-heading">
+              <h3 id="favorite-artist-tracks-heading">Favoritlåtar</h3>
+              <span>{selectedArtist.tracks.length}</span>
+            </div>
+            <div className="favorite-track-list">
+              {selectedArtist.tracks.map((track) => (
+                <FavoriteTrackRow
+                  key={`${track.id}-${track.uri}`}
+                  track={track}
+                  busy={busyKey !== null}
+                  onPlay={() => void playFavorite("track", track.id)}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+      </>
+    );
+  }
+
   return (
     <>
       <div className="music-browser-heading music-browser-heading-actions">
@@ -219,7 +436,11 @@ export default function FavoritesView({
             ← Musik
           </button>
           <h2>Favoriter</h2>
-          <p>{favorites ? `${total} favoriter` : "Music Assistant"}</p>
+          <p>
+            {favorites
+              ? `${artistGroups.length} artister · ${favorites.playlists.length} spellistor`
+              : "Music Assistant"}
+          </p>
         </div>
         <button
           type="button"
@@ -241,57 +462,18 @@ export default function FavoritesView({
         </div>
       )}
 
-      {favorites && favorites.tracks.length > 0 && (
-        <section className="favorite-section" aria-labelledby="favorite-tracks-heading">
-          <div className="favorite-section-heading">
-            <h3 id="favorite-tracks-heading">Låtar</h3>
-            <span>{favorites.tracks.length}</span>
-          </div>
-          <div className="favorite-track-list">
-            {favorites.tracks.map((track) => (
-              <FavoriteTrackRow
-                key={`${track.id}-${track.uri}`}
-                track={track}
-                busy={busyKey !== null}
-                onPlay={() => void playFavorite("track", track.id)}
-              />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {favorites && favorites.albums.length > 0 && (
-        <section className="favorite-section" aria-labelledby="favorite-albums-heading">
-          <div className="favorite-section-heading">
-            <h3 id="favorite-albums-heading">Album</h3>
-            <span>{favorites.albums.length}</span>
-          </div>
-          <div className="favorite-media-grid">
-            {favorites.albums.map((album) => (
-              <FavoriteAlbumCard
-                key={album.id}
-                album={album}
-                busy={busyKey !== null}
-                onPlay={() => void playFavorite("album", album.id)}
-              />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {favorites && favorites.artists.length > 0 && (
+      {artistGroups.length > 0 && (
         <section className="favorite-section" aria-labelledby="favorite-artists-heading">
           <div className="favorite-section-heading">
             <h3 id="favorite-artists-heading">Artister</h3>
-            <span>{favorites.artists.length}</span>
+            <span>{artistGroups.length}</span>
           </div>
           <div className="favorite-media-grid">
-            {favorites.artists.map((artist) => (
-              <FavoriteArtistCard
-                key={artist.id}
-                artist={artist}
-                busy={busyKey !== null}
-                onPlay={() => void playFavorite("artist", artist.id, true)}
+            {artistGroups.map((group) => (
+              <FavoriteArtistGroupCard
+                key={group.key}
+                group={group}
+                onOpen={() => setSelectedArtistKey(group.key)}
               />
             ))}
           </div>
