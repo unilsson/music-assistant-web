@@ -4,6 +4,10 @@ import {
   normalizeMusicArtists,
   normalizeMusicPlaylists,
   normalizeMusicTracks,
+  normalizeSearchAlbums,
+  normalizeSearchArtists,
+  normalizeSearchPlaylists,
+  normalizeSearchTracks,
   type MusicAlbum,
   type MusicArtist,
   type MusicPlaylist,
@@ -13,6 +17,16 @@ import {
 type Command = (command: string, args?: Record<string, unknown>) => Promise<unknown>;
 type FavoriteKind = "track" | "album" | "artist" | "playlist";
 type FavoriteItem = MusicTrack | MusicAlbum | MusicArtist | MusicPlaylist;
+type SearchKind = FavoriteKind;
+type SearchItem = FavoriteItem;
+type MusicSearchResults = {
+  tracks: MusicTrack[];
+  albums: MusicAlbum[];
+  artists: MusicArtist[];
+  playlists: MusicPlaylist[];
+};
+
+const SEARCH_MEDIA_TYPES = ["track", "album", "artist", "playlist"];
 
 function asArray(value: any): any[] {
   if (Array.isArray(value)) {
@@ -22,6 +36,17 @@ function asArray(value: any): any[] {
     return value.result;
   }
   return [];
+}
+
+function resultObject(value: any): any {
+  if (value?.result && typeof value.result === "object" && !Array.isArray(value.result)) {
+    return value.result;
+  }
+  return value && typeof value === "object" ? value : {};
+}
+
+function cleanSearchQuery(value: unknown): string {
+  return typeof value === "string" ? value.trim().slice(0, 200) : "";
 }
 
 async function loadPlaylists(command: Command): Promise<MusicPlaylist[]> {
@@ -94,6 +119,26 @@ async function loadFavorites(command: Command) {
   return { tracks, albums, artists, playlists };
 }
 
+async function searchMusic(
+  command: Command,
+  query: string,
+  limit = 12
+): Promise<MusicSearchResults> {
+  const response = await command("music/search", {
+    search_query: query,
+    media_types: SEARCH_MEDIA_TYPES,
+    limit,
+  });
+  const result = resultObject(response);
+
+  return {
+    tracks: normalizeSearchTracks(asArray(result?.tracks)),
+    albums: normalizeSearchAlbums(asArray(result?.albums)),
+    artists: normalizeSearchArtists(asArray(result?.artists)),
+    playlists: normalizeSearchPlaylists(asArray(result?.playlists)),
+  };
+}
+
 async function findFavorite(
   command: Command,
   kind: FavoriteKind,
@@ -119,10 +164,41 @@ async function findFavorite(
   return items.find((item) => item.id === itemId) ?? null;
 }
 
+async function findSearchItem(
+  command: Command,
+  query: string,
+  kind: SearchKind,
+  uri: string
+): Promise<SearchItem | null> {
+  const results = await searchMusic(command, query, 25);
+  let items: SearchItem[];
+
+  switch (kind) {
+    case "track":
+      items = results.tracks;
+      break;
+    case "album":
+      items = results.albums;
+      break;
+    case "artist":
+      items = results.artists;
+      break;
+    case "playlist":
+      items = results.playlists;
+      break;
+  }
+
+  return items.find((item) => item.uri === uri) ?? null;
+}
+
 function favoriteKind(value: string): FavoriteKind | null {
   return value === "track" || value === "album" || value === "artist" || value === "playlist"
     ? value
     : null;
+}
+
+function searchKind(value: unknown): SearchKind | null {
+  return typeof value === "string" ? favoriteKind(value) : null;
 }
 
 export function createMusicRouter(command: Command) {
@@ -162,6 +238,34 @@ export function createMusicRouter(command: Command) {
     }
   });
 
+  router.get("/search", async (req, res) => {
+    const query = cleanSearchQuery(req.query.q);
+    if (query.length < 2) {
+      res.status(400).json({ status: "error", error: "Search query must contain at least 2 characters" });
+      return;
+    }
+
+    try {
+      const results = await searchMusic(command, query);
+      res.json({
+        status: "ok",
+        query,
+        count:
+          results.tracks.length +
+          results.albums.length +
+          results.artists.length +
+          results.playlists.length,
+        ...results,
+      });
+    } catch (error) {
+      console.error("Music Assistant search error:", error);
+      res.status(502).json({
+        status: "error",
+        error: "Unable to search Music Assistant",
+      });
+    }
+  });
+
   router.get("/playlists/:playlistId", async (req, res) => {
     try {
       const playlistId = req.params.playlistId;
@@ -184,6 +288,49 @@ export function createMusicRouter(command: Command) {
       res.status(502).json({
         status: "error",
         error: "Unable to retrieve playlist from Music Assistant",
+      });
+    }
+  });
+
+  router.post("/:playerId/search/play", async (req, res) => {
+    const playerId = req.params.playerId;
+    const query = cleanSearchQuery(req.body?.query);
+    const kind = searchKind(req.body?.kind);
+    const uri = typeof req.body?.uri === "string" ? req.body.uri.trim() : "";
+
+    if (query.length < 2 || !kind || !uri) {
+      res.status(400).json({ status: "error", error: "query, kind and uri are required" });
+      return;
+    }
+
+    try {
+      const item = await findSearchItem(command, query, kind, uri);
+      if (!item) {
+        res.status(404).json({ status: "error", error: "Search result not found" });
+        return;
+      }
+
+      const shuffle = kind !== "track" && req.body?.shuffle === true;
+      const result = await command("player_queues/play_media", {
+        queue_id: playerId,
+        media: item.uri,
+        option: "replace",
+        shuffle,
+      });
+
+      res.json({
+        status: "ok",
+        playerId,
+        kind,
+        uri: item.uri,
+        shuffle,
+        result,
+      });
+    } catch (error) {
+      console.error("Music Assistant search playback error:", error);
+      res.status(502).json({
+        status: "error",
+        error: "Unable to start search result",
       });
     }
   });
