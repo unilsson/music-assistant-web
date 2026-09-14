@@ -100,7 +100,15 @@ export type MusicFavorites = {
   playlists: MusicPlaylist[];
 };
 
+export type MusicSearchResults = {
+  tracks: MusicTrack[];
+  albums: MusicAlbum[];
+  artists: MusicArtist[];
+  playlists: MusicPlaylist[];
+};
+
 export type FavoriteKind = "track" | "album" | "artist" | "playlist";
+export type SearchKind = FavoriteKind;
 
 export type MusicPlaylistDetail = {
   playlist: MusicPlaylist;
@@ -152,6 +160,12 @@ type MusicPlaylistDetailResponse = {
 
 type MusicFavoritesResponse = MusicFavorites & {
   status: string;
+  count: number;
+};
+
+type MusicSearchResponse = MusicSearchResults & {
+  status: string;
+  query: string;
   count: number;
 };
 
@@ -263,6 +277,35 @@ export async function getMusicFavorites(): Promise<MusicFavorites> {
     artists: data.artists,
     playlists: data.playlists,
   };
+}
+
+export async function searchMusic(query: string): Promise<MusicSearchResults> {
+  const data = (await request(
+    `/api/music/search?q=${encodeURIComponent(query)}`
+  )) as MusicSearchResponse;
+
+  return {
+    tracks: data.tracks,
+    albums: data.albums,
+    artists: data.artists,
+    playlists: data.playlists,
+  };
+}
+
+export async function playMusicSearchResult(
+  playerId: string,
+  query: string,
+  kind: SearchKind,
+  uri: string,
+  shuffle = false
+) {
+  return request(`/api/music/${encodeURIComponent(playerId)}/search/play`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ query, kind, uri, shuffle }),
+  });
 }
 
 export async function playMusicFavorite(
