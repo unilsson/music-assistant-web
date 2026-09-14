@@ -11,6 +11,7 @@ import {
   type MusicTrack,
   type Player,
 } from "../api";
+import FavoriteAlbumDialog from "./FavoriteAlbumDialog";
 import "./favorites.css";
 
 type FavoriteArtworkProps = {
@@ -84,26 +85,26 @@ function FavoriteTrackRow({
 function FavoriteAlbumCard({
   album,
   busy,
-  onPlay,
+  onOpen,
 }: {
   album: MusicAlbum;
   busy: boolean;
-  onPlay: () => void;
+  onOpen: () => void;
 }) {
   return (
     <button
       type="button"
       className="favorite-media-card"
       disabled={busy}
-      onClick={onPlay}
-      aria-label={`Spela albumet ${album.name}`}
+      onClick={onOpen}
+      aria-label={`Öppna albumet ${album.name}`}
     >
       <FavoriteArtwork image={album.image} />
       <span className="favorite-media-card-text">
         <strong>{album.name}</strong>
         <small>{album.year ?? "Album"}</small>
       </span>
-      <span className="favorite-card-play" aria-hidden="true">▶</span>
+      <span className="favorite-card-open" aria-hidden="true">›</span>
     </button>
   );
 }
@@ -287,6 +288,7 @@ export default function FavoritesView({
 }) {
   const [favorites, setFavorites] = useState<MusicFavorites | null>(null);
   const [selectedArtistKey, setSelectedArtistKey] = useState<string | null>(null);
+  const [selectedAlbum, setSelectedAlbum] = useState<MusicAlbum | null>(null);
   const [loading, setLoading] = useState(true);
   const [busyKey, setBusyKey] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -399,7 +401,7 @@ export default function FavoritesView({
                   key={album.id}
                   album={album}
                   busy={busyKey !== null}
-                  onPlay={() => void playFavorite("album", album.id)}
+                  onOpen={() => setSelectedAlbum(album)}
                 />
               ))}
             </div>
@@ -423,6 +425,15 @@ export default function FavoritesView({
               ))}
             </div>
           </section>
+        )}
+
+        {selectedAlbum && (
+          <FavoriteAlbumDialog
+            album={selectedAlbum}
+            player={player}
+            onClose={() => setSelectedAlbum(null)}
+            onChanged={onChanged}
+          />
         )}
       </>
     );
