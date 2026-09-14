@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import { maCommand } from "./musicAssistant.js";
+import { createMusicRouter } from "./musicRoutes.js";
 import { createRadioRouter } from "./radioRoutes.js";
 
 const app = express();
@@ -9,6 +10,7 @@ const host = process.env.HOST ?? "127.0.0.1";
 const port = Number(process.env.PORT ?? 3001);
 
 app.use(express.json());
+app.use("/api/music", createMusicRouter(maCommand));
 app.use("/api/radios", createRadioRouter(maCommand));
 
 function unwrapArray(response: any): any[] {
