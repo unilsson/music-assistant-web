@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   getMusicPlaylist,
   getMusicPlaylists,
@@ -30,9 +30,24 @@ function formatDuration(value: number | null) {
 }
 
 function PlaylistArtwork({ playlist }: { playlist: MusicPlaylist }) {
-  return playlist.image ? (
-    <img className="music-playlist-artwork" src={playlist.image} alt="" />
-  ) : (
+  const [imageFailed, setImageFailed] = useState(false);
+
+  useEffect(() => {
+    setImageFailed(false);
+  }, [playlist.image]);
+
+  if (playlist.image && !imageFailed) {
+    return (
+      <img
+        className="music-playlist-artwork"
+        src={playlist.image}
+        alt=""
+        onError={() => setImageFailed(true)}
+      />
+    );
+  }
+
+  return (
     <div className="music-playlist-artwork music-artwork-placeholder" aria-hidden="true">
       ♫
     </div>
