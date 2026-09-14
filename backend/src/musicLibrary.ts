@@ -103,16 +103,65 @@ function yearNumber(value: unknown): number | null {
   return Number.isInteger(year) && year > 0 ? year : null;
 }
 
+function playlistFromItem(item: any): MusicPlaylist {
+  return {
+    id: String(item?.item_id ?? item?.id ?? ""),
+    name: String(item?.name ?? "Spellista").trim() || "Spellista",
+    uri: typeof item?.uri === "string" ? item.uri : "",
+    image: imagePath(item),
+    provider: typeof item?.provider === "string" ? item.provider : null,
+    favorite: item?.favorite === true,
+  };
+}
+
+function trackFromItem(item: any, index: number): MusicTrack {
+  const artists = artistRefs(item);
+  return {
+    id: String(item?.item_id ?? item?.id ?? item?.uri ?? index),
+    uri: typeof item?.uri === "string" ? item.uri : "",
+    title: String(item?.name ?? item?.title ?? "Låt").trim() || "Låt",
+    artist: artistNameFromRefs(artists),
+    artists,
+    album:
+      typeof item?.album === "string"
+        ? item.album
+        : typeof item?.album?.name === "string"
+          ? item.album.name
+          : null,
+    image: imagePath(item),
+    duration: durationSeconds(item?.duration),
+    position: positionNumber(item?.position ?? item?.playlist_position ?? index + 1),
+    provider: typeof item?.provider === "string" ? item.provider : null,
+  };
+}
+
+function albumFromItem(item: any): MusicAlbum {
+  const artists = artistRefs(item);
+  return {
+    id: String(item?.item_id ?? item?.id ?? ""),
+    uri: typeof item?.uri === "string" ? item.uri : "",
+    name: String(item?.name ?? "Album").trim() || "Album",
+    artist: artistNameFromRefs(artists),
+    artists,
+    image: imagePath(item),
+    year: yearNumber(item?.year),
+    provider: typeof item?.provider === "string" ? item.provider : null,
+  };
+}
+
+function artistFromItem(item: any): MusicArtist {
+  return {
+    id: String(item?.item_id ?? item?.id ?? ""),
+    uri: typeof item?.uri === "string" ? item.uri : "",
+    name: String(item?.name ?? "Artist").trim() || "Artist",
+    image: imagePath(item),
+    provider: typeof item?.provider === "string" ? item.provider : null,
+  };
+}
+
 export function normalizeMusicPlaylists(items: any[]): MusicPlaylist[] {
   return items
-    .map((item: any) => ({
-      id: String(item?.item_id ?? item?.id ?? ""),
-      name: String(item?.name ?? "Spellista").trim() || "Spellista",
-      uri: typeof item?.uri === "string" ? item.uri : "",
-      image: imagePath(item),
-      provider: typeof item?.provider === "string" ? item.provider : null,
-      favorite: item?.favorite === true,
-    }))
+    .map(playlistFromItem)
     .filter(
       (playlist: MusicPlaylist) =>
         playlist.id.length > 0 && playlist.uri.startsWith("library://playlist/")
@@ -120,63 +169,48 @@ export function normalizeMusicPlaylists(items: any[]): MusicPlaylist[] {
     .sort((a: MusicPlaylist, b: MusicPlaylist) => a.name.localeCompare(b.name, "sv"));
 }
 
+export function normalizeSearchPlaylists(items: any[]): MusicPlaylist[] {
+  return items
+    .map(playlistFromItem)
+    .filter((playlist: MusicPlaylist) => playlist.id.length > 0 && playlist.uri.length > 0);
+}
+
 export function normalizeMusicTracks(items: any[]): MusicTrack[] {
   return items
-    .map((item: any, index: number) => {
-      const artists = artistRefs(item);
-      return {
-        id: String(item?.item_id ?? item?.id ?? item?.uri ?? index),
-        uri: typeof item?.uri === "string" ? item.uri : "",
-        title: String(item?.name ?? item?.title ?? "Låt").trim() || "Låt",
-        artist: artistNameFromRefs(artists),
-        artists,
-        album:
-          typeof item?.album === "string"
-            ? item.album
-            : typeof item?.album?.name === "string"
-              ? item.album.name
-              : null,
-        image: imagePath(item),
-        duration: durationSeconds(item?.duration),
-        position: positionNumber(item?.position ?? item?.playlist_position ?? index + 1),
-        provider: typeof item?.provider === "string" ? item.provider : null,
-      };
-    })
+    .map(trackFromItem)
     .filter((track: MusicTrack) => track.uri.length > 0);
+}
+
+export function normalizeSearchTracks(items: any[]): MusicTrack[] {
+  return normalizeMusicTracks(items);
 }
 
 export function normalizeMusicAlbums(items: any[]): MusicAlbum[] {
   return items
-    .map((item: any) => {
-      const artists = artistRefs(item);
-      return {
-        id: String(item?.item_id ?? item?.id ?? ""),
-        uri: typeof item?.uri === "string" ? item.uri : "",
-        name: String(item?.name ?? "Album").trim() || "Album",
-        artist: artistNameFromRefs(artists),
-        artists,
-        image: imagePath(item),
-        year: yearNumber(item?.year),
-        provider: typeof item?.provider === "string" ? item.provider : null,
-      };
-    })
+    .map(albumFromItem)
     .filter(
       (album: MusicAlbum) => album.id.length > 0 && album.uri.startsWith("library://album/")
     )
     .sort((a: MusicAlbum, b: MusicAlbum) => a.name.localeCompare(b.name, "sv"));
 }
 
+export function normalizeSearchAlbums(items: any[]): MusicAlbum[] {
+  return items
+    .map(albumFromItem)
+    .filter((album: MusicAlbum) => album.id.length > 0 && album.uri.length > 0);
+}
+
 export function normalizeMusicArtists(items: any[]): MusicArtist[] {
   return items
-    .map((item: any) => ({
-      id: String(item?.item_id ?? item?.id ?? ""),
-      uri: typeof item?.uri === "string" ? item.uri : "",
-      name: String(item?.name ?? "Artist").trim() || "Artist",
-      image: imagePath(item),
-      provider: typeof item?.provider === "string" ? item.provider : null,
-    }))
+    .map(artistFromItem)
     .filter(
       (artist: MusicArtist) => artist.id.length > 0 && artist.uri.startsWith("library://artist/")
     )
     .sort((a: MusicArtist, b: MusicArtist) => a.name.localeCompare(b.name, "sv"));
+}
+
+export function normalizeSearchArtists(items: any[]): MusicArtist[] {
+  return items
+    .map(artistFromItem)
+    .filter((artist: MusicArtist) => artist.id.length > 0 && artist.uri.length > 0);
 }

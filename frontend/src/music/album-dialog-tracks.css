@@ -1,0 +1,66 @@
+.album-dialog-track-list {
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 16px;
+}
+
+.album-dialog-track {
+  width: 100%;
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 52px 28px;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.album-dialog-track:last-child {
+  border-bottom: 0;
+}
+
+.album-dialog-track:hover:not(:disabled) {
+  background: rgba(51, 65, 85, 0.42);
+}
+
+.album-dialog-track-number,
+.album-dialog-track-duration {
+  color: #64748b;
+  font-size: 0.76rem;
+}
+
+.album-dialog-track-number,
+.album-dialog-track-play {
+  text-align: center;
+}
+
+.album-dialog-track-duration {
+  text-align: right;
+}
+
+.album-dialog-track-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.album-dialog-track-text strong,
+.album-dialog-track-text small {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.album-dialog-track-text strong {
+  font-size: 0.86rem;
+}
+
+.album-dialog-track-text small,
+.album-dialog-track-play {
+  color: #94a3b8;
+  font-size: 0.72rem;
+}
