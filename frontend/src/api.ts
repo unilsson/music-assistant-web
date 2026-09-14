@@ -55,11 +55,18 @@ export type MusicPlaylist = {
   favorite: boolean;
 };
 
+export type MusicArtistRef = {
+  id: string | null;
+  uri: string | null;
+  name: string;
+};
+
 export type MusicTrack = {
   id: string;
   uri: string;
   title: string;
   artist: string | null;
+  artists: MusicArtistRef[];
   album: string | null;
   image: string | null;
   duration: number | null;
@@ -72,6 +79,7 @@ export type MusicAlbum = {
   uri: string;
   name: string;
   artist: string | null;
+  artists: MusicArtistRef[];
   image: string | null;
   year: number | null;
   provider: string | null;
