@@ -1,5 +1,4 @@
 import type { MusicAlbum, MusicTrack } from "../api";
-import "./album-dialog-tracks.css";
 
 export type FavoriteAlbumDetail = {
   album: MusicAlbum;
