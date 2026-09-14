@@ -46,6 +46,32 @@ export type RadioStation = {
   genres: RadioGenre[];
 };
 
+export type MusicPlaylist = {
+  id: string;
+  name: string;
+  uri: string;
+  image: string | null;
+  provider: string | null;
+  favorite: boolean;
+};
+
+export type MusicTrack = {
+  id: string;
+  uri: string;
+  title: string;
+  artist: string | null;
+  album: string | null;
+  image: string | null;
+  duration: number | null;
+  position: number | null;
+  provider: string | null;
+};
+
+export type MusicPlaylistDetail = {
+  playlist: MusicPlaylist;
+  tracks: MusicTrack[];
+};
+
 export type Player = {
   id: string;
   name: string;
@@ -74,6 +100,19 @@ type RadiosResponse = {
   status: string;
   count: number;
   radios: RadioStation[];
+};
+
+type MusicPlaylistsResponse = {
+  status: string;
+  count: number;
+  playlists: MusicPlaylist[];
+};
+
+type MusicPlaylistDetailResponse = {
+  status: string;
+  count: number;
+  playlist: MusicPlaylist;
+  tracks: MusicTrack[];
 };
 
 type RawStatusResponse = {
@@ -158,6 +197,56 @@ export async function getPlayers(): Promise<Player[]> {
 export async function getRadios(): Promise<RadioStation[]> {
   const data = (await request("/api/radios")) as RadiosResponse;
   return data.radios;
+}
+
+export async function getMusicPlaylists(): Promise<MusicPlaylist[]> {
+  const data = (await request("/api/music/playlists")) as MusicPlaylistsResponse;
+  return data.playlists;
+}
+
+export async function getMusicPlaylist(playlistId: string): Promise<MusicPlaylistDetail> {
+  const data = (await request(
+    `/api/music/playlists/${encodeURIComponent(playlistId)}`
+  )) as MusicPlaylistDetailResponse;
+
+  return {
+    playlist: data.playlist,
+    tracks: data.tracks,
+  };
+}
+
+export async function playMusicPlaylist(
+  playerId: string,
+  playlistId: string,
+  shuffle = false
+) {
+  return request(
+    `/api/music/${encodeURIComponent(playerId)}/playlists/${encodeURIComponent(playlistId)}/play`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ shuffle }),
+    }
+  );
+}
+
+export async function playMusicTrack(
+  playerId: string,
+  playlistId: string,
+  trackUri: string
+) {
+  return request(
+    `/api/music/${encodeURIComponent(playerId)}/playlists/${encodeURIComponent(playlistId)}/tracks/play`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ trackUri }),
+    }
+  );
 }
 
 export async function playRadio(playerId: string, uri: string) {
