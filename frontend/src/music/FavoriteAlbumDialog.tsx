@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   playMusicFavorite,
   type MusicAlbum,
@@ -175,7 +176,7 @@ export default function FavoriteAlbumDialog({
   const shownAlbum = detail?.album ?? album;
   const subtitle = [shownAlbum.artist, shownAlbum.year].filter(Boolean).join(" · ");
 
-  return (
+  return createPortal(
     <div
       className="album-dialog-backdrop"
       role="presentation"
@@ -254,6 +255,7 @@ export default function FavoriteAlbumDialog({
           </div>
         )}
       </section>
-    </div>
+    </div>,
+    document.body
   );
 }
