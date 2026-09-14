@@ -90,6 +90,27 @@ async function loadFavoriteAlbums(command: Command): Promise<MusicAlbum[]> {
   return normalizeMusicAlbums(asArray(response));
 }
 
+async function loadFavoriteAlbumDetail(
+  command: Command,
+  albumId: string
+): Promise<{ album: MusicAlbum; tracks: MusicTrack[] } | null> {
+  const albums = await loadFavoriteAlbums(command);
+  const album = albums.find((item) => item.id === albumId);
+  if (!album) {
+    return null;
+  }
+
+  const response = await command("music/albums/album_tracks", {
+    item_id: album.id,
+    provider_instance_id_or_domain: "library",
+  });
+
+  return {
+    album,
+    tracks: normalizeMusicTracks(asArray(response)),
+  };
+}
+
 async function loadFavoriteArtists(command: Command): Promise<MusicArtist[]> {
   const response = await command("music/artists/library_items", {
     favorite: true,
@@ -238,6 +259,29 @@ export function createMusicRouter(command: Command) {
     }
   });
 
+  router.get("/favorites/albums/:albumId", async (req, res) => {
+    try {
+      const detail = await loadFavoriteAlbumDetail(command, req.params.albumId);
+      if (!detail) {
+        res.status(404).json({ status: "error", error: "Favorite album not found" });
+        return;
+      }
+
+      res.json({
+        status: "ok",
+        album: detail.album,
+        count: detail.tracks.length,
+        tracks: detail.tracks,
+      });
+    } catch (error) {
+      console.error("Music Assistant favorite album details error:", error);
+      res.status(502).json({
+        status: "error",
+        error: "Unable to retrieve favorite album from Music Assistant",
+      });
+    }
+  });
+
   router.get("/search", async (req, res) => {
     const query = cleanSearchQuery(req.query.q);
     if (query.length < 2) {
@@ -331,6 +375,56 @@ export function createMusicRouter(command: Command) {
       res.status(502).json({
         status: "error",
         error: "Unable to start search result",
+      });
+    }
+  });
+
+  router.post("/:playerId/favorites/albums/:albumId/tracks/play", async (req, res) => {
+    try {
+      const playerId = req.params.playerId;
+      const albumId = req.params.albumId;
+      const trackUri = typeof req.body?.trackUri === "string" ? req.body.trackUri.trim() : "";
+
+      if (!trackUri) {
+        res.status(400).json({ status: "error", error: "trackUri is required" });
+        return;
+      }
+
+      const detail = await loadFavoriteAlbumDetail(command, albumId);
+      if (!detail) {
+        res.status(404).json({ status: "error", error: "Favorite album not found" });
+        return;
+      }
+
+      const track = detail.tracks.find((item) => item.uri === trackUri);
+      if (!track) {
+        res.status(400).json({
+          status: "error",
+          error: "Track does not belong to the selected favorite album",
+        });
+        return;
+      }
+
+      const result = await command("player_queues/play_media", {
+        queue_id: playerId,
+        media: detail.album.uri,
+        option: "replace",
+        start_item: track.uri,
+        shuffle: false,
+      });
+
+      res.json({
+        status: "ok",
+        playerId,
+        albumId,
+        track: { id: track.id, uri: track.uri, title: track.title },
+        result,
+      });
+    } catch (error) {
+      console.error("Music Assistant favorite album track playback error:", error);
+      res.status(502).json({
+        status: "error",
+        error: "Unable to start favorite album from selected track",
       });
     }
   });
