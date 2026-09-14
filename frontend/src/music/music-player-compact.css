@@ -1,0 +1,50 @@
+.music-view-layout .queue-stage {
+  grid-template-columns: 120px minmax(220px, 270px) 120px;
+  gap: 20px;
+  padding: 16px 22px 14px;
+}
+
+.music-view-layout .artwork-wrap {
+  width: 185px;
+}
+
+.music-view-layout .queue-preview {
+  padding-top: 34px;
+}
+
+.music-view-layout .preview-artwork-wrap {
+  width: 84px;
+}
+
+.music-view-layout .track-info {
+  margin-top: 10px;
+}
+
+.music-view-layout .player-controls-row {
+  padding-top: 11px;
+  padding-bottom: 12px;
+}
+
+@media (max-width: 700px) {
+  .music-view-layout .queue-stage {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .music-view-layout .media-panel {
+    width: min(250px, 100%);
+  }
+
+  .music-view-layout .queue-preview {
+    padding-top: 0;
+  }
+
+  .music-view-layout .artwork-wrap {
+    width: 180px;
+  }
+
+  .music-view-layout .preview-artwork-wrap {
+    width: 78px;
+  }
+}
