@@ -11,12 +11,14 @@ import {
   type QueueContext,
 } from "../api";
 import PlayerCard from "../player/PlayerCard";
+import FavoritesView from "./FavoritesView";
 import "./music.css";
 
 type MusicPage =
   | { kind: "home" }
+  | { kind: "favorites" }
   | { kind: "playlists" }
-  | { kind: "playlist"; playlistId: string };
+  | { kind: "playlist"; playlistId: string; returnTo: "favorites" | "playlists" };
 
 function formatDuration(value: number | null) {
   if (!value || !Number.isFinite(value)) {
@@ -126,8 +128,11 @@ export default function MusicView({
     void loadPlaylists();
   };
 
-  const openPlaylist = async (playlist: MusicPlaylist) => {
-    setPage({ kind: "playlist", playlistId: playlist.id });
+  const openPlaylist = async (
+    playlist: MusicPlaylist,
+    returnTo: "favorites" | "playlists" = "playlists"
+  ) => {
+    setPage({ kind: "playlist", playlistId: playlist.id, returnTo });
     setPlaylistDetail(null);
     setPlaylistLoading(true);
     setError(null);
@@ -177,6 +182,17 @@ export default function MusicView({
     }
   };
 
+  const returnFromPlaylist = () => {
+    if (page.kind !== "playlist") {
+      return;
+    }
+    if (page.returnTo === "favorites") {
+      setPage({ kind: "favorites" });
+      return;
+    }
+    showPlaylists();
+  };
+
   return (
     <div className="music-view-layout">
       {radioIsActive ? (
@@ -217,16 +233,15 @@ export default function MusicView({
             <div className="music-home-actions">
               <button
                 type="button"
-                className="music-home-card music-home-card-disabled"
-                disabled
-                title="Favoriter byggs i Sprint 5B"
+                className="music-home-card"
+                onClick={() => setPage({ kind: "favorites" })}
               >
                 <span className="music-home-icon" aria-hidden="true">♥</span>
                 <span>
                   <strong>Favoriter</strong>
-                  <small>Låtar, album och artister</small>
+                  <small>Låtar, album, artister och spellistor</small>
                 </span>
-                <em>Nästa steg</em>
+                <span className="music-home-arrow" aria-hidden="true">›</span>
               </button>
 
               <button type="button" className="music-home-card" onClick={showPlaylists}>
@@ -239,6 +254,15 @@ export default function MusicView({
               </button>
             </div>
           </>
+        )}
+
+        {page.kind === "favorites" && (
+          <FavoritesView
+            player={player}
+            onBack={() => setPage({ kind: "home" })}
+            onOpenPlaylist={(playlist) => void openPlaylist(playlist, "favorites")}
+            onChanged={onChanged}
+          />
         )}
 
         {page.kind === "playlists" && (
@@ -282,7 +306,7 @@ export default function MusicView({
                   type="button"
                   className="music-playlist-card"
                   key={playlist.id}
-                  onClick={() => void openPlaylist(playlist)}
+                  onClick={() => void openPlaylist(playlist, "playlists")}
                 >
                   <PlaylistArtwork playlist={playlist} />
                   <span className="music-playlist-card-text">
@@ -298,8 +322,8 @@ export default function MusicView({
         {page.kind === "playlist" && (
           <>
             <div className="music-browser-heading">
-              <button type="button" className="music-back-button" onClick={showPlaylists}>
-                ← Spellistor
+              <button type="button" className="music-back-button" onClick={returnFromPlaylist}>
+                ← {page.returnTo === "favorites" ? "Favoriter" : "Spellistor"}
               </button>
             </div>
 
