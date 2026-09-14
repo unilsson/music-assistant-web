@@ -1,0 +1,335 @@
+.music-search {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  margin-bottom: 16px;
+  padding: 0 8px 0 14px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.72);
+  color: #94a3b8;
+}
+
+.music-search:focus-within {
+  border-color: rgba(96, 165, 250, 0.58);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.music-search > span {
+  font-size: 1.35rem;
+}
+
+.music-search input {
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: #f8fafc;
+  font: inherit;
+  outline: none;
+}
+
+.music-search input::placeholder {
+  color: #64748b;
+}
+
+.music-search button {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.music-search button:hover:not(:disabled) {
+  background: #dbeafe;
+}
+
+.music-search button:disabled {
+  cursor: default;
+  opacity: 0.42;
+}
+
+.search-active {
+  margin-bottom: 20px;
+}
+
+.search-heading {
+  margin-bottom: 12px;
+}
+
+.search-message {
+  margin-top: -4px;
+}
+
+.search-intro {
+  display: grid;
+  place-items: center;
+  min-height: 220px;
+  padding: 28px;
+  border: 1px dashed rgba(148, 163, 184, 0.18);
+  border-radius: 18px;
+  color: #cbd5e1;
+  text-align: center;
+}
+
+.search-intro > span {
+  margin-bottom: 8px;
+  color: #475569;
+  font-size: 2.4rem;
+}
+
+.search-intro p {
+  max-width: 520px;
+  margin: 7px 0 0;
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+.search-summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 2px 0 18px;
+  color: #94a3b8;
+}
+
+.search-summary strong {
+  color: #f8fafc;
+  font-size: 0.88rem;
+}
+
+.search-summary span {
+  font-size: 0.74rem;
+}
+
+.search-section + .search-section {
+  margin-top: 28px;
+}
+
+.search-section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.search-section-heading h3 {
+  margin: 0;
+  font-size: 1.02rem;
+  letter-spacing: -0.015em;
+}
+
+.search-section-heading span {
+  color: #64748b;
+  font-size: 0.76rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.search-media-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.search-media-card {
+  position: relative;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.58);
+  color: inherit;
+  text-align: left;
+  transition:
+    transform 0.16s ease,
+    background 0.16s ease,
+    border-color 0.16s ease;
+}
+
+.search-media-card:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: rgba(96, 165, 250, 0.32);
+  background: rgba(30, 41, 59, 0.8);
+}
+
+.search-media-card:focus-visible,
+.search-track-row:focus-visible,
+.music-search button:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 3px;
+}
+
+.search-artwork {
+  width: 100%;
+  aspect-ratio: 1;
+  display: block;
+  object-fit: cover;
+  border-radius: 14px;
+  background: #111827;
+}
+
+.search-artwork-round {
+  border-radius: 50%;
+}
+
+.search-artwork-placeholder {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #172033, #111827);
+  color: #475569;
+  font-size: 2.25rem;
+}
+
+.search-artist-card .search-artwork {
+  width: calc(100% - 18px);
+  margin: 9px auto;
+}
+
+.search-media-card-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 30px 3px 3px;
+}
+
+.search-media-card-text strong,
+.search-media-card-text small {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.search-media-card-text strong {
+  font-size: 0.86rem;
+}
+
+.search-media-card-text small {
+  color: #94a3b8;
+  font-size: 0.72rem;
+}
+
+.search-card-play {
+  position: absolute;
+  right: 16px;
+  bottom: 14px;
+  width: 24px;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  text-align: center;
+  opacity: 0.6;
+}
+
+.search-media-card:hover:not(:disabled) .search-card-play {
+  color: #f8fafc;
+  opacity: 1;
+}
+
+.search-track-list {
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.48);
+}
+
+.search-track-row {
+  width: 100%;
+  min-height: 64px;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 30px;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.search-track-row:last-child {
+  border-bottom: 0;
+}
+
+.search-track-row:hover:not(:disabled) {
+  background: rgba(51, 65, 85, 0.42);
+}
+
+.search-track-artwork {
+  width: 46px;
+  border-radius: 9px;
+  font-size: 1.2rem;
+}
+
+.search-track-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.search-track-text strong,
+.search-track-text small {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.search-track-text strong {
+  font-size: 0.86rem;
+}
+
+.search-track-text small {
+  color: #94a3b8;
+  font-size: 0.72rem;
+}
+
+.search-play-indicator {
+  color: #94a3b8;
+  font-size: 0.72rem;
+  text-align: center;
+  opacity: 0.6;
+}
+
+.search-track-row:hover:not(:disabled) .search-play-indicator {
+  color: #f8fafc;
+  opacity: 1;
+}
+
+@media (max-width: 760px) {
+  .search-media-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .music-search {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    padding-left: 12px;
+  }
+
+  .music-search button {
+    padding: 0 10px;
+  }
+
+  .search-media-grid {
+    gap: 10px;
+  }
+
+  .search-track-row {
+    grid-template-columns: 42px minmax(0, 1fr) 24px;
+    gap: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .search-track-artwork {
+    width: 42px;
+  }
+}
