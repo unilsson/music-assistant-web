@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { MusicAlbum } from "../api";
-import { addSearchAlbumToFavorites } from "./searchFavoritesApi";
+import FavoriteButton from "./FavoriteButton";
 import "./search-album.css";
 
 function AlbumArtwork({ album }: { album: MusicAlbum }) {
@@ -30,42 +30,15 @@ function AlbumArtwork({ album }: { album: MusicAlbum }) {
 
 export default function SearchAlbumCard({
   album,
-  query,
   busy,
   onOpen,
+  onFavoriteError,
 }: {
   album: MusicAlbum;
-  query: string;
   busy: boolean;
   onOpen: () => void;
+  onFavoriteError: (message: string) => void;
 }) {
-  const [favoriteBusy, setFavoriteBusy] = useState(false);
-  const [favoriteAdded, setFavoriteAdded] = useState(false);
-  const [favoriteError, setFavoriteError] = useState<string | null>(null);
-
-  useEffect(() => {
-    setFavoriteBusy(false);
-    setFavoriteAdded(false);
-    setFavoriteError(null);
-  }, [album.uri, query]);
-
-  const addFavorite = async () => {
-    if (favoriteBusy || favoriteAdded) {
-      return;
-    }
-
-    setFavoriteBusy(true);
-    setFavoriteError(null);
-    try {
-      await addSearchAlbumToFavorites(query, album.uri);
-      setFavoriteAdded(true);
-    } catch (err) {
-      setFavoriteError(err instanceof Error ? err.message : "Kunde inte lägga till albumet");
-    } finally {
-      setFavoriteBusy(false);
-    }
-  };
-
   const subtitle = [album.artist, album.year].filter(Boolean).join(" · ") || "Album";
 
   return (
@@ -73,7 +46,7 @@ export default function SearchAlbumCard({
       <button
         type="button"
         className="search-album-play"
-        disabled={busy || favoriteBusy}
+        disabled={busy}
         onClick={onOpen}
         aria-label={`Öppna albumet ${album.name}`}
       >
@@ -85,17 +58,13 @@ export default function SearchAlbumCard({
         <span className="search-card-play search-card-open" aria-hidden="true">›</span>
       </button>
 
-      <button
-        type="button"
-        className={`search-album-favorite${favoriteAdded ? " search-album-favorite-added" : ""}`}
-        disabled={busy || favoriteBusy || favoriteAdded}
-        onClick={() => void addFavorite()}
-      >
-        <span aria-hidden="true">{favoriteAdded ? "♥" : "♡"}</span>
-        {favoriteAdded ? "Favorit" : favoriteBusy ? "Lägger till…" : "Lägg till i favoriter"}
-      </button>
-
-      {favoriteError && <small className="search-album-favorite-error">Kunde inte lägga till i favoriter.</small>}
+      <FavoriteButton
+        kind="album"
+        uri={album.uri}
+        favorite={album.favorite}
+        disabled={busy}
+        onError={onFavoriteError}
+      />
     </article>
   );
 }
