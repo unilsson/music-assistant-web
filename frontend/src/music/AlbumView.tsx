@@ -166,6 +166,7 @@ export default function AlbumView({
       name: primaryArtist.name,
       image: null,
       provider: null,
+      favorite: null,
     });
   };
 
