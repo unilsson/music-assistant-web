@@ -72,6 +72,7 @@ export type MusicTrack = {
   duration: number | null;
   position: number | null;
   provider: string | null;
+  favorite: boolean | null;
 };
 
 export type MusicAlbum = {
@@ -92,6 +93,7 @@ export type MusicArtist = {
   name: string;
   image: string | null;
   provider: string | null;
+  favorite: boolean | null;
 };
 
 export type MusicFavorites = {
@@ -334,6 +336,20 @@ export async function searchMusic(query: string): Promise<MusicSearchResults> {
     artists: data.artists,
     playlists: data.playlists,
   };
+}
+
+export async function setMusicFavorite(
+  kind: FavoriteKind,
+  uri: string,
+  favorite: boolean
+) {
+  return request("/api/music/favorites/set", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ kind, uri, favorite }),
+  });
 }
 
 export async function playMusicSearchResult(
