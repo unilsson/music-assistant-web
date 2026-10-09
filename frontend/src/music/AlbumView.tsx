@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  favoriteMusicAlbum,
   getMusicAlbum,
   playMusicAlbum,
   type MusicAlbum,
@@ -8,6 +7,7 @@ import {
   type MusicTrack,
   type Player,
 } from "../api";
+import FavoriteButton from "./FavoriteButton";
 import "./media-detail.css";
 
 function formatDuration(value: number | null) {
@@ -51,28 +51,40 @@ function AlbumTrackRow({
   index,
   busy,
   onPlay,
+  onFavoriteError,
 }: {
   track: MusicTrack;
   index: number;
   busy: boolean;
   onPlay: () => void;
+  onFavoriteError: (message: string) => void;
 }) {
   return (
-    <button
-      type="button"
-      className="media-detail-track-row"
-      disabled={busy}
-      onClick={onPlay}
-      aria-label={`Spela albumet från ${track.title}`}
-    >
-      <span className="media-detail-track-number">{track.position ?? index + 1}</span>
-      <span className="media-detail-track-text">
-        <strong>{track.title}</strong>
-        <small>{track.artist ?? ""}</small>
-      </span>
-      <span className="media-detail-track-duration">{formatDuration(track.duration)}</span>
-      <span className="media-detail-track-play" aria-hidden="true">▶</span>
-    </button>
+    <div className="media-detail-track-item">
+      <button
+        type="button"
+        className="media-detail-track-main"
+        disabled={busy}
+        onClick={onPlay}
+        aria-label={`Spela albumet från ${track.title}`}
+      >
+        <span className="media-detail-track-number">{track.position ?? index + 1}</span>
+        <span className="media-detail-track-text">
+          <strong>{track.title}</strong>
+          <small>{track.artist ?? ""}</small>
+        </span>
+        <span className="media-detail-track-duration">{formatDuration(track.duration)}</span>
+        <span className="media-detail-track-play" aria-hidden="true">▶</span>
+      </button>
+      <FavoriteButton
+        kind="track"
+        uri={track.uri}
+        favorite={track.favorite}
+        compact
+        disabled={busy}
+        onError={onFavoriteError}
+      />
+    </div>
   );
 }
 
@@ -92,22 +104,18 @@ export default function AlbumView({
   const [detail, setDetail] = useState<{ album: MusicAlbum; tracks: MusicTrack[] } | null>(null);
   const [loading, setLoading] = useState(true);
   const [busyAction, setBusyAction] = useState<string | null>(null);
-  const [favoriteBusy, setFavoriteBusy] = useState(false);
-  const [favorite, setFavorite] = useState(album.favorite === true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     setDetail(null);
-    setFavorite(album.favorite === true);
     setError(null);
 
     void getMusicAlbum(album.uri)
       .then((nextDetail) => {
         if (!cancelled) {
           setDetail(nextDetail);
-          setFavorite(nextDetail.album.favorite === true);
         }
       })
       .catch((err) => {
@@ -147,23 +155,6 @@ export default function AlbumView({
     }
   };
 
-  const addFavorite = async () => {
-    if (favorite || favoriteBusy) {
-      return;
-    }
-
-    setFavoriteBusy(true);
-    setError(null);
-    try {
-      await favoriteMusicAlbum(shownAlbum.uri);
-      setFavorite(true);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Kunde inte lägga till albumet i favoriter");
-    } finally {
-      setFavoriteBusy(false);
-    }
-  };
-
   const openPrimaryArtist = () => {
     if (!primaryArtist?.uri) {
       return;
@@ -175,6 +166,7 @@ export default function AlbumView({
       name: primaryArtist.name,
       image: null,
       provider: null,
+      favorite: null,
     });
   };
 
@@ -217,14 +209,13 @@ export default function AlbumView({
             >
               ⇄ Blanda
             </button>
-            <button
-              type="button"
-              className={`music-secondary-action media-detail-favorite-action${favorite ? " media-detail-favorite-active" : ""}`}
-              disabled={favorite || favoriteBusy}
-              onClick={() => void addFavorite()}
-            >
-              {favorite ? "♥ Favorit" : favoriteBusy ? "♡ Sparar…" : "♡ Lägg till i favoriter"}
-            </button>
+            <FavoriteButton
+              kind="album"
+              uri={shownAlbum.uri}
+              favorite={shownAlbum.favorite}
+              disabled={busyAction !== null}
+              onError={(message) => setError(message)}
+            />
           </div>
         </div>
       </header>
@@ -247,6 +238,7 @@ export default function AlbumView({
               index={index}
               busy={busyAction !== null}
               onPlay={() => void playAlbum(false, track.uri)}
+              onFavoriteError={(message) => setError(message)}
             />
           ))}
         </div>

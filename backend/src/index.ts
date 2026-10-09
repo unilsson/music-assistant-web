@@ -5,7 +5,6 @@ import { fileURLToPath } from "node:url";
 import express from "express";
 import { maCommand } from "./musicAssistant.js";
 import { createMusicRouter } from "./musicRoutes.js";
-import { createMusicSearchFavoriteRouter } from "./musicSearchFavoriteRoutes.js";
 import { createRadioRouter } from "./radioRoutes.js";
 
 const app = express();
@@ -18,7 +17,6 @@ const frontendDist =
 
 app.use(express.json());
 app.use("/api/music", createMusicRouter(maCommand));
-app.use("/api/music/search", createMusicSearchFavoriteRouter(maCommand));
 app.use("/api/radios", createRadioRouter(maCommand));
 
 function unwrapArray(response: any): any[] {

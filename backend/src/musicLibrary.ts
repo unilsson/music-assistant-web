@@ -24,6 +24,7 @@ export type MusicTrack = {
   duration: number | null;
   position: number | null;
   provider: string | null;
+  favorite: boolean | null;
 };
 
 export type MusicAlbum = {
@@ -44,6 +45,7 @@ export type MusicArtist = {
   name: string;
   image: string | null;
   provider: string | null;
+  favorite: boolean | null;
 };
 
 function imagePath(item: any): string | null {
@@ -133,6 +135,7 @@ function trackFromItem(item: any, index: number): MusicTrack {
     duration: durationSeconds(item?.duration),
     position: positionNumber(item?.position ?? item?.playlist_position ?? index + 1),
     provider: typeof item?.provider === "string" ? item.provider : null,
+    favorite: typeof item?.favorite === "boolean" ? item.favorite : null,
   };
 }
 
@@ -158,6 +161,7 @@ function artistFromItem(item: any): MusicArtist {
     name: String(item?.name ?? "Artist").trim() || "Artist",
     image: imagePath(item),
     provider: typeof item?.provider === "string" ? item.provider : null,
+    favorite: typeof item?.favorite === "boolean" ? item.favorite : null,
   };
 }
 

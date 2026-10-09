@@ -29,6 +29,45 @@
   background: rgba(15, 23, 42, 0.48);
 }
 
+.favorite-track-item {
+  min-height: 64px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 42px;
+  align-items: center;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.favorite-track-item:last-child {
+  border-bottom: 0;
+}
+
+.favorite-track-main {
+  width: 100%;
+  min-height: 64px;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 30px;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 8px 8px 14px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.favorite-track-main:hover:not(:disabled) {
+  background: rgba(51, 65, 85, 0.42);
+}
+
+.favorite-track-item > .favorite-action {
+  justify-self: center;
+}
+
+.favorite-track-main:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: -2px;
+}
+
 .favorite-track-row {
   width: 100%;
   min-height: 64px;
@@ -48,6 +87,27 @@
 }
 
 .favorite-track-row:hover:not(:disabled),
+.favorite-media-card-main {
+  position: relative;
+  width: 100%;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.favorite-media-card-main:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 3px;
+}
+
+.favorite-media-card-with-action > .favorite-action {
+  width: 100%;
+  margin-top: 8px;
+}
+
 .favorite-media-card:hover:not(:disabled) {
   background: rgba(51, 65, 85, 0.42);
 }
@@ -127,6 +187,7 @@
 }
 
 .favorite-track-row:hover:not(:disabled) .favorite-play-indicator,
+.favorite-track-main:hover:not(:disabled) .favorite-play-indicator,
 .favorite-media-card:hover:not(:disabled) .favorite-card-play,
 .favorite-media-card:hover:not(:disabled) .favorite-card-open {
   color: #f8fafc;
@@ -201,6 +262,13 @@
   letter-spacing: -0.04em;
 }
 
+.favorite-artist-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
 .favorite-artist-detail-header p:not(.eyebrow) {
   margin: 7px 0 14px;
   color: #94a3b8;
@@ -232,6 +300,17 @@
     gap: 10px;
     padding-left: 10px;
     padding-right: 10px;
+  }
+
+  .favorite-track-item {
+    grid-template-columns: minmax(0, 1fr) 38px;
+  }
+
+  .favorite-track-main {
+    grid-template-columns: 42px minmax(0, 1fr) 24px;
+    gap: 10px;
+    padding-left: 10px;
+    padding-right: 4px;
   }
 
   .favorite-track-artwork {
