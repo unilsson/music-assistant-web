@@ -4,6 +4,8 @@ import {
   getMusicPlaylists,
   playMusicPlaylist,
   playMusicTrack,
+  type MusicAlbum,
+  type MusicArtist,
   type MusicPlaylist,
   type MusicPlaylistDetail,
   type MusicTrack,
@@ -11,6 +13,8 @@ import {
   type QueueContext,
 } from "../api";
 import PlayerCard from "../player/PlayerCard";
+import AlbumView from "./AlbumView";
+import ArtistView from "./ArtistView";
 import FavoritesView from "./FavoritesView";
 import SearchView from "./SearchView";
 import "./music.css";
@@ -20,7 +24,9 @@ type MusicPage =
   | { kind: "search"; query: string }
   | { kind: "favorites" }
   | { kind: "playlists" }
-  | { kind: "playlist"; playlistId: string; returnTo: "favorites" | "playlists" };
+  | { kind: "playlist"; playlistId: string }
+  | { kind: "album"; album: MusicAlbum }
+  | { kind: "artist"; artist: MusicArtist };
 
 function formatDuration(value: number | null) {
   if (!value || !Number.isFinite(value)) {
@@ -100,6 +106,7 @@ export default function MusicView({
   onChanged: () => Promise<void>;
 }) {
   const [page, setPage] = useState<MusicPage>({ kind: "home" });
+  const [history, setHistory] = useState<MusicPage[]>([]);
   const [homeSearch, setHomeSearch] = useState("");
   const [playlists, setPlaylists] = useState<MusicPlaylist[]>([]);
   const [playlistsLoaded, setPlaylistsLoaded] = useState(false);
@@ -108,6 +115,21 @@ export default function MusicView({
   const [playlistLoading, setPlaylistLoading] = useState(false);
   const [busyAction, setBusyAction] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const navigate = (nextPage: MusicPage) => {
+    setHistory((current) => [...current, page]);
+    setError(null);
+    setPage(nextPage);
+  };
+
+  const goBack = () => {
+    setHistory((current) => {
+      const previous = current[current.length - 1] ?? { kind: "home" as const };
+      setPage(previous);
+      return current.slice(0, -1);
+    });
+    setError(null);
+  };
 
   const loadPlaylists = useCallback(async (force = false) => {
     if (playlistsLoading || (playlistsLoaded && !force)) {
@@ -127,15 +149,12 @@ export default function MusicView({
   }, [playlistsLoaded, playlistsLoading]);
 
   const showPlaylists = () => {
-    setPage({ kind: "playlists" });
+    navigate({ kind: "playlists" });
     void loadPlaylists();
   };
 
-  const openPlaylist = async (
-    playlist: MusicPlaylist,
-    returnTo: "favorites" | "playlists" = "playlists"
-  ) => {
-    setPage({ kind: "playlist", playlistId: playlist.id, returnTo });
+  const openPlaylist = async (playlist: MusicPlaylist) => {
+    navigate({ kind: "playlist", playlistId: playlist.id });
     setPlaylistDetail(null);
     setPlaylistLoading(true);
     setError(null);
@@ -147,6 +166,14 @@ export default function MusicView({
     } finally {
       setPlaylistLoading(false);
     }
+  };
+
+  const openAlbum = (album: MusicAlbum) => {
+    navigate({ kind: "album", album });
+  };
+
+  const openArtist = (artist: MusicArtist) => {
+    navigate({ kind: "artist", artist });
   };
 
   const startPlaylist = async (shuffle: boolean) => {
@@ -192,18 +219,7 @@ export default function MusicView({
       return;
     }
     setError(null);
-    setPage({ kind: "search", query });
-  };
-
-  const returnFromPlaylist = () => {
-    if (page.kind !== "playlist") {
-      return;
-    }
-    if (page.returnTo === "favorites") {
-      setPage({ kind: "favorites" });
-      return;
-    }
-    showPlaylists();
+    navigate({ kind: "search", query });
   };
 
   return (
@@ -251,7 +267,7 @@ export default function MusicView({
               <button
                 type="button"
                 className="music-home-card"
-                onClick={() => setPage({ kind: "favorites" })}
+                onClick={() => navigate({ kind: "favorites" })}
               >
                 <span className="music-home-icon" aria-hidden="true">♥</span>
                 <span>
@@ -277,7 +293,9 @@ export default function MusicView({
           <SearchView
             player={player}
             initialQuery={page.query}
-            onBack={() => setPage({ kind: "home" })}
+            onBack={goBack}
+            onOpenAlbum={openAlbum}
+            onOpenArtist={openArtist}
             onChanged={onChanged}
           />
         )}
@@ -285,8 +303,30 @@ export default function MusicView({
         {page.kind === "favorites" && (
           <FavoritesView
             player={player}
-            onBack={() => setPage({ kind: "home" })}
-            onOpenPlaylist={(playlist) => void openPlaylist(playlist, "favorites")}
+            onBack={goBack}
+            onOpenPlaylist={(playlist) => void openPlaylist(playlist)}
+            onOpenAlbum={openAlbum}
+            onOpenArtist={openArtist}
+            onChanged={onChanged}
+          />
+        )}
+
+        {page.kind === "album" && (
+          <AlbumView
+            album={page.album}
+            player={player}
+            onBack={goBack}
+            onOpenArtist={openArtist}
+            onChanged={onChanged}
+          />
+        )}
+
+        {page.kind === "artist" && (
+          <ArtistView
+            artist={page.artist}
+            player={player}
+            onBack={goBack}
+            onOpenAlbum={openAlbum}
             onChanged={onChanged}
           />
         )}
@@ -295,11 +335,7 @@ export default function MusicView({
           <>
             <div className="music-browser-heading music-browser-heading-actions">
               <div>
-                <button
-                  type="button"
-                  className="music-back-button"
-                  onClick={() => setPage({ kind: "home" })}
-                >
+                <button type="button" className="music-back-button" onClick={goBack}>
                   ← Musik
                 </button>
                 <h2>Spellistor</h2>
@@ -332,7 +368,7 @@ export default function MusicView({
                   type="button"
                   className="music-playlist-card"
                   key={playlist.id}
-                  onClick={() => void openPlaylist(playlist, "playlists")}
+                  onClick={() => void openPlaylist(playlist)}
                 >
                   <PlaylistArtwork playlist={playlist} />
                   <span className="music-playlist-card-text">
@@ -348,8 +384,8 @@ export default function MusicView({
         {page.kind === "playlist" && (
           <>
             <div className="music-browser-heading">
-              <button type="button" className="music-back-button" onClick={returnFromPlaylist}>
-                ← {page.returnTo === "favorites" ? "Favoriter" : "Spellistor"}
+              <button type="button" className="music-back-button" onClick={goBack}>
+                ← Tillbaka
               </button>
             </div>
 
