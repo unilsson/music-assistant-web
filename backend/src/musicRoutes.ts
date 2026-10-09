@@ -453,6 +453,39 @@ export function createMusicRouter(command: Command) {
     }
   });
 
+  router.post("/albums/favorite", async (req, res) => {
+    const uri = cleanMediaUri(req.body?.uri);
+    if (!uri) {
+      res.status(400).json({ status: "error", error: "Album uri is required" });
+      return;
+    }
+
+    try {
+      const rawAlbum = await resolveMediaItem(command, uri, "album");
+      if (!rawAlbum) {
+        res.status(404).json({ status: "error", error: "Album not found" });
+        return;
+      }
+
+      await command("music/favorites/set_item", {
+        item: rawAlbum.uri ?? uri,
+        favorite: true,
+      });
+
+      res.json({
+        status: "ok",
+        uri: rawAlbum.uri ?? uri,
+        favorite: true,
+      });
+    } catch (error) {
+      console.error("Music Assistant album favorite error:", error);
+      res.status(502).json({
+        status: "error",
+        error: "Unable to add album to favorites",
+      });
+    }
+  });
+
   router.get("/artists/detail", async (req, res) => {
     const uri = cleanMediaUri(req.query.uri);
     if (!uri) {
