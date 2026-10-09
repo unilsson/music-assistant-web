@@ -69,7 +69,7 @@ function providerForItem(item: any, uri: string): string {
 async function resolveMediaItem(
   command: Command,
   uri: string,
-  expectedType: "album" | "artist"
+  expectedType: FavoriteKind
 ): Promise<any | null> {
   const response = await command("music/item_by_uri", { uri });
   const item = resultObject(response);
@@ -421,6 +421,57 @@ function searchKind(value: unknown): SearchKind | null {
   return typeof value === "string" ? favoriteKind(value) : null;
 }
 
+function mediaItemId(item: any): string | null {
+  const value = item?.item_id ?? item?.id;
+  return value === undefined || value === null ? null : String(value);
+}
+
+async function setFavorite(
+  command: Command,
+  kind: FavoriteKind,
+  uri: string,
+  favorite: boolean
+): Promise<boolean> {
+  const rawItem = await resolveMediaItem(command, uri, kind);
+  if (!rawItem) {
+    return false;
+  }
+
+  if (favorite) {
+    await command("music/favorites/add_item", {
+      item: rawItem.uri ?? uri,
+    });
+    return true;
+  }
+
+  let libraryItem = rawItem;
+  if (rawItem?.provider !== "library") {
+    const itemId = mediaItemId(rawItem);
+    if (!itemId) {
+      return false;
+    }
+
+    const response = await command("music/get_library_item", {
+      media_type: kind,
+      item_id: itemId,
+      provider_instance_id_or_domain: providerForItem(rawItem, rawItem.uri ?? uri),
+    });
+    libraryItem = resultObject(response);
+  }
+
+  const libraryItemId = mediaItemId(libraryItem);
+  if (!libraryItemId) {
+    return false;
+  }
+
+  await command("music/favorites/remove_item", {
+    media_type: kind,
+    library_item_id: libraryItemId,
+  });
+  return true;
+}
+
+
 export function createMusicRouter(command: Command) {
   const router = Router();
 
@@ -454,6 +505,48 @@ export function createMusicRouter(command: Command) {
       res.status(502).json({
         status: "error",
         error: "Unable to retrieve favorites from Music Assistant",
+      });
+    }
+  });
+
+  router.post("/favorites/set", async (req, res) => {
+    const kind = searchKind(req.body?.kind);
+    const uri = cleanMediaUri(req.body?.uri);
+    const favorite = req.body?.favorite;
+
+    if (!kind || !uri || typeof favorite !== "boolean") {
+      res.status(400).json({
+        status: "error",
+        error: "kind, uri and favorite are required",
+      });
+      return;
+    }
+
+    try {
+      const changed = await setFavorite(command, kind, uri, favorite);
+      if (!changed) {
+        res.status(404).json({
+          status: "error",
+          error: favorite
+            ? "Media item not found"
+            : "Favorite library item not found",
+        });
+        return;
+      }
+
+      res.json({
+        status: "ok",
+        kind,
+        uri,
+        favorite,
+      });
+    } catch (error) {
+      console.error("Music Assistant favorite update error:", error);
+      res.status(502).json({
+        status: "error",
+        error: favorite
+          ? "Unable to add favorite"
+          : "Unable to remove favorite",
       });
     }
   });
