@@ -83,6 +83,7 @@ export type MusicAlbum = {
   image: string | null;
   year: number | null;
   provider: string | null;
+  favorite: boolean | null;
 };
 
 export type MusicArtist = {
@@ -348,6 +349,16 @@ export async function playMusicSearchResult(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ query, kind, uri, shuffle }),
+  });
+}
+
+export async function favoriteMusicAlbum(uri: string) {
+  return request("/api/music/albums/favorite", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ uri }),
   });
 }
 
