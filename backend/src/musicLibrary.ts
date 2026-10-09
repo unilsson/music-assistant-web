@@ -35,6 +35,7 @@ export type MusicAlbum = {
   image: string | null;
   year: number | null;
   provider: string | null;
+  favorite: boolean | null;
 };
 
 export type MusicArtist = {
@@ -146,6 +147,7 @@ function albumFromItem(item: any): MusicAlbum {
     image: imagePath(item),
     year: yearNumber(item?.year),
     provider: typeof item?.provider === "string" ? item.provider : null,
+    favorite: typeof item?.favorite === "boolean" ? item.favorite : null,
   };
 }
 

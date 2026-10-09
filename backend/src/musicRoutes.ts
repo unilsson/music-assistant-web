@@ -203,6 +203,70 @@ function deduplicateArtistAlbums(albums: MusicAlbum[]): MusicAlbum[] {
   return [...byIdentity.values()];
 }
 
+function artistAlbumSources(rawArtist: any, artist: MusicArtist) {
+  const sources = new Map<string, { item_id: string; provider_instance_id_or_domain: string }>();
+
+  const addSource = (itemId: unknown, provider: unknown) => {
+    if (
+      itemId === undefined ||
+      itemId === null ||
+      typeof provider !== "string" ||
+      provider.length === 0
+    ) {
+      return;
+    }
+
+    const source = {
+      item_id: String(itemId),
+      provider_instance_id_or_domain: provider,
+    };
+    sources.set(`${source.provider_instance_id_or_domain}:${source.item_id}`, source);
+  };
+
+  addSource(artist.id, providerForItem(rawArtist, artist.uri));
+
+  if (rawArtist?.provider === "library" && Array.isArray(rawArtist?.provider_mappings)) {
+    for (const mapping of rawArtist.provider_mappings) {
+      addSource(
+        mapping?.item_id,
+        mapping?.provider_instance ?? mapping?.provider_domain
+      );
+    }
+  }
+
+  return [...sources.values()];
+}
+
+async function loadArtistAlbums(
+  command: Command,
+  rawArtist: any,
+  artist: MusicArtist
+): Promise<MusicAlbum[]> {
+  const sources = artistAlbumSources(rawArtist, artist);
+  const responses = await Promise.allSettled(
+    sources.map((source) =>
+      command("music/artists/artist_albums", source)
+    )
+  );
+
+  const rawAlbums = responses.flatMap((result) => {
+    if (result.status === "fulfilled") {
+      return asArray(result.value);
+    }
+
+    console.warn("Unable to retrieve artist albums from one source:", result.reason);
+    return [];
+  });
+
+  return deduplicateArtistAlbums(normalizeSearchAlbums(rawAlbums))
+    .sort((a, b) => {
+      if (a.year && b.year && a.year !== b.year) {
+        return b.year - a.year;
+      }
+      return a.name.localeCompare(b.name, "sv");
+    });
+}
+
 async function loadArtistDetailByUri(
   command: Command,
   uri: string
@@ -224,14 +288,7 @@ async function loadArtistDetailByUri(
 
   let albums: MusicAlbum[] = [];
   try {
-    const response = await command("music/artists/artist_albums", args);
-    albums = deduplicateArtistAlbums(normalizeSearchAlbums(asArray(response)))
-      .sort((a, b) => {
-        if (a.year && b.year && a.year !== b.year) {
-          return b.year - a.year;
-        }
-        return a.name.localeCompare(b.name, "sv");
-      });
+    albums = await loadArtistAlbums(command, rawArtist, artist);
   } catch (error) {
     console.warn("Unable to retrieve artist albums:", error);
   }
@@ -449,6 +506,38 @@ export function createMusicRouter(command: Command) {
       res.status(502).json({
         status: "error",
         error: "Unable to retrieve album from Music Assistant",
+      });
+    }
+  });
+
+  router.post("/albums/favorite", async (req, res) => {
+    const uri = cleanMediaUri(req.body?.uri);
+    if (!uri) {
+      res.status(400).json({ status: "error", error: "Album uri is required" });
+      return;
+    }
+
+    try {
+      const rawAlbum = await resolveMediaItem(command, uri, "album");
+      if (!rawAlbum) {
+        res.status(404).json({ status: "error", error: "Album not found" });
+        return;
+      }
+
+      await command("music/favorites/add_item", {
+        item: rawAlbum.uri ?? uri,
+      });
+
+      res.json({
+        status: "ok",
+        uri: rawAlbum.uri ?? uri,
+        favorite: true,
+      });
+    } catch (error) {
+      console.error("Music Assistant album favorite error:", error);
+      res.status(502).json({
+        status: "error",
+        error: "Unable to add album to favorites",
       });
     }
   });
