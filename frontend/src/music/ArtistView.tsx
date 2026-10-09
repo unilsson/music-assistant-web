@@ -8,6 +8,7 @@ import {
   type MusicTrack,
   type Player,
 } from "../api";
+import FavoriteButton from "./FavoriteButton";
 import "./media-detail.css";
 
 function ArtistArtwork({ artist }: { artist: MusicArtist }) {
@@ -60,27 +61,39 @@ function ArtistTrackRow({
   track,
   busy,
   onPlay,
+  onFavoriteError,
 }: {
   track: MusicTrack;
   busy: boolean;
   onPlay: () => void;
+  onFavoriteError: (message: string) => void;
 }) {
   return (
-    <button
-      type="button"
-      className="media-detail-track-row media-detail-artist-track-row"
-      disabled={busy}
-      onClick={onPlay}
-      aria-label={`Spela ${track.title}`}
-    >
-      <span className="media-detail-track-number">♪</span>
-      <span className="media-detail-track-text">
-        <strong>{track.title}</strong>
-        <small>{track.album ?? track.artist ?? ""}</small>
-      </span>
-      <span className="media-detail-track-duration"></span>
-      <span className="media-detail-track-play" aria-hidden="true">▶</span>
-    </button>
+    <div className="media-detail-track-item">
+      <button
+        type="button"
+        className="media-detail-track-main"
+        disabled={busy}
+        onClick={onPlay}
+        aria-label={`Spela ${track.title}`}
+      >
+        <span className="media-detail-track-number">♪</span>
+        <span className="media-detail-track-text">
+          <strong>{track.title}</strong>
+          <small>{track.album ?? track.artist ?? ""}</small>
+        </span>
+        <span className="media-detail-track-duration"></span>
+        <span className="media-detail-track-play" aria-hidden="true">▶</span>
+      </button>
+      <FavoriteButton
+        kind="track"
+        uri={track.uri}
+        favorite={track.favorite}
+        compact
+        disabled={busy}
+        onError={onFavoriteError}
+      />
+    </div>
   );
 }
 
@@ -208,6 +221,13 @@ export default function ArtistView({
             >
               ⇄ Blanda
             </button>
+            <FavoriteButton
+              kind="artist"
+              uri={shownArtist.uri}
+              favorite={shownArtist.favorite}
+              disabled={busyAction !== null}
+              onError={(message) => setError(message)}
+            />
           </div>
         </div>
       </header>
@@ -261,6 +281,7 @@ export default function ArtistView({
                 track={track}
                 busy={busyAction !== null}
                 onPlay={() => void playTrack(track)}
+                onFavoriteError={(message) => setError(message)}
               />
             ))}
           </div>
