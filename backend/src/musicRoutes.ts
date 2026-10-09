@@ -467,9 +467,8 @@ export function createMusicRouter(command: Command) {
         return;
       }
 
-      await command("music/favorites/set_item", {
+      await command("music/favorites/add_item", {
         item: rawAlbum.uri ?? uri,
-        favorite: true,
       });
 
       res.json({
