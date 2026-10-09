@@ -63,6 +63,14 @@
   margin-top: 16px;
 }
 
+.media-detail-favorite-active:disabled {
+  cursor: default;
+  opacity: 1;
+  border-color: rgba(244, 114, 182, 0.32);
+  background: rgba(190, 24, 93, 0.12);
+  color: #f9a8d4;
+}
+
 .media-detail-section + .media-detail-section {
   margin-top: 28px;
 }
