@@ -192,8 +192,7 @@ async function loadArtistDetailByUri(
           return b.year - a.year;
         }
         return a.name.localeCompare(b.name, "sv");
-      })
-      .slice(0, 40);
+      });
   } catch (error) {
     console.warn("Unable to retrieve artist albums:", error);
   }
