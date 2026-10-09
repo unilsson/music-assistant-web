@@ -1,4 +1,7 @@
 import "dotenv/config";
+import { existsSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import express from "express";
 import { maCommand } from "./musicAssistant.js";
 import { createMusicRouter } from "./musicRoutes.js";
@@ -9,6 +12,9 @@ const app = express();
 
 const host = process.env.HOST ?? "127.0.0.1";
 const port = Number(process.env.PORT ?? 3001);
+const frontendDist =
+  process.env.FRONTEND_DIST_DIR ??
+  resolve(dirname(fileURLToPath(import.meta.url)), "../../frontend/dist");
 
 app.use(express.json());
 app.use("/api/music", createMusicRouter(maCommand));
@@ -385,6 +391,24 @@ app.post("/api/players/:id/volume", async (req, res) => {
     });
   }
 });
+
+if (existsSync(frontendDist)) {
+  app.use(express.static(frontendDist));
+  app.use((req, res, next) => {
+    if (req.method !== "GET" || req.path.startsWith("/api/")) {
+      next();
+      return;
+    }
+
+    res.sendFile(join(frontendDist, "index.html"), (error) => {
+      if (error) {
+        next(error);
+      }
+    });
+  });
+} else if (process.env.NODE_ENV === "production") {
+  console.warn(`Frontend build directory not found: ${frontendDist}`);
+}
 
 app.listen(port, host, () => {
   console.log(

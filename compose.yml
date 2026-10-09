@@ -1,0 +1,14 @@
+services:
+  music-assistant-web:
+    build:
+      context: .
+    image: music-assistant-web:local
+    container_name: music-assistant-web
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3001
+    ports:
+      - "${WEB_PORT:-3001}:3001"
