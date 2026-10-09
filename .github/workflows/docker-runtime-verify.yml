@@ -1,0 +1,42 @@
+name: Docker runtime verify
+
+on:
+  push:
+    branches:
+      - feature/docker-runtime
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Compose configuration
+        run: |
+          cp .env.example .env
+          docker compose config
+
+      - name: Build image
+        run: docker build -t music-assistant-web:test .
+
+      - name: Smoke test container
+        run: |
+          docker run -d --rm             --name music-assistant-web-test             -p 3001:3001             -e MUSIC_ASSISTANT_URL=http://127.0.0.1:8095             -e MUSIC_ASSISTANT_TOKEN=test-token             music-assistant-web:test
+
+          for attempt in $(seq 1 20); do
+            if curl --fail --silent http://127.0.0.1:3001/api/health; then
+              break
+            fi
+            sleep 1
+          done
+
+          curl --fail --silent http://127.0.0.1:3001/api/health
+          curl --fail --silent http://127.0.0.1:3001/ | grep -q '<div id="root"></div>'
+
+      - name: Container logs on failure
+        if: failure()
+        run: docker logs music-assistant-web-test || true
+
+      - name: Stop test container
+        if: always()
+        run: docker stop music-assistant-web-test || true
