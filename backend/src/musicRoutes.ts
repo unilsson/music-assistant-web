@@ -164,6 +164,45 @@ async function loadAlbumDetailByUri(
   };
 }
 
+function normalizedAlbumIdentityName(name: string): string {
+  return name
+    .normalize("NFKC")
+    .toLocaleLowerCase("sv-SE")
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u2013\u2014]/g, "-")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function albumPreferenceScore(album: MusicAlbum): number {
+  let score = 0;
+  if (album.provider === "library" || album.uri.startsWith("library://")) {
+    score += 4;
+  }
+  if (album.image) {
+    score += 2;
+  }
+  if (album.year) {
+    score += 1;
+  }
+  return score;
+}
+
+function deduplicateArtistAlbums(albums: MusicAlbum[]): MusicAlbum[] {
+  const byIdentity = new Map<string, MusicAlbum>();
+
+  for (const album of albums) {
+    const key = `${normalizedAlbumIdentityName(album.name)}::${album.year ?? "unknown"}`;
+    const existing = byIdentity.get(key);
+
+    if (!existing || albumPreferenceScore(album) > albumPreferenceScore(existing)) {
+      byIdentity.set(key, album);
+    }
+  }
+
+  return [...byIdentity.values()];
+}
+
 async function loadArtistDetailByUri(
   command: Command,
   uri: string
@@ -186,7 +225,7 @@ async function loadArtistDetailByUri(
   let albums: MusicAlbum[] = [];
   try {
     const response = await command("music/artists/artist_albums", args);
-    albums = normalizeSearchAlbums(asArray(response))
+    albums = deduplicateArtistAlbums(normalizeSearchAlbums(asArray(response)))
       .sort((a, b) => {
         if (a.year && b.year && a.year !== b.year) {
           return b.year - a.year;
