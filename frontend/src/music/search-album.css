@@ -74,3 +74,8 @@
   font-size: 0.68rem;
   text-align: center;
 }
+
+.search-album-card > .favorite-action {
+  width: 100%;
+  margin-top: 8px;
+}
