@@ -51,28 +51,40 @@ function AlbumTrackRow({
   index,
   busy,
   onPlay,
+  onFavoriteError,
 }: {
   track: MusicTrack;
   index: number;
   busy: boolean;
   onPlay: () => void;
+  onFavoriteError: (message: string) => void;
 }) {
   return (
-    <button
-      type="button"
-      className="media-detail-track-row"
-      disabled={busy}
-      onClick={onPlay}
-      aria-label={`Spela albumet från ${track.title}`}
-    >
-      <span className="media-detail-track-number">{track.position ?? index + 1}</span>
-      <span className="media-detail-track-text">
-        <strong>{track.title}</strong>
-        <small>{track.artist ?? ""}</small>
-      </span>
-      <span className="media-detail-track-duration">{formatDuration(track.duration)}</span>
-      <span className="media-detail-track-play" aria-hidden="true">▶</span>
-    </button>
+    <div className="media-detail-track-item">
+      <button
+        type="button"
+        className="media-detail-track-main"
+        disabled={busy}
+        onClick={onPlay}
+        aria-label={`Spela albumet från ${track.title}`}
+      >
+        <span className="media-detail-track-number">{track.position ?? index + 1}</span>
+        <span className="media-detail-track-text">
+          <strong>{track.title}</strong>
+          <small>{track.artist ?? ""}</small>
+        </span>
+        <span className="media-detail-track-duration">{formatDuration(track.duration)}</span>
+        <span className="media-detail-track-play" aria-hidden="true">▶</span>
+      </button>
+      <FavoriteButton
+        kind="track"
+        uri={track.uri}
+        favorite={track.favorite}
+        compact
+        disabled={busy}
+        onError={onFavoriteError}
+      />
+    </div>
   );
 }
 
@@ -225,6 +237,7 @@ export default function AlbumView({
               index={index}
               busy={busyAction !== null}
               onPlay={() => void playAlbum(false, track.uri)}
+              onFavoriteError={(message) => setError(message)}
             />
           ))}
         </div>
