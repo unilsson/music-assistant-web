@@ -73,29 +73,33 @@ function SearchMediaCard({
   subtitle,
   round = false,
   busy,
-  onPlay,
+  onSelect,
+  open = false,
 }: {
   image: string | null;
   title: string;
   subtitle: string;
   round?: boolean;
   busy: boolean;
-  onPlay: () => void;
+  onSelect: () => void;
+  open?: boolean;
 }) {
   return (
     <button
       type="button"
       className={`search-media-card${round ? " search-artist-card" : ""}`}
       disabled={busy}
-      onClick={onPlay}
-      aria-label={`Spela ${title}`}
+      onClick={onSelect}
+      aria-label={`${open ? "Öppna" : "Spela"} ${title}`}
     >
       <SearchArtwork image={image} round={round} />
       <span className="search-media-card-text">
         <strong>{title}</strong>
         <small>{subtitle}</small>
       </span>
-      <span className="search-card-play" aria-hidden="true">▶</span>
+      <span className={`search-card-play${open ? " search-card-open" : ""}`} aria-hidden="true">
+        {open ? "›" : "▶"}
+      </span>
     </button>
   );
 }
@@ -104,11 +108,15 @@ export default function SearchView({
   player,
   initialQuery,
   onBack,
+  onOpenAlbum,
+  onOpenArtist,
   onChanged,
 }: {
   player: Player;
   initialQuery: string;
   onBack: () => void;
+  onOpenAlbum: (album: MusicSearchResults["albums"][number]) => void;
+  onOpenArtist: (artist: MusicArtist) => void;
   onChanged: () => Promise<void>;
 }) {
   const [input, setInput] = useState(initialQuery);
@@ -247,7 +255,8 @@ export default function SearchView({
                     subtitle={artistSubtitle(artist)}
                     round
                     busy={busyKey !== null}
-                    onPlay={() => void playResult("artist", artist.uri, true)}
+                    open
+                    onSelect={() => onOpenArtist(artist)}
                   />
                 ))}
               </div>
@@ -267,7 +276,7 @@ export default function SearchView({
                     album={album}
                     query={query}
                     busy={busyKey !== null}
-                    onPlay={() => void playResult("album", album.uri)}
+                    onOpen={() => onOpenAlbum(album)}
                   />
                 ))}
               </div>
@@ -307,7 +316,7 @@ export default function SearchView({
                     title={playlist.name}
                     subtitle={playlistSubtitle(playlist)}
                     busy={busyKey !== null}
-                    onPlay={() => void playResult("playlist", playlist.uri)}
+                    onSelect={() => void playResult("playlist", playlist.uri)}
                   />
                 ))}
               </div>

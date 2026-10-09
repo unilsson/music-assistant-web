@@ -115,6 +115,17 @@ export type MusicPlaylistDetail = {
   tracks: MusicTrack[];
 };
 
+export type MusicAlbumDetail = {
+  album: MusicAlbum;
+  tracks: MusicTrack[];
+};
+
+export type MusicArtistDetail = {
+  artist: MusicArtist;
+  albums: MusicAlbum[];
+  tracks: MusicTrack[];
+};
+
 export type Player = {
   id: string;
   name: string;
@@ -156,6 +167,15 @@ type MusicPlaylistDetailResponse = {
   count: number;
   playlist: MusicPlaylist;
   tracks: MusicTrack[];
+};
+
+type MusicAlbumDetailResponse = MusicAlbumDetail & {
+  status: string;
+  count: number;
+};
+
+type MusicArtistDetailResponse = MusicArtistDetail & {
+  status: string;
 };
 
 type MusicFavoritesResponse = MusicFavorites & {
@@ -269,6 +289,29 @@ export async function getMusicPlaylist(playlistId: string): Promise<MusicPlaylis
   };
 }
 
+export async function getMusicAlbum(uri: string): Promise<MusicAlbumDetail> {
+  const data = (await request(
+    `/api/music/albums/detail?uri=${encodeURIComponent(uri)}`
+  )) as MusicAlbumDetailResponse;
+
+  return {
+    album: data.album,
+    tracks: data.tracks,
+  };
+}
+
+export async function getMusicArtist(uri: string): Promise<MusicArtistDetail> {
+  const data = (await request(
+    `/api/music/artists/detail?uri=${encodeURIComponent(uri)}`
+  )) as MusicArtistDetailResponse;
+
+  return {
+    artist: data.artist,
+    albums: data.albums,
+    tracks: data.tracks,
+  };
+}
+
 export async function getMusicFavorites(): Promise<MusicFavorites> {
   const data = (await request("/api/music/favorites")) as MusicFavoritesResponse;
   return {
@@ -305,6 +348,49 @@ export async function playMusicSearchResult(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ query, kind, uri, shuffle }),
+  });
+}
+
+export async function playMusicAlbum(
+  playerId: string,
+  uri: string,
+  shuffle = false,
+  trackUri?: string
+) {
+  return request(`/api/music/${encodeURIComponent(playerId)}/albums/play`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ uri, shuffle, trackUri }),
+  });
+}
+
+export async function playMusicArtist(
+  playerId: string,
+  uri: string,
+  shuffle = false
+) {
+  return request(`/api/music/${encodeURIComponent(playerId)}/artists/play`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ uri, shuffle }),
+  });
+}
+
+export async function playMusicArtistTrack(
+  playerId: string,
+  artistUri: string,
+  trackUri: string
+) {
+  return request(`/api/music/${encodeURIComponent(playerId)}/artists/tracks/play`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ artistUri, trackUri }),
   });
 }
 

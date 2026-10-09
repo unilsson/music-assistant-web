@@ -11,7 +11,6 @@ import {
   type MusicTrack,
   type Player,
 } from "../api";
-import FavoriteAlbumDialog from "./FavoriteAlbumDialog";
 import "./favorites.css";
 
 type FavoriteArtworkProps = {
@@ -279,16 +278,19 @@ export default function FavoritesView({
   player,
   onBack,
   onOpenPlaylist,
+  onOpenAlbum,
+  onOpenArtist,
   onChanged,
 }: {
   player: Player;
   onBack: () => void;
   onOpenPlaylist: (playlist: MusicPlaylist) => void;
+  onOpenAlbum: (album: MusicAlbum) => void;
+  onOpenArtist: (artist: MusicArtist) => void;
   onChanged: () => Promise<void>;
 }) {
   const [favorites, setFavorites] = useState<MusicFavorites | null>(null);
   const [selectedArtistKey, setSelectedArtistKey] = useState<string | null>(null);
-  const [selectedAlbum, setSelectedAlbum] = useState<MusicAlbum | null>(null);
   const [loading, setLoading] = useState(true);
   const [busyKey, setBusyKey] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -401,7 +403,7 @@ export default function FavoritesView({
                   key={album.id}
                   album={album}
                   busy={busyKey !== null}
-                  onOpen={() => setSelectedAlbum(album)}
+                  onOpen={() => onOpenAlbum(album)}
                 />
               ))}
             </div>
@@ -427,14 +429,6 @@ export default function FavoritesView({
           </section>
         )}
 
-        {selectedAlbum && (
-          <FavoriteAlbumDialog
-            album={selectedAlbum}
-            player={player}
-            onClose={() => setSelectedAlbum(null)}
-            onChanged={onChanged}
-          />
-        )}
       </>
     );
   }
@@ -484,7 +478,9 @@ export default function FavoritesView({
               <FavoriteArtistGroupCard
                 key={group.key}
                 group={group}
-                onOpen={() => setSelectedArtistKey(group.key)}
+                onOpen={() =>
+                  group.artist ? onOpenArtist(group.artist) : setSelectedArtistKey(group.key)
+                }
               />
             ))}
           </div>

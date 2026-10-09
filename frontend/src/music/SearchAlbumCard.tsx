@@ -32,12 +32,12 @@ export default function SearchAlbumCard({
   album,
   query,
   busy,
-  onPlay,
+  onOpen,
 }: {
   album: MusicAlbum;
   query: string;
   busy: boolean;
-  onPlay: () => void;
+  onOpen: () => void;
 }) {
   const [favoriteBusy, setFavoriteBusy] = useState(false);
   const [favoriteAdded, setFavoriteAdded] = useState(false);
@@ -74,15 +74,15 @@ export default function SearchAlbumCard({
         type="button"
         className="search-album-play"
         disabled={busy || favoriteBusy}
-        onClick={onPlay}
-        aria-label={`Spela albumet ${album.name}`}
+        onClick={onOpen}
+        aria-label={`Öppna albumet ${album.name}`}
       >
         <AlbumArtwork album={album} />
         <span className="search-media-card-text">
           <strong>{album.name}</strong>
           <small>{subtitle}</small>
         </span>
-        <span className="search-card-play" aria-hidden="true">▶</span>
+        <span className="search-card-play search-card-open" aria-hidden="true">›</span>
       </button>
 
       <button
