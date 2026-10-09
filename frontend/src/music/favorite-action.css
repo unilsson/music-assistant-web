@@ -1,0 +1,46 @@
+.favorite-action {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 13px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.72);
+  color: #cbd5e1;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 750;
+}
+
+.favorite-action:hover:not(:disabled) {
+  border-color: rgba(96, 165, 250, 0.4);
+  background: rgba(51, 65, 85, 0.72);
+  color: #f8fafc;
+}
+
+.favorite-action-active {
+  border-color: rgba(244, 114, 182, 0.32);
+  background: rgba(190, 24, 93, 0.12);
+  color: #f9a8d4;
+}
+
+.favorite-action-compact {
+  width: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1rem;
+}
+
+.favorite-action:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.favorite-action:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 3px;
+}
