@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  favoriteMusicAlbum,
   getMusicAlbum,
   playMusicAlbum,
   type MusicAlbum,
@@ -91,18 +92,22 @@ export default function AlbumView({
   const [detail, setDetail] = useState<{ album: MusicAlbum; tracks: MusicTrack[] } | null>(null);
   const [loading, setLoading] = useState(true);
   const [busyAction, setBusyAction] = useState<string | null>(null);
+  const [favoriteBusy, setFavoriteBusy] = useState(false);
+  const [favorite, setFavorite] = useState(album.favorite === true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     setDetail(null);
+    setFavorite(album.favorite === true);
     setError(null);
 
     void getMusicAlbum(album.uri)
       .then((nextDetail) => {
         if (!cancelled) {
           setDetail(nextDetail);
+          setFavorite(nextDetail.album.favorite === true);
         }
       })
       .catch((err) => {
@@ -139,6 +144,23 @@ export default function AlbumView({
       setError(err instanceof Error ? err.message : "Kunde inte starta albumet");
     } finally {
       setBusyAction(null);
+    }
+  };
+
+  const addFavorite = async () => {
+    if (favorite || favoriteBusy) {
+      return;
+    }
+
+    setFavoriteBusy(true);
+    setError(null);
+    try {
+      await favoriteMusicAlbum(shownAlbum.uri);
+      setFavorite(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Kunde inte lägga till albumet i favoriter");
+    } finally {
+      setFavoriteBusy(false);
     }
   };
 
@@ -194,6 +216,14 @@ export default function AlbumView({
               onClick={() => void playAlbum(true)}
             >
               ⇄ Blanda
+            </button>
+            <button
+              type="button"
+              className={`music-secondary-action media-detail-favorite-action${favorite ? " media-detail-favorite-active" : ""}`}
+              disabled={favorite || favoriteBusy}
+              onClick={() => void addFavorite()}
+            >
+              {favorite ? "♥ Favorit" : favoriteBusy ? "♡ Sparar…" : "♡ Lägg till i favoriter"}
             </button>
           </div>
         </div>
