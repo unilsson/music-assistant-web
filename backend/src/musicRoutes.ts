@@ -49,6 +49,33 @@ function cleanSearchQuery(value: unknown): string {
   return typeof value === "string" ? value.trim().slice(0, 200) : "";
 }
 
+function cleanMediaUri(value: unknown): string {
+  return typeof value === "string" ? value.trim().slice(0, 1000) : "";
+}
+
+function mediaType(item: any): string | null {
+  return typeof item?.media_type === "string" ? item.media_type : null;
+}
+
+function providerForItem(item: any, uri: string): string {
+  if (typeof item?.provider === "string" && item.provider.trim()) {
+    return item.provider;
+  }
+
+  const separator = uri.indexOf("://");
+  return separator > 0 ? uri.slice(0, separator) : "library";
+}
+
+async function resolveMediaItem(
+  command: Command,
+  uri: string,
+  expectedType: "album" | "artist"
+): Promise<any | null> {
+  const response = await command("music/item_by_uri", { uri });
+  const item = resultObject(response);
+  return mediaType(item) === expectedType ? item : null;
+}
+
 async function loadPlaylists(command: Command): Promise<MusicPlaylist[]> {
   const response = await command("music/playlists/library_items", {
     limit: 500,
@@ -109,6 +136,83 @@ async function loadFavoriteAlbumDetail(
     album,
     tracks: normalizeMusicTracks(asArray(response)),
   };
+}
+
+async function loadAlbumDetailByUri(
+  command: Command,
+  uri: string
+): Promise<{ album: MusicAlbum; tracks: MusicTrack[] } | null> {
+  const rawAlbum = await resolveMediaItem(command, uri, "album");
+  if (!rawAlbum) {
+    return null;
+  }
+
+  const album = normalizeSearchAlbums([rawAlbum])[0];
+  if (!album) {
+    return null;
+  }
+
+  const response = await command("music/albums/album_tracks", {
+    item_id: album.id,
+    provider_instance_id_or_domain: providerForItem(rawAlbum, album.uri),
+    in_library_only: false,
+  });
+
+  return {
+    album,
+    tracks: normalizeSearchTracks(asArray(response)),
+  };
+}
+
+async function loadArtistDetailByUri(
+  command: Command,
+  uri: string
+): Promise<{ artist: MusicArtist; albums: MusicAlbum[]; tracks: MusicTrack[] } | null> {
+  const rawArtist = await resolveMediaItem(command, uri, "artist");
+  if (!rawArtist) {
+    return null;
+  }
+
+  const artist = normalizeSearchArtists([rawArtist])[0];
+  if (!artist) {
+    return null;
+  }
+
+  const args = {
+    item_id: artist.id,
+    provider_instance_id_or_domain: providerForItem(rawArtist, artist.uri),
+  };
+
+  let albums: MusicAlbum[] = [];
+  try {
+    const response = await command("music/artists/artist_albums", args);
+    albums = normalizeSearchAlbums(asArray(response))
+      .sort((a, b) => {
+        if (a.year && b.year && a.year !== b.year) {
+          return b.year - a.year;
+        }
+        return a.name.localeCompare(b.name, "sv");
+      })
+      .slice(0, 40);
+  } catch (error) {
+    console.warn("Unable to retrieve artist albums:", error);
+  }
+
+  let tracks: MusicTrack[] = [];
+  try {
+    const response = await command("music/artists/top_tracks", args);
+    tracks = normalizeSearchTracks(asArray(response)).slice(0, 12);
+  } catch (topTracksError) {
+    console.warn("Unable to retrieve artist top tracks, trying artist tracks:", topTracksError);
+    try {
+      const response = await command("music/artists/artist_tracks", args);
+      tracks = normalizeSearchTracks(asArray(response)).slice(0, 12);
+    } catch (artistTracksError) {
+      console.warn("Unable to retrieve artist tracks:", artistTracksError);
+    }
+  }
+
+  return { artist, albums, tracks };
 }
 
 async function loadFavoriteArtists(command: Command): Promise<MusicArtist[]> {
@@ -282,6 +386,64 @@ export function createMusicRouter(command: Command) {
     }
   });
 
+  router.get("/albums/detail", async (req, res) => {
+    const uri = cleanMediaUri(req.query.uri);
+    if (!uri) {
+      res.status(400).json({ status: "error", error: "Album uri is required" });
+      return;
+    }
+
+    try {
+      const detail = await loadAlbumDetailByUri(command, uri);
+      if (!detail) {
+        res.status(404).json({ status: "error", error: "Album not found" });
+        return;
+      }
+
+      res.json({
+        status: "ok",
+        album: detail.album,
+        count: detail.tracks.length,
+        tracks: detail.tracks,
+      });
+    } catch (error) {
+      console.error("Music Assistant album details error:", error);
+      res.status(502).json({
+        status: "error",
+        error: "Unable to retrieve album from Music Assistant",
+      });
+    }
+  });
+
+  router.get("/artists/detail", async (req, res) => {
+    const uri = cleanMediaUri(req.query.uri);
+    if (!uri) {
+      res.status(400).json({ status: "error", error: "Artist uri is required" });
+      return;
+    }
+
+    try {
+      const detail = await loadArtistDetailByUri(command, uri);
+      if (!detail) {
+        res.status(404).json({ status: "error", error: "Artist not found" });
+        return;
+      }
+
+      res.json({
+        status: "ok",
+        artist: detail.artist,
+        albums: detail.albums,
+        tracks: detail.tracks,
+      });
+    } catch (error) {
+      console.error("Music Assistant artist details error:", error);
+      res.status(502).json({
+        status: "error",
+        error: "Unable to retrieve artist from Music Assistant",
+      });
+    }
+  });
+
   router.get("/search", async (req, res) => {
     const query = cleanSearchQuery(req.query.q);
     if (query.length < 2) {
@@ -375,6 +537,156 @@ export function createMusicRouter(command: Command) {
       res.status(502).json({
         status: "error",
         error: "Unable to start search result",
+      });
+    }
+  });
+
+  router.post("/:playerId/albums/play", async (req, res) => {
+    const playerId = req.params.playerId;
+    const uri = cleanMediaUri(req.body?.uri);
+    const trackUri = cleanMediaUri(req.body?.trackUri);
+
+    if (!uri) {
+      res.status(400).json({ status: "error", error: "Album uri is required" });
+      return;
+    }
+
+    try {
+      const detail = await loadAlbumDetailByUri(command, uri);
+      if (!detail) {
+        res.status(404).json({ status: "error", error: "Album not found" });
+        return;
+      }
+
+      let startItem: string | undefined;
+      if (trackUri) {
+        const track = detail.tracks.find((item) => item.uri === trackUri);
+        if (!track) {
+          res.status(400).json({
+            status: "error",
+            error: "Track does not belong to the selected album",
+          });
+          return;
+        }
+        startItem = track.uri;
+      }
+
+      const shuffle = !startItem && req.body?.shuffle === true;
+      const args: Record<string, unknown> = {
+        queue_id: playerId,
+        media: detail.album.uri,
+        option: "replace",
+        shuffle,
+      };
+      if (startItem) {
+        args.start_item = startItem;
+      }
+
+      const result = await command("player_queues/play_media", args);
+      res.json({
+        status: "ok",
+        playerId,
+        album: detail.album,
+        startItem: startItem ?? null,
+        shuffle,
+        result,
+      });
+    } catch (error) {
+      console.error("Music Assistant album playback error:", error);
+      res.status(502).json({
+        status: "error",
+        error: "Unable to start album",
+      });
+    }
+  });
+
+  router.post("/:playerId/artists/play", async (req, res) => {
+    const playerId = req.params.playerId;
+    const uri = cleanMediaUri(req.body?.uri);
+
+    if (!uri) {
+      res.status(400).json({ status: "error", error: "Artist uri is required" });
+      return;
+    }
+
+    try {
+      const detail = await loadArtistDetailByUri(command, uri);
+      if (!detail) {
+        res.status(404).json({ status: "error", error: "Artist not found" });
+        return;
+      }
+
+      const shuffle = req.body?.shuffle === true;
+      const result = await command("player_queues/play_media", {
+        queue_id: playerId,
+        media: detail.artist.uri,
+        option: "replace",
+        shuffle,
+      });
+
+      res.json({
+        status: "ok",
+        playerId,
+        artist: detail.artist,
+        shuffle,
+        result,
+      });
+    } catch (error) {
+      console.error("Music Assistant artist playback error:", error);
+      res.status(502).json({
+        status: "error",
+        error: "Unable to start artist",
+      });
+    }
+  });
+
+  router.post("/:playerId/artists/tracks/play", async (req, res) => {
+    const playerId = req.params.playerId;
+    const artistUri = cleanMediaUri(req.body?.artistUri);
+    const trackUri = cleanMediaUri(req.body?.trackUri);
+
+    if (!artistUri || !trackUri) {
+      res.status(400).json({
+        status: "error",
+        error: "artistUri and trackUri are required",
+      });
+      return;
+    }
+
+    try {
+      const detail = await loadArtistDetailByUri(command, artistUri);
+      if (!detail) {
+        res.status(404).json({ status: "error", error: "Artist not found" });
+        return;
+      }
+
+      const track = detail.tracks.find((item) => item.uri === trackUri);
+      if (!track) {
+        res.status(400).json({
+          status: "error",
+          error: "Track is not part of the selected artist view",
+        });
+        return;
+      }
+
+      const result = await command("player_queues/play_media", {
+        queue_id: playerId,
+        media: track.uri,
+        option: "replace",
+      });
+
+      res.json({
+        status: "ok",
+        playerId,
+        artist: detail.artist,
+        track,
+        result,
+      });
+    } catch (error) {
+      console.error("Music Assistant artist track playback error:", error);
+      res.status(502).json({
+        status: "error",
+        error: "Unable to start artist track",
       });
     }
   });
