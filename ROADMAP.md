@@ -645,3 +645,12 @@ Play
 ```
 
 Och ovanpå det kan vi lägga sådant som bara ett lokalt, hemmaanpassat system kan göra riktigt bra: Radiofynd, historik, vardagsrumsdisplay, Home Assistant-scener och smart musikupptäckt.
+
+
+#### Sprint 2 – förbättring av flikbyte
+
+- Music Assistant-spelaren är delad mellan Musik, Radio och Podcasts; byte av flik får aldrig pausa eller stoppa ett pågående avsnitt.
+- Musik-fliken visar inte podcastspelaren när ett podcastavsnitt är valt på aktuell spelare.
+- Musik och Radio visar en kompakt statusrad för aktiv/pausad podcast med avsnittsnamn och **Gå till Podcasts**.
+- Startar användaren musik eller radio ersätts den gamla uppspelningen som tidigare.
+- Funktionstesta aktiv och pausad podcast vid flikbyten på ThinkPad innan merge.
