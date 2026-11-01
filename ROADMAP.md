@@ -61,6 +61,25 @@ Klart och mergat till `main`.
 - fallback-artwork med enkel broadcast/radio-ikon
 - frontend får bara starta `library://radio/...`-URI:er, inte godtyckliga externa URL:er
 
+
+### Podcast Sprint 1 – Bibliotek, avsnitt och uppspelning
+
+Implementerad på branch `sprint-podcast-1` (testas före merge).
+
+- Podcasts som tredje toppnivåflik.
+- Läs podcastprenumerationer från Music Assistant-biblioteket.
+- Omslag, poddnamn och publicist.
+- Visa upp till 50 avsnitt per sida med **Visa fler avsnitt**.
+- Avsnittets datum, längd och beskrivning.
+- Starta enskilt avsnitt med den redan valda Music Assistant-spelaren.
+- Återanvänd `PlayerCard` för pågående podcastavsnitt och paus.
+- Tillåt endast avsnitt som backend har verifierat tillhör den valda bibliotekspodden.
+- Ingen ny Docker-tjänst eller ny API-nyckel.
+
+**Podcast Sprint 2:** lyssningsstatus, fortsätt lyssna, framåt/bakåt och seek.
+
+**Podcast Sprint 3:** sök efter podcasts, följ/sluta följa, uppdateringshantering.
+
 ---
 
 # Sprint 5 – Musik

@@ -7,6 +7,7 @@ import { maCommand } from "./musicAssistant.js";
 import { createMusicRouter } from "./musicRoutes.js";
 import { createMusicSearchFavoriteRouter } from "./musicSearchFavoriteRoutes.js";
 import { createRadioRouter } from "./radioRoutes.js";
+import { createPodcastRouter } from "./podcastRoutes.js";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use("/api/music", createMusicRouter(maCommand));
 app.use("/api/music/search", createMusicSearchFavoriteRouter(maCommand));
 app.use("/api/radios", createRadioRouter(maCommand));
+app.use("/api/podcasts", createPodcastRouter(maCommand));
 
 function unwrapArray(response: any): any[] {
   if (Array.isArray(response)) {

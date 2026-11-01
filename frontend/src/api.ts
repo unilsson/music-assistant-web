@@ -512,3 +512,62 @@ export async function setVolume(playerId: string, volume: number) {
     body: JSON.stringify({ volume }),
   });
 }
+
+export type Podcast = {
+  id: string;
+  uri: string;
+  name: string;
+  image: string | null;
+  publisher: string | null;
+  description: string | null;
+};
+
+export type PodcastEpisode = {
+  id: string;
+  uri: string;
+  title: string;
+  image: string | null;
+  duration: number | null;
+  publishedAt: string | number | null;
+  description: string | null;
+};
+
+type PodcastsResponse = { status: string; count: number; podcasts: Podcast[] };
+type PodcastEpisodesResponse = {
+  status: string;
+  podcast: Podcast;
+  offset: number;
+  limit: number;
+  hasMore: boolean;
+  episodes: PodcastEpisode[];
+};
+
+export async function getPodcasts(): Promise<Podcast[]> {
+  const response = (await request("/api/podcasts")) as PodcastsResponse;
+  return response.podcasts;
+}
+
+export async function getPodcastEpisodes(
+  podcastId: string,
+  offset = 0
+): Promise<PodcastEpisodesResponse> {
+  return (await request(
+    `/api/podcasts/${encodeURIComponent(podcastId)}/episodes?offset=${offset}`
+  )) as PodcastEpisodesResponse;
+}
+
+export async function playPodcastEpisode(
+  podcastId: string,
+  playerId: string,
+  episodeUri: string,
+  offset: number
+) {
+  return request(
+    `/api/podcasts/${encodeURIComponent(podcastId)}/${encodeURIComponent(playerId)}/play`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ episodeUri, offset }),
+    }
+  );
+}
