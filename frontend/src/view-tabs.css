@@ -140,3 +140,71 @@
     padding: 22px 18px;
   }
 }
+
+
+/* Sprint 2: Keep the shared player state visible without rendering the
+   podcast player on the Music or Radio tabs. */
+.podcast-active-notice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 12px 16px;
+  margin: 0 0 16px;
+  border: 1px solid rgba(96, 165, 250, 0.24);
+  border-radius: 16px;
+  background: rgba(30, 41, 59, 0.6);
+}
+
+.podcast-active-icon {
+  flex: 0 0 auto;
+  font-size: 1.35rem;
+}
+
+.podcast-active-details {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.podcast-active-state {
+  font-size: 0.75rem;
+  color: #93c5fd;
+  font-weight: 700;
+}
+
+.podcast-active-details strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.86rem;
+  color: #e2e8f0;
+}
+
+.podcast-active-link {
+  flex: 0 0 auto;
+  padding: 9px 12px;
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  border-radius: 10px;
+  color: #eff6ff;
+  background: rgba(59, 130, 246, 0.16);
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.podcast-active-link:hover {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+.podcast-active-link:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  .podcast-active-notice { flex-wrap: wrap; gap: 10px; padding: 12px; }
+  .podcast-active-details { flex-basis: calc(100% - 50px); }
+  .podcast-active-link { margin-left: auto; }
+}
