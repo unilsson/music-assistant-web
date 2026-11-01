@@ -190,3 +190,53 @@ Frontend:
 cd frontend
 npm run build
 ```
+
+
+## Podcasts – Sprint 1
+
+The **Podcasts** tab uses the podcast library already configured in Music Assistant.
+No separate podcast server, RSS parser, API key or additional container is needed.
+
+1. In Music Assistant (`http://YOUR_MA_SERVER:8095`), configure a podcast music source such as iTunes Podcast Search.
+2. Add podcasts to the Music Assistant library.
+3. In Music Assistant Web, choose **Podcasts**, select a show, and click **Play** on an episode.
+4. The selected Music Assistant player is shared with Music and Radio.
+5. Shows are presented as artwork cards, with episodes loaded in pages of 50 using **Visa fler avsnitt**.
+
+Playback always uses an episode returned by Music Assistant for the selected library podcast. The backend checks that the episode belongs to the displayed podcast page before forwarding playback to Music Assistant. The existing Music Assistant access token remains backend-only.
+
+The first sprint is intentionally limited to **library browsing, episode listing, playback and pause**. Podcast search/subscription management, dedicated podcast seeking and listening-progress displays are follow-up sprints.
+
+### Testing the sprint on ThinkPad (production checkout)
+
+The existing deployment is located at `~/Production/music-assistant-web`, not `~/docker`.
+**Before a production merge**, test the feature branch in that checkout:
+
+```bash
+ssh thinkpad
+cd ~/Production/music-assistant-web
+git status -sb                      # ensure local edits are committed/safe
+git fetch origin
+git switch sprint-podcast-1
+git pull --ff-only origin sprint-podcast-1
+docker compose up -d --build
+docker compose ps
+curl -fsS http://localhost:3001/api/health
+curl -fsS http://localhost:3001/api/podcasts
+```
+
+If `WEB_PORT` in the local `.env` is different from 3001, use that port for the curl commands.
+Opening the application in a browser and playing an episode verifies the complete path to Music Assistant.
+
+The local `.env` is intentionally ignored by Git. **Do not delete or commit it.**
+
+To return to the current production main branch:
+
+```bash
+cd ~/Production/music-assistant-web
+git switch main
+git pull --ff-only origin main
+docker compose up -d --build
+```
+
+Check `git status -sb` first and do not use `git reset --hard` on this deployment.
