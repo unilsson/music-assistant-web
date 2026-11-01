@@ -62,6 +62,20 @@ Klart och mergat till `main`.
 - frontend får bara starta `library://radio/...`-URI:er, inte godtyckliga externa URL:er
 
 
+
+### Podcast Sprint 2 – Lyssningsposition och uppspelningskontroller
+
+Implementerad på branch `sprint-podcast-2`; testas på ThinkPad innan merge.
+
+- Hämta påbörjade avsnitt via Music Assistants `music/in_progress_items`.
+- Visa **Fortsätt lyssna** på podcasts-startsidan och progressstatus i avsnittslistan.
+- Återuppta från Music Assistants sparade position.
+- Egen podcastspelare med paus, 15 sekunder bakåt, 30 sekunder framåt och tidslinje.
+- Validering av skip/seek på backend, så andra mediatyper inte kan påverkas.
+- Automatiska API-tester för lyssningsposition och uppspelningskommandon.
+
+Efter Sprint 2: sökning, nya prenumerationer och uppdateringshantering i Sprint 3.
+
 ### Podcast Sprint 1 – Bibliotek, avsnitt och uppspelning
 
 Implementerad på branch `sprint-podcast-1` (testas före merge).
