@@ -240,3 +240,46 @@ docker compose up -d --build
 ```
 
 Check `git status -sb` first and do not use `git reset --hard` on this deployment.
+
+
+## Podcasts – Sprint 2 (test branch)
+
+The Podcasts view now includes:
+
+- **Fortsätt lyssna**, read from Music Assistant's `music/in_progress_items` API (not browser localStorage).
+- Per-episode **Lyssnad** or **Fortsätt från …** indicators, based on MA progress metadata.
+- A dedicated podcast player with **15 seconds backward**, **30 seconds forward**, **play/pause**, and a seek slider when the duration is known.
+- Backend-only validation that skip and seek operate on a currently selected podcast episode, not music or live radio.
+
+Music Assistant tracks podcast listening progress and resumes a previously started episode automatically. Provider support, the underlying player and the installed MA version determine whether position data and seeking actually work. Playback is not tracked in any new local database. Refresh progress in the UI by switching back to Podcasts or allowing the periodic refresh.
+
+The new endpoints are `GET /api/podcasts/in-progress`, `POST /api/podcasts/:playerId/resume`, `POST /api/podcasts/:playerId/skip` (`seconds: -15 | -30 | 15 | 30`) and `POST /api/podcasts/:playerId/seek` (`position` in seconds).
+
+Run checks locally:
+
+```bash
+cd backend && npm ci && npm run build && npm test
+cd ../frontend && npm ci && npm run build
+```
+
+### Test Sprint 2 on ThinkPad
+
+Test using the production checkout at `~/Production/music-assistant-web` before merging:
+
+```bash
+ssh thinkpad
+cd ~/Production/music-assistant-web
+git status -sb
+git fetch origin
+git switch sprint-podcast-2
+git pull --ff-only origin sprint-podcast-2
+docker compose up -d --build
+docker compose ps
+curl -fsS http://localhost:3001/api/podcasts/in-progress | jq
+```
+
+Replace `3001` with the `WEB_PORT` value from the local `.env` when necessary. Do not commit or remove the production `.env` file.
+
+Functional smoke test: play 2–3 minutes of a podcast, pause, switch away and back, confirm its progress appears under **Fortsätt lyssna**; resume, skip 15 seconds backward and 30 seconds forward, and drag the seek slider. Check that Music/Radio are unchanged. Music Assistant may update resume metadata approximately every 30 seconds.
+
+After testing and merging, update the ThinkPad deployment via `git switch main && git pull --ff-only origin main && docker compose up -d --build`.
