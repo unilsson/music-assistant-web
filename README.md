@@ -283,3 +283,16 @@ Replace `3001` with the `WEB_PORT` value from the local `.env` when necessary. D
 Functional smoke test: play 2–3 minutes of a podcast, pause, switch away and back, confirm its progress appears under **Fortsätt lyssna**; resume, skip 15 seconds backward and 30 seconds forward, and drag the seek slider. Check that Music/Radio are unchanged. Music Assistant may update resume metadata approximately every 30 seconds.
 
 After testing and merging, update the ThinkPad deployment via `git switch main && git pull --ff-only origin main && docker compose up -d --build`.
+
+
+### Podcast playback when switching tabs
+
+Music Assistant Web uses **one selected player across Music, Radio and Podcasts**.
+
+- Switching from Podcasts to Music or Radio **does not stop or pause** the current podcast.
+- While that player is playing or paused on a podcast, Music and Radio show a compact **Podcast spelar/pausad** notice with the episode title and a **Gå till Podcasts** action.
+- Music hides the podcast playback controls and shows the normal music browser instead; the full podcast player remains on the Podcasts tab.
+- Starting music or radio explicitly replaces the podcast in the shared player.
+- The notice disappears when another media type plays. The selected player determines which podcast status is shown.
+
+Manual regression: start a podcast, switch to Music and then Radio, confirm continuous playback and banner; use **Gå till Podcasts**, confirm the podcast controls and position are still available. Start a music track and confirm the banner disappears and music controls appear normally. Also try pausing a podcast and switching back to Music.
