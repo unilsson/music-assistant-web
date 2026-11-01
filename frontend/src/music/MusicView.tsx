@@ -98,11 +98,13 @@ export default function MusicView({
   player,
   queueContext,
   radioIsActive,
+  podcastIsSelected,
   onChanged,
 }: {
   player: Player;
   queueContext: QueueContext | null;
   radioIsActive: boolean;
+  podcastIsSelected: boolean;
   onChanged: () => Promise<void>;
 }) {
   const [page, setPage] = useState<MusicPage>({ kind: "home" });
@@ -232,9 +234,9 @@ export default function MusicView({
             <p>Välj musik nedan för att ersätta radion på {player.name}.</p>
           </div>
         </div>
-      ) : (
+      ) : !podcastIsSelected ? (
         <PlayerCard player={player} queueContext={queueContext} onChanged={onChanged} />
-      )}
+      ) : null}
 
       <section className="music-browser" aria-label="Välj musik">
         {error && <div className="message error music-message">{error}</div>}

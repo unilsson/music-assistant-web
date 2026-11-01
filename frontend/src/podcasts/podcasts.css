@@ -33,3 +33,33 @@
   .podcast-episode-description { -webkit-line-clamp: 2; line-clamp: 2; }
   .podcast-play-button { width: 38px; height: 38px; }
 }
+
+/* Sprint 2: Continue listening and detailed podcast controls */
+.podcast-continue { margin: 0 0 27px; }
+.podcast-continue h3 { margin: 0 0 13px; font-size: 1.08rem; }
+.podcast-continue-list { display: flex; flex-direction: column; gap: 9px; }
+.podcast-continue-item { display: flex; align-items: center; gap: 14px; background: rgba(30,41,59,.62); border: 1px solid rgba(96,165,250,.2); padding: 13px; border-radius: 15px; }
+.podcast-continue-item .podcast-episode-info { display: flex; flex-direction: column; gap: 4px; }
+.podcast-continue-item .podcast-episode-info strong { overflow-wrap: anywhere; }
+.podcast-continue-item .podcast-episode-info small { color: #94a3b8; }
+.podcast-resume-button { padding: 10px 14px; border-radius: 12px; background: #60a5fa; color: #071227; font-weight: 800; white-space: nowrap; }
+.podcast-resume-button:hover:not(:disabled) { background: #93c5fd; }
+.podcast-resume-button:focus-visible { outline: 2px solid #bfdbfe; outline-offset: 3px; }
+.podcast-subtle-warning { margin: 0 0 14px; color: #fbbf24; font-size: .8rem; }
+.podcast-episode-progress { margin-top: 7px; color: #86efac; font-size: .78rem; }
+.podcast-episode-progress-track { height: 4px; border-radius: 99px; overflow: hidden; background: #334155; margin-top: 6px; width: min(310px, 100%); }
+.podcast-episode-progress-track > div { height: 100%; background: #34d399; }
+.podcast-playback-stage { display: grid; place-items: center; padding: 21px; }
+.podcast-playback-panel { width: min(360px, 100%); }
+.podcast-playback-panel .now-playing { min-height: 65px; }
+.podcast-playback-panel .now-playing strong { white-space: normal; }
+.podcast-seek-slider { width: 100%; margin: 5px 0 0; accent-color: #60a5fa; cursor: pointer; }
+.podcast-seek-slider:focus-visible { outline: 2px solid #60a5fa; outline-offset: 4px; }
+.podcast-transport button:not(.primary-control) { display: flex; align-items: center; justify-content: center; gap: 2px; font-size: 1.45rem; }
+.podcast-transport button small { font-size: .68rem; font-weight: 800; }
+.podcast-control-error { margin: 0; padding: 10px 20px; font-size: .85rem; color: #fecaca; background: rgba(127,29,29,.32); }
+@media (max-width: 700px) {
+  .podcast-continue-item { flex-wrap: wrap; }
+  .podcast-continue-item .podcast-resume-button { margin-left: auto; }
+  .podcast-playback-stage { padding: 16px; }
+}

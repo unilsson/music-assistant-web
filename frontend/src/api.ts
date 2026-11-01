@@ -530,6 +530,9 @@ export type PodcastEpisode = {
   duration: number | null;
   publishedAt: string | number | null;
   description: string | null;
+  resumePositionMs: number;
+  fullyPlayed: boolean;
+  podcastName: string | null;
 };
 
 type PodcastsResponse = { status: string; count: number; podcasts: Podcast[] };
@@ -570,4 +573,35 @@ export async function playPodcastEpisode(
       body: JSON.stringify({ episodeUri, offset }),
     }
   );
+}
+
+type PodcastInProgressResponse = { status: string; count: number; episodes: PodcastEpisode[] };
+
+export async function getPodcastInProgress(): Promise<PodcastEpisode[]> {
+  const response = (await request("/api/podcasts/in-progress")) as PodcastInProgressResponse;
+  return response.episodes;
+}
+
+export async function resumePodcastEpisode(playerId: string, episodeUri: string) {
+  return request(`/api/podcasts/${encodeURIComponent(playerId)}/resume`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ episodeUri }),
+  });
+}
+
+export async function skipPodcast(playerId: string, seconds: -30 | -15 | 15 | 30) {
+  return request(`/api/podcasts/${encodeURIComponent(playerId)}/skip`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ seconds }),
+  });
+}
+
+export async function seekPodcast(playerId: string, position: number) {
+  return request(`/api/podcasts/${encodeURIComponent(playerId)}/seek`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ position: Math.round(position) }),
+  });
 }

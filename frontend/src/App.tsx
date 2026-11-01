@@ -143,6 +143,15 @@ export default function App() {
   };
 
   const hasRadioSelection = selectedPlayer?.nowPlaying?.mediaType === "radio";
+  const activePodcast = selectedPlayer?.nowPlaying?.mediaType === "podcast_episode"
+    ? selectedPlayer.nowPlaying
+    : queueContext?.current?.mediaType === "podcast_episode"
+      ? queueContext.current
+      : null;
+  const podcastIsSelected = activePodcast !== null;
+  const podcastIsPlayingOrPaused =
+    podcastIsSelected &&
+    (selectedPlayer?.state === "playing" || selectedPlayer?.state === "paused");
   const radioIsActive =
     hasRadioSelection &&
     (selectedPlayer?.state === "playing" || selectedPlayer?.state === "paused");
@@ -226,12 +235,32 @@ export default function App() {
             </button>
           </section>
 
+          {selectedPlayer && activeView !== "podcasts" && podcastIsPlayingOrPaused && activePodcast && (
+            <aside className="podcast-active-notice" aria-label="Aktiv podcast">
+              <span className="podcast-active-icon" aria-hidden="true">🎙</span>
+              <div className="podcast-active-details">
+                <span className="podcast-active-state">
+                  Podcast {selectedPlayer.state === "playing" ? "spelar" : "pausad"} på {selectedPlayer.name}
+                </span>
+                <strong>{activePodcast.title ?? "Podcastavsnitt"}</strong>
+              </div>
+              <button
+                type="button"
+                className="podcast-active-link"
+                onClick={() => chooseView("podcasts")}
+              >
+                Gå till Podcasts →
+              </button>
+            </aside>
+          )}
+
           {selectedPlayer && activeView === "music" && (
             <section id="music-view" role="tabpanel" className="selected-player">
               <MusicView
                 player={selectedPlayer}
                 queueContext={queueContext}
                 radioIsActive={radioIsActive}
+                podcastIsSelected={podcastIsSelected}
                 onChanged={refresh}
               />
             </section>

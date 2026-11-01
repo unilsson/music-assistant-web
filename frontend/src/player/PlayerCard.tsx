@@ -5,6 +5,8 @@ import {
   playRadio,
   previousTrack,
   setVolume,
+  skipPodcast,
+  seekPodcast,
   type NowPlaying,
   type Player,
   type QueueContext,
@@ -158,13 +160,19 @@ export default function PlayerCard({
   const [busy, setBusy] = useState(false);
   const [volume, setLocalVolume] = useState(player.volumeLevel ?? 25);
   const [progress, setProgress] = useState(player.elapsedTime ?? 0);
+  const [seekDraft, setSeekDraft] = useState<number | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const run = async (action: () => Promise<unknown>) => {
     setBusy(true);
+    setActionError(null);
     try {
       await action();
       await onChanged();
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : "Kunde inte styra uppspelningen");
     } finally {
+      setSeekDraft(null);
       setBusy(false);
     }
   };
@@ -186,6 +194,7 @@ export default function PlayerCard({
         ? queueContext?.current ?? null
         : queueContext?.current ?? player.nowPlaying;
   const isPlaying = player.state === "playing";
+  const isPodcast = now?.mediaType === "podcast_episode";
   const duration = Number.isFinite(player.duration) && (player.duration ?? 0) > 0
     ? player.duration ?? 0
     : 0;
@@ -199,6 +208,10 @@ export default function PlayerCard({
   useEffect(() => {
     setProgress(Math.max(0, player.elapsedTime ?? 0));
   }, [player.elapsedTime, player.id, now?.title]);
+
+  useEffect(() => {
+    setSeekDraft(null);
+  }, [player.id, now?.uri]);
 
   useEffect(() => {
     if (!isPlaying || isRadio) {
@@ -238,6 +251,64 @@ export default function PlayerCard({
             }
           }}
         />
+      ) : isPodcast && now ? (
+        <div className="podcast-playback-stage">
+          <section className="podcast-playback-panel" aria-label="Podcastspelare">
+            <div className="artwork-wrap">
+              {now.image ? (
+                <img className="artwork" src={now.image} alt="" />
+              ) : (
+                <div className="artwork artwork-placeholder">🎙</div>
+              )}
+              <span className={`status-dot ${isPlaying ? "playing" : ""}`} />
+            </div>
+            <div className="track-info">
+              <p className="info-label">Podcast · Nu spelas</p>
+              <div className="now-playing">
+                <strong>{now.title ?? "Podcastavsnitt"}</strong>
+                {now.artist && <span>{now.artist}</span>}
+              </div>
+              <div className="playback-progress">
+                <div className="playback-times">
+                  <span>{formatTime(seekDraft ?? progress)}</span>
+                  <span>{duration > 0 ? formatTime(duration) : "–:––"}</span>
+                </div>
+                {duration > 0 ? (
+                  <input
+                    type="range"
+                    className="podcast-seek-slider"
+                    min={0}
+                    max={Math.floor(duration)}
+                    step={1}
+                    value={Math.min(Math.floor(duration), Math.max(0, seekDraft ?? progress))}
+                    disabled={busy}
+                    aria-label="Spola i podcastavsnittet"
+                    onChange={(event) => setSeekDraft(Number(event.target.value))}
+                    onPointerUp={(event) => {
+                      const value = Number(event.currentTarget.value);
+                      void run(() => seekPodcast(player.id, value));
+                    }}
+                    onKeyUp={(event) => {
+                      if (["ArrowLeft", "ArrowRight", "Home", "End", "PageUp", "PageDown"].includes(event.key)) {
+                        const value = Number(event.currentTarget.value);
+                        void run(() => seekPodcast(player.id, value));
+                      }
+                    }}
+                  />
+                ) : (
+                  <div className="progress-track" aria-label="Uppspelningsposition saknas">
+                    <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
+                  </div>
+                )}
+              </div>
+              <div className="transport podcast-transport" aria-label="Styr podcast">
+                <button type="button" disabled={busy} aria-label="Hoppa bakåt 15 sekunder" onClick={() => void run(() => skipPodcast(player.id, -15))}>↶ <small>15</small></button>
+                <button type="button" className="primary-control" disabled={busy} aria-label={isPlaying ? "Pausa podcast" : "Fortsätt podcast"} onClick={() => void run(() => playPause(player.id))}>{isPlaying ? "❚❚" : "▶"}</button>
+                <button type="button" disabled={busy} aria-label="Hoppa framåt 30 sekunder" onClick={() => void run(() => skipPodcast(player.id, 30))}>↷ <small>30</small></button>
+              </div>
+            </div>
+          </section>
+        </div>
       ) : (
         <div className="queue-stage">
           <TrackPreview
@@ -318,6 +389,7 @@ export default function PlayerCard({
         </div>
       )}
 
+      {actionError && <p className="podcast-control-error" role="alert">{actionError}</p>}
       <div className="player-controls-row">
         <section className="player-info" aria-label="Spelarinfo">
           <strong className="player-name">{player.name}</strong>

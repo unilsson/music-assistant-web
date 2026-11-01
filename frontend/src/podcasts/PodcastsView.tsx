@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import {
   getPodcasts,
   getPodcastEpisodes,
+  getPodcastInProgress,
+  resumePodcastEpisode,
   playPodcastEpisode,
   type Player,
   type Podcast,
@@ -49,6 +51,8 @@ export default function PodcastsView({
   onChanged: () => Promise<void>;
 }) {
   const [podcasts, setPodcasts] = useState<Podcast[]>([]);
+  const [inProgress, setInProgress] = useState<PodcastEpisode[]>([]);
+  const [progressError, setProgressError] = useState<string | null>(null);
   const [selected, setSelected] = useState<Podcast | null>(null);
   const [rows, setRows] = useState<EpisodeRow[]>([]);
   const [hasMore, setHasMore] = useState(false);
@@ -71,6 +75,21 @@ export default function PodcastsView({
   }, []);
 
   useEffect(() => { void loadLibrary(); }, [loadLibrary]);
+
+  const refreshProgress = useCallback(async () => {
+    try {
+      setInProgress(await getPodcastInProgress());
+      setProgressError(null);
+    } catch {
+      setProgressError("Kunde inte läsa lyssningshistoriken från Music Assistant.");
+    }
+  }, []);
+
+  useEffect(() => {
+    void refreshProgress();
+    const interval = window.setInterval(() => void refreshProgress(), 45000);
+    return () => window.clearInterval(interval);
+  }, [refreshProgress]);
 
   const openPodcast = async (podcast: Podcast) => {
     setSelected(podcast);
@@ -115,8 +134,24 @@ export default function PodcastsView({
     try {
       await playPodcastEpisode(selected.id, player.id, entry.episode.uri, entry.offset);
       await onChanged();
+      void refreshProgress();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Kunde inte spela avsnittet");
+    } finally {
+      setBusyUri(null);
+    }
+  };
+
+  const resumeEpisode = async (episode: PodcastEpisode) => {
+    if (busyUri) return;
+    setBusyUri(episode.uri);
+    setError(null);
+    try {
+      await resumePodcastEpisode(player.id, episode.uri);
+      await onChanged();
+      void refreshProgress();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Kunde inte fortsätta avsnittet");
     } finally {
       setBusyUri(null);
     }
@@ -151,6 +186,33 @@ export default function PodcastsView({
 
       {!selected && (
         <>
+          {inProgress.length > 0 && (
+            <section className="podcast-continue" aria-label="Fortsätt lyssna">
+              <h3>Fortsätt lyssna</h3>
+              <div className="podcast-continue-list">
+                {inProgress.map((episode) => (
+                  <article className="podcast-continue-item" key={episode.uri}>
+                    <Artwork image={episode.image} name={episode.title} small />
+                    <div className="podcast-episode-info">
+                      <strong>{episode.title}</strong>
+                      {episode.podcastName && <small>{episode.podcastName}</small>}
+                      {episode.resumePositionMs > 0 && (
+                        <small>Lyssnat {durationLabel(episode.resumePositionMs / 1000)}
+                        {episode.duration ? ` av ${durationLabel(episode.duration)}` : ""}</small>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      className="podcast-resume-button"
+                      disabled={busyUri !== null}
+                      onClick={() => void resumeEpisode(episode)}
+                    >{busyUri === episode.uri ? "…" : "▶ Fortsätt"}</button>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
+          {progressError && <p className="podcast-subtle-warning">{progressError}</p>}
           {loadingLibrary && <div className="message">Läser podcastbiblioteket…</div>}
           {!loadingLibrary && podcasts.length === 0 && !error && (
             <div className="message">Inga podcasts finns i Music Assistants bibliotek ännu.</div>
@@ -182,7 +244,12 @@ export default function PodcastsView({
           )}
 
           <div className="podcast-episode-list" aria-label="Podcastavsnitt">
-            {rows.map((entry) => (
+            {rows.map((entry) => {
+              const progressEntry = inProgress.find((item) => item.uri === entry.episode.uri);
+              const listenedMs = Math.max(entry.episode.resumePositionMs, progressEntry?.resumePositionMs ?? 0);
+              const fullyPlayed = entry.episode.fullyPlayed;
+              const durationMs = (entry.episode.duration ?? 0) * 1000;
+              return (
               <article className="podcast-episode" key={entry.episode.uri}>
                 <Artwork image={entry.episode.image ?? selected.image} name={entry.episode.title} small />
                 <div className="podcast-episode-info">
@@ -191,6 +258,16 @@ export default function PodcastsView({
                     {dateLabel(entry.episode.publishedAt)}
                     {entry.episode.duration ? ` · ${durationLabel(entry.episode.duration)}` : ""}
                   </p>
+                  {(fullyPlayed || listenedMs > 0) && (
+                    <div className="podcast-episode-progress">
+                      <span>{fullyPlayed ? "✓ Lyssnad" : `Fortsätt från ${durationLabel(listenedMs / 1000)}`}</span>
+                      {durationMs > 0 && (
+                        <div className="podcast-episode-progress-track">
+                          <div style={{ width: `${fullyPlayed ? 100 : Math.min(100, listenedMs / durationMs * 100)}%` }} />
+                        </div>
+                      )}
+                    </div>
+                  )}
                   {entry.episode.description && (
                     <p className="podcast-episode-description">{entry.episode.description}</p>
                   )}
@@ -199,13 +276,14 @@ export default function PodcastsView({
                   type="button"
                   className="podcast-play-button"
                   disabled={busyUri !== null || loadingEpisodes}
-                  aria-label={`Spela ${entry.episode.title}`}
+                  aria-label={`${listenedMs > 0 && !fullyPlayed ? "Fortsätt" : "Spela"} ${entry.episode.title}`}
                   onClick={() => void startEpisode(entry)}
                 >
                   {busyUri === entry.episode.uri ? "…" : "▶"}
                 </button>
               </article>
-            ))}
+              );
+            })}
           </div>
           {hasMore && (
             <button
