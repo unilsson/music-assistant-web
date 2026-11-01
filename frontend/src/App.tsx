@@ -11,15 +11,17 @@ import {
 import MusicView from "./music/MusicView";
 import PlayerCard from "./player/PlayerCard";
 import RadioLibrary from "./RadioLibrary";
+import PodcastsView from "./podcasts/PodcastsView";
 import "./view-tabs.css";
 
 const PLAYER_STORAGE_KEY = "music-assistant-web.selected-player";
 const VIEW_STORAGE_KEY = "music-assistant-web.active-view";
 
-type AppView = "music" | "radio";
+type AppView = "music" | "radio" | "podcasts";
 
 function storedView(): AppView {
-  return window.localStorage.getItem(VIEW_STORAGE_KEY) === "radio" ? "radio" : "music";
+  const stored = window.localStorage.getItem(VIEW_STORAGE_KEY);
+  return stored === "radio" || stored === "podcasts" ? stored : "music";
 }
 
 export default function App() {
@@ -178,6 +180,17 @@ export default function App() {
           <span className="view-switcher-icon" aria-hidden="true">●</span>
           Radio
         </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeView === "podcasts"}
+          aria-controls="podcasts-view"
+          className={activeView === "podcasts" ? "active" : ""}
+          onClick={() => chooseView("podcasts")}
+        >
+          <span className="view-switcher-icon" aria-hidden="true">🎙</span>
+          Podcasts
+        </button>
       </nav>
 
       {error && <div className="message error">{error}</div>}
@@ -221,6 +234,12 @@ export default function App() {
                 radioIsActive={radioIsActive}
                 onChanged={refresh}
               />
+            </section>
+          )}
+
+          {selectedPlayer && activeView === "podcasts" && (
+            <section id="podcasts-view" role="tabpanel" className="podcasts-view-panel">
+              <PodcastsView player={selectedPlayer} queueContext={queueContext} onChanged={refresh} />
             </section>
           )}
 
