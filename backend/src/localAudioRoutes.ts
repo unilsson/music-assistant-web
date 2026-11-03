@@ -202,7 +202,9 @@ async function proxyStream(
     };
     const range = validRange(req.headers.range);
     if (range) headers.Range = range;
-    const upstream = transport.request({
+    // Node supports autoSelectFamily at runtime, but it is not yet part of
+    // the @types/node HTTP RequestOptions definition.
+    const requestOptions: http.RequestOptions & { autoSelectFamily: boolean } = {
       protocol: url.protocol,
       hostname: url.hostname,
       port: url.port || (url.protocol === "https:" ? 443 : 80),
@@ -216,7 +218,8 @@ async function proxyStream(
       family: 4,
       autoSelectFamily: false,
       lookup: (_hostname, _options, callback) => callback(null, ip, 4),
-    }, (audio) => {
+    };
+    const upstream = transport.request(requestOptions, (audio) => {
       const code = audio.statusCode ?? 502;
       if ([301, 302, 303, 307, 308].includes(code) && audio.headers.location) {
         audio.resume();
