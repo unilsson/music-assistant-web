@@ -6,6 +6,7 @@ import {
   isPublicIPv4,
   mappedRadioUrl,
   podcastStreamUrl,
+  rewriteHlsPlaylist,
 } from "../dist/localAudioRoutes.js";
 
 test("local audio: only public IPv4 addresses are proxied", () => {
@@ -141,4 +142,49 @@ test("local audio: fetches full podcast episode when the listing lacks a stream 
   } finally {
     await new Promise((resolve) => server.close(resolve));
   }
+});
+
+
+test("local audio: HLS master and media playlists rewrite all remote resources", () => {
+  const master = [
+    "#EXTM3U",
+    '#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="a",NAME="Swedish",URI="audio/index.m3u8"',
+    "#EXT-X-STREAM-INF:BANDWIDTH=82000,AUDIO=\"a\"",
+    "variants/low.m3u8?key=abc",
+    "",
+  ].join("\n");
+  const media = [
+    "#EXTM3U",
+    "#EXT-X-TARGETDURATION:6",
+    '#EXT-X-KEY:METHOD=AES-128,URI="../keys/key.bin"',
+    '#EXT-X-MAP:URI="init.mp4"',
+    "#EXTINF:6.000,",
+    "seg001.aac",
+    "#EXTINF:6.000,",
+    "https://cdn.example.net/seg002.aac",
+    "",
+  ].join("\n");
+  const rewrite = (origin) => `/api/local-audio/hls/${encodeURIComponent(origin)}`;
+  const first = rewriteHlsPlaylist(master, "https://audio.example.org/root/master.m3u8", rewrite);
+  assert.match(first, /\/api\/local-audio\/hls\//);
+  assert.match(first, /https%3A%2F%2Faudio.example.org%2Froot%2Faudio%2Findex.m3u8/);
+  assert.match(first, /https%3A%2F%2Faudio.example.org%2Froot%2Fvariants%2Flow.m3u8/);
+  assert.match(first, /#EXT-X-STREAM-INF:BANDWIDTH=82000/);
+  const second = rewriteHlsPlaylist(media, "https://audio.example.org/live/playlist.m3u8", rewrite);
+  assert.match(second, /https%3A%2F%2Faudio.example.org%2Fkeys%2Fkey.bin/);
+  assert.match(second, /https%3A%2F%2Faudio.example.org%2Flive%2Finit.mp4/);
+  assert.match(second, /https%3A%2F%2Fcdn.example.net%2Fseg002.aac/);
+  assert.ok(!second.includes("\nseg001.aac\n"));
+});
+
+test("local audio: HLS manifest cannot inject private or dangerous protocols into the stream proxy", () => {
+  assert.throws(() =>
+    rewriteHlsPlaylist("#EXTM3U\nfile:///etc/passwd\n", "https://example.org/root.m3u8")
+  );
+  assert.throws(() =>
+    rewriteHlsPlaylist("#EXTM3U\n#EXT-X-KEY:URI=\"data:text/plain,secret\"\n", "https://example.org/root.m3u8")
+  );
+  assert.throws(() =>
+    rewriteHlsPlaylist("<html>not audio</html>", "https://example.org/root.m3u8")
+  );
 });
