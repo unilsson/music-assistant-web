@@ -9,6 +9,7 @@ import {
   type Player,
   type SearchKind,
 } from "../api";
+import FavoriteButton from "./FavoriteButton";
 import SearchAlbumCard from "./SearchAlbumCard";
 import "./search.css";
 
@@ -44,26 +45,38 @@ function SearchTrackRow({
   track,
   busy,
   onPlay,
+  onFavoriteError,
 }: {
   track: MusicTrack;
   busy: boolean;
   onPlay: () => void;
+  onFavoriteError: (message: string) => void;
 }) {
   return (
-    <button
-      type="button"
-      className="search-track-row"
-      disabled={busy}
-      onClick={onPlay}
-      aria-label={`Spela ${track.title}`}
-    >
-      <SearchArtwork image={track.image} className="search-track-artwork" />
-      <span className="search-track-text">
-        <strong>{track.title}</strong>
-        <small>{[track.artist, track.album].filter(Boolean).join(" · ")}</small>
-      </span>
-      <span className="search-play-indicator" aria-hidden="true">▶</span>
-    </button>
+    <div className="search-track-item">
+      <button
+        type="button"
+        className="search-track-main"
+        disabled={busy}
+        onClick={onPlay}
+        aria-label={`Spela ${track.title}`}
+      >
+        <SearchArtwork image={track.image} className="search-track-artwork" />
+        <span className="search-track-text">
+          <strong>{track.title}</strong>
+          <small>{[track.artist, track.album].filter(Boolean).join(" · ")}</small>
+        </span>
+        <span className="search-play-indicator" aria-hidden="true">▶</span>
+      </button>
+      <FavoriteButton
+        kind="track"
+        uri={track.uri}
+        favorite={track.favorite}
+        compact
+        disabled={busy}
+        onError={onFavoriteError}
+      />
+    </div>
   );
 }
 
@@ -75,6 +88,10 @@ function SearchMediaCard({
   busy,
   onSelect,
   open = false,
+  favoriteKind,
+  uri,
+  favorite,
+  onFavoriteError,
 }: {
   image: string | null;
   title: string;
@@ -83,24 +100,37 @@ function SearchMediaCard({
   busy: boolean;
   onSelect: () => void;
   open?: boolean;
+  favoriteKind: "artist" | "playlist";
+  uri: string;
+  favorite: boolean | null;
+  onFavoriteError: (message: string) => void;
 }) {
   return (
-    <button
-      type="button"
-      className={`search-media-card${round ? " search-artist-card" : ""}`}
-      disabled={busy}
-      onClick={onSelect}
-      aria-label={`${open ? "Öppna" : "Spela"} ${title}`}
-    >
-      <SearchArtwork image={image} round={round} />
-      <span className="search-media-card-text">
-        <strong>{title}</strong>
-        <small>{subtitle}</small>
-      </span>
-      <span className={`search-card-play${open ? " search-card-open" : ""}`} aria-hidden="true">
-        {open ? "›" : "▶"}
-      </span>
-    </button>
+    <article className={`search-media-card search-media-card-with-action${round ? " search-artist-card" : ""}`}>
+      <button
+        type="button"
+        className="search-media-card-main"
+        disabled={busy}
+        onClick={onSelect}
+        aria-label={`${open ? "Öppna" : "Spela"} ${title}`}
+      >
+        <SearchArtwork image={image} round={round} />
+        <span className="search-media-card-text">
+          <strong>{title}</strong>
+          <small>{subtitle}</small>
+        </span>
+        <span className={`search-card-play${open ? " search-card-open" : ""}`} aria-hidden="true">
+          {open ? "›" : "▶"}
+        </span>
+      </button>
+      <FavoriteButton
+        kind={favoriteKind}
+        uri={uri}
+        favorite={favorite}
+        disabled={busy}
+        onError={onFavoriteError}
+      />
+    </article>
   );
 }
 
@@ -256,6 +286,10 @@ export default function SearchView({
                     round
                     busy={busyKey !== null}
                     open
+                    favoriteKind="artist"
+                    uri={artist.uri}
+                    favorite={artist.favorite}
+                    onFavoriteError={(message) => setError(message)}
                     onSelect={() => onOpenArtist(artist)}
                   />
                 ))}
@@ -274,9 +308,9 @@ export default function SearchView({
                   <SearchAlbumCard
                     key={`${album.provider ?? "provider"}-${album.id}-${album.uri}`}
                     album={album}
-                    query={query}
                     busy={busyKey !== null}
                     onOpen={() => onOpenAlbum(album)}
+                    onFavoriteError={(message) => setError(message)}
                   />
                 ))}
               </div>
@@ -296,6 +330,7 @@ export default function SearchView({
                     track={track}
                     busy={busyKey !== null}
                     onPlay={() => void playResult("track", track.uri)}
+                    onFavoriteError={(message) => setError(message)}
                   />
                 ))}
               </div>
@@ -316,6 +351,10 @@ export default function SearchView({
                     title={playlist.name}
                     subtitle={playlistSubtitle(playlist)}
                     busy={busyKey !== null}
+                    favoriteKind="playlist"
+                    uri={playlist.uri}
+                    favorite={playlist.favorite}
+                    onFavoriteError={(message) => setError(message)}
                     onSelect={() => void playResult("playlist", playlist.uri)}
                   />
                 ))}

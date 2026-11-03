@@ -11,6 +11,7 @@ import {
   type MusicTrack,
   type Player,
 } from "../api";
+import FavoriteButton from "./FavoriteButton";
 import "./favorites.css";
 
 type FavoriteArtworkProps = {
@@ -58,26 +59,41 @@ function FavoriteTrackRow({
   track,
   busy,
   onPlay,
+  onRemoved,
+  onFavoriteError,
 }: {
   track: MusicTrack;
   busy: boolean;
   onPlay: () => void;
+  onRemoved: () => Promise<void>;
+  onFavoriteError: (message: string) => void;
 }) {
   return (
-    <button
-      type="button"
-      className="favorite-track-row"
-      disabled={busy}
-      onClick={onPlay}
-      aria-label={`Spela ${track.title}`}
-    >
-      <FavoriteArtwork image={track.image} className="favorite-track-artwork" />
-      <span className="favorite-track-text">
-        <strong>{track.title}</strong>
-        <small>{track.album ?? track.artist ?? ""}</small>
-      </span>
-      <span className="favorite-play-indicator" aria-hidden="true">▶</span>
-    </button>
+    <div className="favorite-track-item">
+      <button
+        type="button"
+        className="favorite-track-main"
+        disabled={busy}
+        onClick={onPlay}
+        aria-label={`Spela ${track.title}`}
+      >
+        <FavoriteArtwork image={track.image} className="favorite-track-artwork" />
+        <span className="favorite-track-text">
+          <strong>{track.title}</strong>
+          <small>{track.album ?? track.artist ?? ""}</small>
+        </span>
+        <span className="favorite-play-indicator" aria-hidden="true">▶</span>
+      </button>
+      <FavoriteButton
+        kind="track"
+        uri={track.uri}
+        favorite
+        compact
+        disabled={busy}
+        onChanged={() => onRemoved()}
+        onError={onFavoriteError}
+      />
+    </div>
   );
 }
 
@@ -85,74 +101,124 @@ function FavoriteAlbumCard({
   album,
   busy,
   onOpen,
+  onRemoved,
+  onFavoriteError,
 }: {
   album: MusicAlbum;
   busy: boolean;
   onOpen: () => void;
+  onRemoved: () => Promise<void>;
+  onFavoriteError: (message: string) => void;
 }) {
   return (
-    <button
-      type="button"
-      className="favorite-media-card"
-      disabled={busy}
-      onClick={onOpen}
-      aria-label={`Öppna albumet ${album.name}`}
-    >
-      <FavoriteArtwork image={album.image} />
-      <span className="favorite-media-card-text">
-        <strong>{album.name}</strong>
-        <small>{album.year ?? "Album"}</small>
-      </span>
-      <span className="favorite-card-open" aria-hidden="true">›</span>
-    </button>
+    <article className="favorite-media-card favorite-media-card-with-action">
+      <button
+        type="button"
+        className="favorite-media-card-main"
+        disabled={busy}
+        onClick={onOpen}
+        aria-label={`Öppna albumet ${album.name}`}
+      >
+        <FavoriteArtwork image={album.image} />
+        <span className="favorite-media-card-text">
+          <strong>{album.name}</strong>
+          <small>{album.year ?? "Album"}</small>
+        </span>
+        <span className="favorite-card-open" aria-hidden="true">›</span>
+      </button>
+      <FavoriteButton
+        kind="album"
+        uri={album.uri}
+        favorite
+        disabled={busy}
+        onChanged={() => onRemoved()}
+        onError={onFavoriteError}
+      />
+    </article>
   );
 }
 
 function FavoriteArtistGroupCard({
   group,
+  busy,
   onOpen,
+  onRemoved,
+  onFavoriteError,
 }: {
   group: FavoriteArtistGroup;
+  busy: boolean;
   onOpen: () => void;
+  onRemoved: () => Promise<void>;
+  onFavoriteError: (message: string) => void;
 }) {
   return (
-    <button
-      type="button"
-      className="favorite-media-card favorite-artist-card"
-      onClick={onOpen}
-      aria-label={`Öppna favoriter för ${group.name}`}
-    >
-      <FavoriteArtwork image={group.image} round />
-      <span className="favorite-media-card-text">
-        <strong>{group.name}</strong>
-        <small>{favoriteArtistSummary(group)}</small>
-      </span>
-      <span className="favorite-card-open" aria-hidden="true">›</span>
-    </button>
+    <article className="favorite-media-card favorite-media-card-with-action favorite-artist-card">
+      <button
+        type="button"
+        className="favorite-media-card-main"
+        disabled={busy}
+        onClick={onOpen}
+        aria-label={`Öppna favoriter för ${group.name}`}
+      >
+        <FavoriteArtwork image={group.image} round />
+        <span className="favorite-media-card-text">
+          <strong>{group.name}</strong>
+          <small>{favoriteArtistSummary(group)}</small>
+        </span>
+        <span className="favorite-card-open" aria-hidden="true">›</span>
+      </button>
+      {group.artist && (
+        <FavoriteButton
+          kind="artist"
+          uri={group.artist.uri}
+          favorite
+          disabled={busy}
+          onChanged={() => onRemoved()}
+          onError={onFavoriteError}
+        />
+      )}
+    </article>
   );
 }
 
 function FavoritePlaylistCard({
   playlist,
+  busy,
   onOpen,
+  onRemoved,
+  onFavoriteError,
 }: {
   playlist: MusicPlaylist;
+  busy: boolean;
   onOpen: () => void;
+  onRemoved: () => Promise<void>;
+  onFavoriteError: (message: string) => void;
 }) {
   return (
-    <button
-      type="button"
-      className="favorite-media-card"
-      onClick={onOpen}
-      aria-label={`Öppna spellistan ${playlist.name}`}
-    >
-      <FavoriteArtwork image={playlist.image} />
-      <span className="favorite-media-card-text">
-        <strong>{playlist.name}</strong>
-        <small>Spellista</small>
-      </span>
-      <span className="favorite-card-open" aria-hidden="true">›</span>
-    </button>
+    <article className="favorite-media-card favorite-media-card-with-action">
+      <button
+        type="button"
+        className="favorite-media-card-main"
+        disabled={busy}
+        onClick={onOpen}
+        aria-label={`Öppna spellistan ${playlist.name}`}
+      >
+        <FavoriteArtwork image={playlist.image} />
+        <span className="favorite-media-card-text">
+          <strong>{playlist.name}</strong>
+          <small>Spellista</small>
+        </span>
+        <span className="favorite-card-open" aria-hidden="true">›</span>
+      </button>
+      <FavoriteButton
+        kind="playlist"
+        uri={playlist.uri}
+        favorite
+        disabled={busy}
+        onChanged={() => onRemoved()}
+        onError={onFavoriteError}
+      />
+    </article>
   );
 }
 
@@ -377,16 +443,26 @@ export default function FavoritesView({
             <h2>{selectedArtist.name}</h2>
             <p>{favoriteArtistSummary(selectedArtist)}</p>
             {selectedArtist.artist && (
-              <button
-                type="button"
-                className="music-primary-action"
-                disabled={busyKey !== null}
-                onClick={() =>
-                  void playFavorite("artist", selectedArtist.artist!.id, true)
-                }
-              >
-                ▶ Spela artist
-              </button>
+              <div className="favorite-artist-detail-actions">
+                <button
+                  type="button"
+                  className="music-primary-action"
+                  disabled={busyKey !== null}
+                  onClick={() =>
+                    void playFavorite("artist", selectedArtist.artist!.id, true)
+                  }
+                >
+                  ▶ Spela artist
+                </button>
+                <FavoriteButton
+                  kind="artist"
+                  uri={selectedArtist.artist.uri}
+                  favorite
+                  disabled={busyKey !== null}
+                  onChanged={() => loadFavorites()}
+                  onError={(message) => setError(message)}
+                />
+              </div>
             )}
           </div>
         </header>
@@ -404,6 +480,8 @@ export default function FavoritesView({
                   album={album}
                   busy={busyKey !== null}
                   onOpen={() => onOpenAlbum(album)}
+                  onRemoved={loadFavorites}
+                  onFavoriteError={(message) => setError(message)}
                 />
               ))}
             </div>
@@ -423,6 +501,8 @@ export default function FavoritesView({
                   track={track}
                   busy={busyKey !== null}
                   onPlay={() => void playFavorite("track", track.id)}
+                  onRemoved={loadFavorites}
+                  onFavoriteError={(message) => setError(message)}
                 />
               ))}
             </div>
@@ -478,9 +558,12 @@ export default function FavoritesView({
               <FavoriteArtistGroupCard
                 key={group.key}
                 group={group}
+                busy={busyKey !== null}
                 onOpen={() =>
                   group.artist ? onOpenArtist(group.artist) : setSelectedArtistKey(group.key)
                 }
+                onRemoved={loadFavorites}
+                onFavoriteError={(message) => setError(message)}
               />
             ))}
           </div>
@@ -498,7 +581,10 @@ export default function FavoritesView({
               <FavoritePlaylistCard
                 key={playlist.id}
                 playlist={playlist}
+                busy={busyKey !== null}
                 onOpen={() => onOpenPlaylist(playlist)}
+                onRemoved={loadFavorites}
+                onFavoriteError={(message) => setError(message)}
               />
             ))}
           </div>
