@@ -209,6 +209,12 @@ async function proxyStream(
       path: url.pathname + url.search,
       method: "GET",
       headers,
+      // Node.js 22 enables autoSelectFamily by default; in that mode the
+      // custom lookup must return an address array (options.all=true).
+      // We already validated and pinned one public IPv4, so disable
+      // family auto-selection to use the single-address lookup contract.
+      family: 4,
+      autoSelectFamily: false,
       lookup: (_hostname, _options, callback) => callback(null, ip, 4),
     }, (audio) => {
       const code = audio.statusCode ?? 502;
