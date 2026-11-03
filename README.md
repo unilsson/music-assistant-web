@@ -296,3 +296,82 @@ Music Assistant Web uses **one selected player across Music, Radio and Podcasts*
 - The notice disappears when another media type plays. The selected player determines which podcast status is shown.
 
 Manual regression: start a podcast, switch to Music and then Radio, confirm continuous playback and banner; use **Gå till Podcasts**, confirm the podcast controls and position are still available. Start a music track and confirm the banner disappears and music controls appear normally. Also try pausing a podcast and switching back to Music.
+
+
+## Local playback v1 – This device
+
+**Status:** feature branch `sprint-local-playback-1`. Test on ThinkPad before merging.
+
+Select **📱 Den här enheten** in the player selector to play **Podcasts** and **Radio**
+through this browser instead of sending audio to a Music Assistant queue. This works on
+a phone or desktop browser and does not interrupt other Music Assistant players.
+
+- Podcast episodes play directly in `<audio>`, with pause/play, -15s/+30s and seeking.
+- Radio uses the same HTML5 audio element and has play/pause and stop.
+- The audio element stays mounted while switching tabs, so switching from Podcasts
+  to Radio (without starting another station), or back, does not stop playback.
+- Media Session metadata and lock-screen controls are used where the browser supports them.
+  **iOS background/locked-screen playback needs real-device testing**; it depends
+  on Safari and the source's audio codec.
+- Episode listening position and **Fortsätt lyssna här** are stored in this browser's
+  `localStorage`. **This does not synchronize with Music Assistant's resume history
+  or with your other phones/computers.** The existing MA players still use MA history.
+- Local music playback is not implemented in v1. Select a network player for Music.
+
+### Sources and audio security
+
+The Express backend serves `/api/local-audio/stream` and
+`/api/local-audio/source` through the app's existing origin. Only
+podcast episodes or radio stations confirmed in Music Assistant's library can be
+streamed. The backend extracts direct HTTP(S) audio enclosures from podcast provider
+mappings (e.g., iTunes Podcasts/RSS), accepts direct HTTP(S) radio mapping URLs,
+and looks up Radio Browser UUIDs through its public API. Arbitrary URLs supplied by
+web clients are **never** used as proxy destinations. Stream destinations are checked
+against private/loopback/reserved IPv4 ranges on every redirect, and the validated
+public IPv4 address is pinned for the upstream connection. HTTP Range is forwarded
+for podcast seeking; no Music Assistant token is exposed to the browser.
+
+**Limitations in v1:** providers that do not expose a direct HTTP audio URL are not
+supported by local playback. HLS/playlist streams and unusual codecs may be unsupported
+by some browsers. The proxy intentionally blocks internal/private stream URLs;
+use a normal Music Assistant player for those stations. The proxy streams the
+entire audio and consumes ThinkPad/network bandwidth. The existing web app does
+not yet have authentication; keep it on a trusted network.
+
+### Testing on ThinkPad
+
+```bash
+cd ~/Production/music-assistant-web
+git status -sb
+git fetch origin
+git switch sprint-local-playback-1
+git pull --ff-only origin sprint-local-playback-1
+docker compose up -d --build
+docker compose ps
+curl -fsS http://localhost:3001/api/podcasts | jq '.count'
+curl -fsS http://localhost:3001/api/radios | jq '.count'
+```
+
+If the host port is changed via `WEB_PORT` in `.env`, replace 3001 above.
+Do not delete or commit `.env`. On iPhone or Android, load the
+web UI on the same LAN (or via a trusted HTTPS reverse proxy) and select
+**Den här enheten**.
+
+Smoke test:
+1. Select **Den här enheten** and play a podcast. Check that sound comes out of the phone.
+2. Pause; seek with the slider and -15/+30s; lock the screen and test the media controls.
+3. Leave the Podcasts tab and return. Audio should continue without restarting.
+4. Play a radio station; change tabs, pause/resume, then stop.
+5. Play a podcast for 30 seconds, pause, reload and confirm **Fortsätt lyssna här** resumes it.
+6. Switch to a normal Music Assistant player and confirm that normal Radio/Podcast playback
+   still works. Local audio stops when selecting a network player.
+7. Verify that the existing Music tab still works for normal players.
+
+After testing and merge, deploy `main` again:
+
+```bash
+cd ~/Production/music-assistant-web
+git switch main
+git pull --ff-only origin main
+docker compose up -d --build
+```
