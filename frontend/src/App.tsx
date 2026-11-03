@@ -12,6 +12,8 @@ import MusicView from "./music/MusicView";
 import PlayerCard from "./player/PlayerCard";
 import RadioLibrary from "./RadioLibrary";
 import PodcastsView from "./podcasts/PodcastsView";
+import LocalAudioPlayer from "./local/LocalAudioPlayer";
+import { BROWSER_PLAYER_ID, useLocalAudio } from "./local/useLocalAudio";
 import "./view-tabs.css";
 
 const PLAYER_STORAGE_KEY = "music-assistant-web.selected-player";
@@ -25,6 +27,7 @@ function storedView(): AppView {
 }
 
 export default function App() {
+  const localAudio = useLocalAudio();
   const [players, setPlayers] = useState<Player[]>([]);
   const [queueContext, setQueueContext] = useState<QueueContext | null>(null);
   const [radios, setRadios] = useState<RadioStation[]>([]);
@@ -95,13 +98,13 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (players.length === 0) {
+    if (selectedPlayerId === BROWSER_PLAYER_ID) {
       return;
     }
 
     const selectedStillExists = players.some((player) => player.id === selectedPlayerId);
     if (!selectedPlayerId || !selectedStillExists) {
-      const firstPlayerId = players[0].id;
+      const firstPlayerId = players[0]?.id ?? BROWSER_PLAYER_ID;
       setSelectedPlayerId(firstPlayerId);
       window.localStorage.setItem(PLAYER_STORAGE_KEY, firstPlayerId);
     }
@@ -111,8 +114,12 @@ export default function App() {
     () => players.find((player) => player.id === selectedPlayerId) ?? null,
     [players, selectedPlayerId]
   );
+  const localSelected = selectedPlayerId === BROWSER_PLAYER_ID;
 
   const choosePlayer = (playerId: string) => {
+    if (selectedPlayerId === BROWSER_PLAYER_ID && playerId !== BROWSER_PLAYER_ID) {
+      localAudio.stop();
+    }
     setSelectedPlayerId(playerId);
     setQueueContext(null);
     window.localStorage.setItem(PLAYER_STORAGE_KEY, playerId);
@@ -124,7 +131,15 @@ export default function App() {
   };
 
   const startRadioStation = async (station: RadioStation) => {
-    if (!selectedPlayer || startingRadioUri) {
+    if (startingRadioUri || (!localSelected && !selectedPlayer)) {
+      return;
+    }
+
+    if (localSelected) {
+      localAudio.start({
+        kind: "radio", uri: station.uri,
+        title: station.name, image: station.image, subtitle: "Radio",
+      });
       return;
     }
 
@@ -132,7 +147,7 @@ export default function App() {
     setRadioError(null);
 
     try {
-      await playRadio(selectedPlayer.id, station.uri);
+      await playRadio(selectedPlayer!.id, station.uri);
       setQueueContext(null);
       await refresh();
     } catch (err) {
@@ -165,6 +180,7 @@ export default function App() {
           <p className="subtitle">Välj spelare och styr musiken på ett enkelt sätt</p>
         </div>
       </header>
+      {localAudio.audioElement}
 
       <nav className="view-switcher" aria-label="Välj innehåll" role="tablist">
         <button
@@ -205,11 +221,7 @@ export default function App() {
       {error && <div className="message error">{error}</div>}
       {loading && <div className="message">Läser spelare…</div>}
 
-      {!loading && !error && players.length === 0 && (
-        <div className="message">Inga tillgängliga spelare hittades.</div>
-      )}
-
-      {!loading && !error && players.length > 0 && (
+      {!loading && !error && (
         <>
           <section className="player-selector" aria-label="Välj spelare">
             <label htmlFor="player-select">Spelare</label>
@@ -218,6 +230,7 @@ export default function App() {
               value={selectedPlayerId}
               onChange={(event) => choosePlayer(event.target.value)}
             >
+              <option value={BROWSER_PLAYER_ID}>📱 Den här enheten</option>
               {players.map((player) => (
                 <option key={player.id} value={player.id}>
                   {player.name}
@@ -234,6 +247,7 @@ export default function App() {
               ↻
             </button>
           </section>
+          {localSelected && <LocalAudioPlayer controller={localAudio} />}
 
           {selectedPlayer && activeView !== "podcasts" && podcastIsPlayingOrPaused && activePodcast && (
             <aside className="podcast-active-notice" aria-label="Aktiv podcast">
@@ -254,7 +268,14 @@ export default function App() {
             </aside>
           )}
 
-          {selectedPlayer && activeView === "music" && (
+          {localSelected && activeView === "music" && (
+            <section id="music-view" role="tabpanel" className="message">
+              Lokal uppspelning på den här enheten stöds just nu för Radio och Podcasts.
+              Välj en Music Assistant-spelare ovan om du vill spela musik.
+            </section>
+          )}
+
+          {selectedPlayer && !localSelected && activeView === "music" && (
             <section id="music-view" role="tabpanel" className="selected-player">
               <MusicView
                 player={selectedPlayer}
@@ -266,21 +287,37 @@ export default function App() {
             </section>
           )}
 
-          {selectedPlayer && activeView === "podcasts" && (
+          {(localSelected || selectedPlayer) && activeView === "podcasts" && (
             <section id="podcasts-view" role="tabpanel" className="podcasts-view-panel">
-              <PodcastsView player={selectedPlayer} queueContext={queueContext} onChanged={refresh} />
+              <PodcastsView
+                player={selectedPlayer}
+                localMode={localSelected}
+                localHistory={localAudio.history}
+                onLocalPlay={(podcast, episode, offset) =>
+                  localAudio.start({
+                    kind: "podcast", podcastId: podcast.id, offset,
+                    uri: episode.uri, title: episode.title,
+                    subtitle: podcast.name,
+                    image: episode.image ?? podcast.image,
+                    duration: episode.duration,
+                  })
+                }
+                onLocalResume={(entry) => localAudio.start(entry)}
+                queueContext={queueContext}
+                onChanged={refresh}
+              />
             </section>
           )}
 
-          {selectedPlayer && activeView === "radio" && (
+          {(localSelected || selectedPlayer) && activeView === "radio" && (
             <section id="radio-view" role="tabpanel" className="radio-view">
-              {hasRadioSelection && (
+              {!localSelected && hasRadioSelection && (
                 <section
                   className="radio-player-section"
                   aria-label={radioIsActive ? "Radio spelar nu" : "Senast spelade radio"}
                 >
                   <PlayerCard
-                    player={selectedPlayer}
+                    player={selectedPlayer!}
                     queueContext={null}
                     onChanged={refresh}
                     preserveRadio
@@ -290,13 +327,13 @@ export default function App() {
 
               <RadioLibrary
                 stations={radios}
-                playerName={selectedPlayer.name}
-                currentUri={radioIsActive ? selectedPlayer.nowPlaying?.uri ?? null : null}
-                currentName={
-                  radioIsActive
-                    ? selectedPlayer.nowPlaying?.stationName ?? selectedPlayer.nowPlaying?.title ?? null
-                    : null
-                }
+                playerName={localSelected ? "den här enheten" : selectedPlayer!.name}
+                currentUri={localSelected
+                  ? (localAudio.item?.kind === "radio" ? localAudio.item.uri : null)
+                  : radioIsActive ? selectedPlayer?.nowPlaying?.uri ?? null : null}
+                currentName={localSelected
+                  ? (localAudio.item?.kind === "radio" ? localAudio.item.title : null)
+                  : radioIsActive ? selectedPlayer?.nowPlaying?.stationName ?? selectedPlayer?.nowPlaying?.title ?? null : null}
                 loading={radiosLoading}
                 error={radioError}
                 busyUri={startingRadioUri}
