@@ -63,3 +63,4 @@
   .podcast-continue-item .podcast-resume-button { margin-left: auto; }
   .podcast-playback-stage { padding: 16px; }
 }
+.podcast-local-hint { color: #94a3b8; font-size: .82rem; margin: 0 0 12px; }
