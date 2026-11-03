@@ -626,5 +626,9 @@ export async function verifyLocalAudio(item: LocalAudioRequest): Promise<void> {
     params.set("podcastId", item.podcastId);
     params.set("offset", String(item.offset));
   }
-  await request(`/api/local-audio/source?${params.toString()}`);
+  const response = await fetch(`/api/local-audio/source?${params.toString()}`);
+  if (!response.ok) {
+    const data = await response.json().catch(() => null) as { error?: string } | null;
+    throw new Error(data?.error || "Ljudkällan kan inte spelas lokalt.");
+  }
 }
