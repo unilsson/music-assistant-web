@@ -332,8 +332,12 @@ public IPv4 address is pinned for the upstream connection. HTTP Range is forward
 for podcast seeking; no Music Assistant token is exposed to the browser.
 
 **Limitations in v1:** providers that do not expose a direct HTTP audio URL are not
-supported by local playback. HLS/playlist streams and unusual codecs may be unsupported
-by some browsers. The proxy intentionally blocks internal/private stream URLs;
+supported by local playback. **HLS playlists are now rewritten by the Express proxy**:
+master playlists, nested media playlists, audio segments, initialization segments,
+and ordinary AES-128 key references are all served through opaque same-origin URLs.
+Safari on iPhone can use its native HLS playback support. **Firefox and some Android
+browsers may require an HLS JavaScript player (not included in v1).** Unusual codecs
+and protected/DRM streams may remain unsupported. The proxy intentionally blocks internal/private stream URLs;
 use a normal Music Assistant player for those stations. The proxy streams the
 entire audio and consumes ThinkPad/network bandwidth. The existing web app does
 not yet have authentication; keep it on a trusted network.
@@ -375,3 +379,22 @@ git switch main
 git pull --ff-only origin main
 docker compose up -d --build
 ```
+
+### Troubleshooting an HLS radio station
+
+For a radio station whose stream reports `application/vnd.apple.mpegurl`, the
+proxy must return an HTTP **200** HLS manifest containing URLs that start with
+`/api/local-audio/hls/`. Each such URL represents a temporary, opaque reference;
+the raw upstream URL is never accepted as a browser parameter. The referenced
+audio segments must return binary audio (typically HTTP 200/206).
+
+```bash
+BASE=http://localhost:3001
+RADIO=$(curl -fsS "$BASE/api/radios" | jq -r '.radios[0].uri')
+URL=$(curl -fsS -G "$BASE/api/local-audio/source" \
+  --data-urlencode 'kind=radio' --data-urlencode "uri=$RADIO" | jq -r .src)
+curl -sS --max-time 10 -D - "$BASE$URL" | head -n 25
+```
+
+If the stream is HLS and the device is Firefox on Ubuntu, test on an iPhone
+with Safari first; desktop HLS fallback via hls.js remains a subsequent task.
