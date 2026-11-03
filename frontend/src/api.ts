@@ -605,3 +605,30 @@ export async function seekPodcast(playerId: string, position: number) {
     body: JSON.stringify({ position: Math.round(position) }),
   });
 }
+
+export type LocalAudioRequest =
+  | { kind: "radio"; uri: string }
+  | { kind: "podcast"; uri: string; podcastId: string; offset: number };
+
+/** Same-origin stream: the backend validates library membership and keeps MA credentials private. */
+export function localAudioUrl(item: LocalAudioRequest): string {
+  const params = new URLSearchParams({ kind: item.kind, uri: item.uri });
+  if (item.kind === "podcast") {
+    params.set("podcastId", item.podcastId);
+    params.set("offset", String(item.offset));
+  }
+  return `/api/local-audio/stream?${params.toString()}`;
+}
+
+export async function verifyLocalAudio(item: LocalAudioRequest): Promise<void> {
+  const params = new URLSearchParams({ kind: item.kind, uri: item.uri });
+  if (item.kind === "podcast") {
+    params.set("podcastId", item.podcastId);
+    params.set("offset", String(item.offset));
+  }
+  const response = await fetch(`/api/local-audio/source?${params.toString()}`);
+  if (!response.ok) {
+    const data = await response.json().catch(() => null) as { error?: string } | null;
+    throw new Error(data?.error || "Ljudkällan kan inte spelas lokalt.");
+  }
+}

@@ -654,3 +654,24 @@ Och ovanpå det kan vi lägga sådant som bara ett lokalt, hemmaanpassat system 
 - Musik och Radio visar en kompakt statusrad för aktiv/pausad podcast med avsnittsnamn och **Gå till Podcasts**.
 - Startar användaren musik eller radio ersätts den gamla uppspelningen som tidigare.
 - Funktionstesta aktiv och pausad podcast vid flikbyten på ThinkPad innan merge.
+
+
+### Lokal uppspelning – Sprint 1
+
+Implementerad på branch `sprint-local-playback-1`; testas på ThinkPad och mobil innan merge.
+
+- Extra spelarval: **Den här enheten** (webbläsaren).
+- Direkt uppspelning av podcastavsnitt från Music Assistants bibliotek.
+- Direkt uppspelning av radiostationer från Music Assistant (HTTP-strömmar och Radio Browser).
+- Webbläsarbaserad ljudspelare med paus, stopp, spolning och -15/+30 s.
+- Media Session och låsskärmsstyrning där mobilens webbläsare stöder det.
+- Lokalt lagrad lyssningshistorik och **Fortsätt lyssna här**.
+- Uppspelningen överlever navigering mellan appens flikar.
+- Säkert backendstöd: godkända bibliotekskällor, SSRF-skydd, Range-proxy.
+- Ingen ny Docker-tjänst eller databas.
+
+**Begränsning:** Lyssningspositionen synkroniseras inte till Music Assistant
+i den här versionen. En del radioströmmar och specialformat kan kräva
+ytterligare stöd; låsskärms- och bakgrundsuppspelning måste testas på riktig mobil.
+
+**Senare:** synk till Music Assistant, fler radioproviders och eventuellt lokal musik.

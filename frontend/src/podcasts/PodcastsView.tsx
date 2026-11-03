@@ -11,6 +11,7 @@ import {
   type QueueContext,
 } from "../api";
 import PlayerCard from "../player/PlayerCard";
+import type { LocalEpisodeRecord } from "../local/useLocalAudio";
 import "./podcasts.css";
 
 type EpisodeRow = { episode: PodcastEpisode; offset: number };
@@ -45,10 +46,18 @@ export default function PodcastsView({
   player,
   queueContext,
   onChanged,
+  localMode = false,
+  localHistory = [],
+  onLocalPlay,
+  onLocalResume,
 }: {
-  player: Player;
+  player: Player | null;
   queueContext: QueueContext | null;
   onChanged: () => Promise<void>;
+  localMode?: boolean;
+  localHistory?: LocalEpisodeRecord[];
+  onLocalPlay?: (podcast: Podcast, episode: PodcastEpisode, offset: number) => void;
+  onLocalResume?: (entry: LocalEpisodeRecord) => void;
 }) {
   const [podcasts, setPodcasts] = useState<Podcast[]>([]);
   const [inProgress, setInProgress] = useState<PodcastEpisode[]>([]);
@@ -129,6 +138,11 @@ export default function PodcastsView({
 
   const startEpisode = async (entry: EpisodeRow) => {
     if (!selected || busyUri) return;
+    if (localMode) {
+      onLocalPlay?.(selected, entry.episode, entry.offset);
+      return;
+    }
+    if (!player) return;
     setBusyUri(entry.episode.uri);
     setError(null);
     try {
@@ -143,7 +157,7 @@ export default function PodcastsView({
   };
 
   const resumeEpisode = async (episode: PodcastEpisode) => {
-    if (busyUri) return;
+    if (busyUri || !player) return;
     setBusyUri(episode.uri);
     setError(null);
     try {
@@ -157,11 +171,11 @@ export default function PodcastsView({
     }
   };
 
-  const podcastPlaying = player.nowPlaying?.mediaType === "podcast_episode";
+  const podcastPlaying = !localMode && player?.nowPlaying?.mediaType === "podcast_episode";
 
   return (
     <div className="podcasts-view">
-      {podcastPlaying && (
+      {podcastPlaying && player && (
         <div className="podcast-player-section">
           <PlayerCard player={player} queueContext={queueContext} onChanged={onChanged} />
         </div>
@@ -186,7 +200,28 @@ export default function PodcastsView({
 
       {!selected && (
         <>
-          {inProgress.length > 0 && (
+          {localMode && localHistory.some((episode) => !episode.completed && episode.position > 0) && (
+            <section className="podcast-continue" aria-label="Fortsätt lyssna på den här enheten">
+              <h3>Fortsätt lyssna här</h3>
+              <p className="podcast-local-hint">Lyssningspositionerna sparas bara i den här webbläsaren.</p>
+              <div className="podcast-continue-list">
+                {localHistory.filter((episode) => !episode.completed && episode.position > 0).map((episode) => (
+                  <article className="podcast-continue-item" key={episode.uri}>
+                    <Artwork image={episode.image ?? null} name={episode.title} small />
+                    <div className="podcast-episode-info">
+                      <strong>{episode.title}</strong>
+                      <small>{episode.subtitle ?? "Podcast"}</small>
+                      <small>Lyssnat {durationLabel(episode.position)}</small>
+                    </div>
+                    <button type="button" className="podcast-resume-button" onClick={() => onLocalResume?.(episode)}>
+                      ▶ Fortsätt
+                    </button>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
+          {!localMode && inProgress.length > 0 && (
             <section className="podcast-continue" aria-label="Fortsätt lyssna">
               <h3>Fortsätt lyssna</h3>
               <div className="podcast-continue-list">
@@ -212,7 +247,7 @@ export default function PodcastsView({
               </div>
             </section>
           )}
-          {progressError && <p className="podcast-subtle-warning">{progressError}</p>}
+          {!localMode && progressError && <p className="podcast-subtle-warning">{progressError}</p>}
           {loadingLibrary && <div className="message">Läser podcastbiblioteket…</div>}
           {!loadingLibrary && podcasts.length === 0 && !error && (
             <div className="message">Inga podcasts finns i Music Assistants bibliotek ännu.</div>
@@ -245,9 +280,15 @@ export default function PodcastsView({
 
           <div className="podcast-episode-list" aria-label="Podcastavsnitt">
             {rows.map((entry) => {
-              const progressEntry = inProgress.find((item) => item.uri === entry.episode.uri);
-              const listenedMs = Math.max(entry.episode.resumePositionMs, progressEntry?.resumePositionMs ?? 0);
-              const fullyPlayed = entry.episode.fullyPlayed;
+              const progressEntry = localMode
+                ? localHistory.find((item) => item.uri === entry.episode.uri)
+                : inProgress.find((item) => item.uri === entry.episode.uri);
+              const listenedMs = localMode
+                ? ((progressEntry as LocalEpisodeRecord | undefined)?.position ?? 0) * 1000
+                : Math.max(entry.episode.resumePositionMs, (progressEntry as PodcastEpisode | undefined)?.resumePositionMs ?? 0);
+              const fullyPlayed = localMode
+                ? (progressEntry as LocalEpisodeRecord | undefined)?.completed === true
+                : entry.episode.fullyPlayed;
               const durationMs = (entry.episode.duration ?? 0) * 1000;
               return (
               <article className="podcast-episode" key={entry.episode.uri}>

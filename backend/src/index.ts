@@ -8,6 +8,7 @@ import { createMusicRouter } from "./musicRoutes.js";
 import { createMusicSearchFavoriteRouter } from "./musicSearchFavoriteRoutes.js";
 import { createRadioRouter } from "./radioRoutes.js";
 import { createPodcastRouter } from "./podcastRoutes.js";
+import { createLocalAudioRouter } from "./localAudioRoutes.js";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/api/music", createMusicRouter(maCommand));
 app.use("/api/music/search", createMusicSearchFavoriteRouter(maCommand));
 app.use("/api/radios", createRadioRouter(maCommand));
 app.use("/api/podcasts", createPodcastRouter(maCommand));
+app.use("/api/local-audio", createLocalAudioRouter(maCommand));
 
 function unwrapArray(response: any): any[] {
   if (Array.isArray(response)) {
