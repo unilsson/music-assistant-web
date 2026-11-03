@@ -98,8 +98,30 @@ async function resolvePodcast(
     item_id: podcastId, provider_instance_id_or_domain: "library",
     limit: EPISODE_PAGE_SIZE, offset,
   }));
-  const episode = episodeList.find((ep) => ep?.uri === episodeUri && ep?.media_type === "podcast_episode");
-  return episode ? podcastStreamUrl(episode) : null;
+  const episode = episodeList.find((ep) =>
+    ep?.uri === episodeUri && ep?.media_type === "podcast_episode");
+  if (!episode) return null;
+  const direct = podcastStreamUrl(episode);
+  if (direct) return direct;
+
+  // Some Music Assistant versions expose slim episode listings without an
+  // enclosure mapping. Fetch the provider's full episode before giving up.
+  const provider = str(episode.provider, 200);
+  const itemId = str(episode.item_id, 2048);
+  if (provider && provider !== "library" && itemId) {
+    try {
+      const response = await command("music/podcasts/podcast_episode", {
+        item_id: itemId, provider_instance_id_or_domain: provider,
+      });
+      const full = (response as any)?.result ?? response;
+      if (full?.media_type === "podcast_episode") {
+        return podcastStreamUrl(full);
+      }
+    } catch (error) {
+      console.warn("Unable to resolve full podcast episode metadata:", error);
+    }
+  }
+  return null;
 }
 
 async function resolveRadio(command: Command, radioUri: string): Promise<string | null> {
@@ -108,10 +130,19 @@ async function resolveRadio(command: Command, radioUri: string): Promise<string 
     typeof item.uri === "string" && item.uri.startsWith("library://radio/"));
   if (!radio) return null;
 
-  // The library response is not guaranteed to contain complete provider mappings.
-  const raw = await command("music/item_by_uri", { uri: radioUri });
-  const full = (raw as any)?.result ?? raw;
-  const direct = mappedRadioUrl(full) ?? mappedRadioUrl(radio);
+  // First try the mapping already present in the library. A failed full-item
+  // lookup must not prevent using an otherwise valid direct station URL.
+  const libraryUrl = mappedRadioUrl(radio);
+  if (libraryUrl) return libraryUrl;
+
+  let full: any = radio;
+  try {
+    const raw = await command("music/item_by_uri", { uri: radioUri });
+    full = (raw as any)?.result ?? raw;
+  } catch (error) {
+    console.warn("Unable to resolve detailed radio metadata:", error);
+  }
+  const direct = mappedRadioUrl(full);
   if (direct) return direct;
   const uuid = radioBrowserId(full) ?? radioBrowserId(radio);
   if (uuid) return radioBrowserUrl(uuid);
