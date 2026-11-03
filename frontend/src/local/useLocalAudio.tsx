@@ -145,12 +145,14 @@ export function useLocalAudio() {
     const audio = audioRef.current;
     const session = navigator.mediaSession;
     if (!audio || !session || !item) return;
-    session.metadata = new MediaMetadata({
-      title: item.title,
-      artist: item.subtitle || (item.kind === "radio" ? "Radio" : "Podcast"),
-      album: item.kind === "radio" ? "Radio" : "Podcasts",
-      artwork: item.image ? [{ src: item.image }] : [],
-    });
+    if (typeof MediaMetadata !== "undefined") {
+      session.metadata = new MediaMetadata({
+        title: item.title,
+        artist: item.subtitle || (item.kind === "radio" ? "Radio" : "Podcast"),
+        album: item.kind === "radio" ? "Radio" : "Podcasts",
+        artwork: item.image ? [{ src: item.image }] : [],
+      });
+    }
     const handlers: [MediaSessionAction, MediaSessionActionHandler | null][] = [
       ["play", () => { void audio.play(); }],
       ["pause", () => audio.pause()],
