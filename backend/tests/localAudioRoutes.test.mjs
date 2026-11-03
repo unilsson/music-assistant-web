@@ -78,3 +78,67 @@ test("local audio: stream requests cannot directly choose arbitrary URLs", async
       server.close((err) => err ? reject(err) : resolve()));
   }
 });
+
+test("local audio: a library radio URL works even when full lookup is unavailable", async () => {
+  const called = [];
+  const command = async (name) => {
+    called.push(name);
+    if (name === "music/radios/library_items") return [{
+      item_id: "4", uri: "library://radio/4", media_type: "radio",
+      provider_mappings: [{ url: "https://1.1.1.1/live.mp3" }],
+    }];
+    throw new Error("Full lookup is unavailable");
+  };
+  const app = express();
+  app.use("/api/local-audio", createLocalAudioRouter(command));
+  const server = app.listen(0, "127.0.0.1");
+  try {
+    await new Promise((resolve) => server.once("listening", resolve));
+    const url = `http://127.0.0.1:${server.address().port}/api/local-audio/source?kind=radio&uri=${encodeURIComponent("library://radio/4")}`;
+    const response = await fetch(url);
+    assert.equal(response.status, 200);
+    assert.match((await response.json()).src, /kind=radio/);
+    assert.ok(!called.includes("music/item_by_uri"));
+  } finally {
+    await new Promise((resolve) => server.close(resolve));
+  }
+});
+
+test("local audio: fetches full podcast episode when the listing lacks a stream URL", async () => {
+  const called = [];
+  const command = async (name, args) => {
+    called.push(name);
+    if (name === "music/podcasts/library_items") return [{
+      item_id: "12", uri: "library://podcast/12", media_type: "podcast",
+    }];
+    if (name === "music/podcasts/podcast_episodes") return [{
+      item_id: "episode-id", uri: "provider://podcast_episode/episode-id",
+      media_type: "podcast_episode", provider: "itunes_podcasts",
+    }];
+    if (name === "music/podcasts/podcast_episode") {
+      assert.equal(args.item_id, "episode-id");
+      return {
+        item_id: "episode-id", media_type: "podcast_episode",
+        provider_mappings: [{ url: "https://8.8.8.8/episode.mp3" }],
+      };
+    }
+    throw new Error("Unexpected command");
+  };
+  const app = express();
+  app.use("/api/local-audio", createLocalAudioRouter(command));
+  const server = app.listen(0, "127.0.0.1");
+  try {
+    await new Promise((resolve) => server.once("listening", resolve));
+    const params = new URLSearchParams({
+      kind: "podcast", podcastId: "12", offset: "0",
+      uri: "provider://podcast_episode/episode-id",
+    });
+    const response = await fetch(
+      `http://127.0.0.1:${server.address().port}/api/local-audio/source?${params}`
+    );
+    assert.equal(response.status, 200);
+    assert.ok(called.includes("music/podcasts/podcast_episode"));
+  } finally {
+    await new Promise((resolve) => server.close(resolve));
+  }
+});
